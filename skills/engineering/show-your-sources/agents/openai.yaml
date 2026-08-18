@@ -1,0 +1,4 @@
+interface:
+  display_name: "Show Your Sources"
+  short_description: "Research technical decisions from sources"
+  default_prompt: "Use $show-your-sources to answer this question from current primary sources with traceable evidence."

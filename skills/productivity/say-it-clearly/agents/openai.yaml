@@ -1,0 +1,4 @@
+interface:
+  display_name: "Say It Clearly"
+  short_description: "Write clearly with Google developer style"
+  default_prompt: "Use $say-it-clearly to revise this text according to the Google Developer Documentation Style Guide."

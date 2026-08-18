@@ -1,0 +1,4 @@
+interface:
+  display_name: "Review the Diff"
+  short_description: "Review changes by risk and intent"
+  default_prompt: "Use $review-the-diff to review this change for actionable correctness, safety, intent, and maintainability findings."

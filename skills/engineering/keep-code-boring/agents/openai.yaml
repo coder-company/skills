@@ -1,0 +1,4 @@
+interface:
+  display_name: "Keep Code Boring"
+  short_description: "Build simple, readable, well-tested code"
+  default_prompt: "Use $keep-code-boring to implement the smallest clear change that fully solves this task."

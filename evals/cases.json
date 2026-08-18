@@ -1,0 +1,154 @@
+[
+  {
+    "id": "code-existing-behavior",
+    "skill": "keep-code-boring",
+    "prompt": "A Python function returns int(value). A bug report says the input ' 45 ' should return 45. Fix it and add the smallest appropriate test.",
+    "assertions": [
+      "Recognizes that int already accepts surrounding whitespace",
+      "Does not change production code unnecessarily",
+      "Adds a focused regression test"
+    ]
+  },
+  {
+    "id": "code-standard-library",
+    "skill": "keep-code-boring",
+    "prompt": "Write a Python 3.12 function that sums a CSV amount column exactly, ignores blank cells, and reports a missing column.",
+    "assertions": [
+      "Uses csv and Decimal from the standard library",
+      "Handles the specified missing and blank cases",
+      "Adds focused tests without a new dependency or abstraction"
+    ]
+  },
+  {
+    "id": "code-security-before-deletion",
+    "skill": "review-the-diff",
+    "prompt": "Review an HS256 token validator that accepts the none algorithm, ignores its signature argument, catches Exception, and is constructed through a one-case factory.",
+    "assertions": [
+      "Reports the authentication bypass before maintainability issues",
+      "Preserves the security boundary instead of simplifying it away",
+      "Also identifies the unnecessary one-case factory"
+    ]
+  },
+  {
+    "id": "write-release-note",
+    "skill": "say-it-clearly",
+    "prompt": "Rewrite a release note about CSV exports, a 50 MB limit, the resulting error, and an Export control on the Reports page.",
+    "assertions": [
+      "Preserves every product fact and limit",
+      "Leads with the feature instead of an announcement",
+      "Uses present tense and formats UI labels in bold"
+    ]
+  },
+  {
+    "id": "write-action-email",
+    "skill": "say-it-clearly",
+    "prompt": "Rewrite a respectful email asking Priya to verify rollback steps by 3 PM Thursday because the plan freezes that evening.",
+    "assertions": [
+      "Makes the request and deadline easy to find",
+      "Preserves the reason and respectful tone",
+      "Removes throat-clearing and vague subject text"
+    ]
+  },
+  {
+    "id": "write-procedure",
+    "skill": "say-it-clearly",
+    "prompt": "Rewrite a deployment procedure with FEATURE_X, Settings, Publish, an optional command, a production warning, and Success and Done UI labels.",
+    "assertions": [
+      "Uses numbered imperative steps",
+      "Places conditions and locations before actions",
+      "Makes the optional action its own step and puts the warning immediately before it",
+      "Preserves technical tokens and formats named UI elements in bold"
+    ]
+  },
+  {
+    "id": "debug-diagnosis-only",
+    "skill": "find-the-bug",
+    "prompt": "Diagnose why our CLI occasionally writes an empty cache file. Do not fix it yet. The failure happens about once per 50 concurrent runs.",
+    "assertions": [
+      "Respects the diagnosis-only boundary",
+      "Builds a repeated concurrency reproducer and captures the observed failure rate",
+      "Traces the write boundary and separates evidence from hypotheses",
+      "Does not claim a root cause before a discriminating test"
+    ]
+  },
+  {
+    "id": "debug-simple-local",
+    "skill": "find-the-bug",
+    "prompt": "Fix a deterministic off-by-one in a five-line range helper. An existing unit test reproduces it.",
+    "assertions": [
+      "Uses the existing focused test as the feedback loop",
+      "Avoids an unnecessary multi-phase investigation",
+      "Fixes the owning expression and re-runs the regression test"
+    ]
+  },
+  {
+    "id": "debug-no-local-repro",
+    "skill": "find-the-bug",
+    "prompt": "Investigate a production-only timeout from a redacted trace and repository code. You cannot access production.",
+    "assertions": [
+      "Uses the trace and static call path without pretending to reproduce production",
+      "Protects secrets and avoids unsafe production actions",
+      "States evidence, inference, and remaining uncertainty separately"
+    ]
+  },
+  {
+    "id": "review-security-over-style",
+    "skill": "review-the-diff",
+    "prompt": "Review a token-validation diff that also contains inconsistent quote style. The new fallback accepts unsigned tokens after a key lookup timeout.",
+    "assertions": [
+      "Reports the authentication bypass as the highest-severity finding",
+      "Explains the triggering timeout path and consequence",
+      "Does not distract with formatter-enforced quote style"
+    ]
+  },
+  {
+    "id": "review-no-spec",
+    "skill": "review-the-diff",
+    "prompt": "Review my current working-tree changes. I did not provide a base or a specification.",
+    "assertions": [
+      "Infers the natural repository base and inspects current changes",
+      "Uses tests and existing contracts as intent evidence",
+      "States that no reliable specification was available without blocking"
+    ]
+  },
+  {
+    "id": "review-clean-change",
+    "skill": "review-the-diff",
+    "prompt": "Review a small, well-tested parser change. No actionable defect is present.",
+    "assertions": [
+      "Returns no findings instead of inventing style preferences",
+      "Summarizes the reviewed boundary and checks",
+      "Does not add praise or implement unrequested changes"
+    ]
+  },
+  {
+    "id": "research-narrow-fact",
+    "skill": "show-your-sources",
+    "prompt": "Which Node.js release first enabled the built-in test runner without an experimental flag? Give me the source.",
+    "assertions": [
+      "Checks current official Node.js documentation or release notes",
+      "Answers directly with the applicable version qualifier",
+      "Cites the exact primary source and does not create a repository file"
+    ]
+  },
+  {
+    "id": "research-library-choice",
+    "skill": "show-your-sources",
+    "prompt": "Compare two database clients for our pinned runtime and recommend one. Their current compatibility and maintenance status matter.",
+    "assertions": [
+      "Uses current first-party documentation and release information for both clients",
+      "Applies the same compatibility and maintenance criteria to both",
+      "Separates sourced facts from the recommendation"
+    ]
+  },
+  {
+    "id": "research-durable-record",
+    "skill": "show-your-sources",
+    "prompt": "Research this protocol decision and record it in the repository's existing ADR system.",
+    "assertions": [
+      "Uses the established ADR location and format",
+      "Supports material claims with primary sources",
+      "Records the decision, constraints, tradeoffs, and unresolved risks"
+    ]
+  }
+]
