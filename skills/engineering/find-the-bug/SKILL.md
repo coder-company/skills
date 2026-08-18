@@ -21,6 +21,7 @@ Do not turn routine debugging into a ceremony. Do not skip evidence because a th
 - Do not reproduce destructive behavior against production data.
 - Ask for new access or authority only after safe in-scope checks cannot answer the question.
 - Keep temporary instrumentation narrow, identifiable, and removable.
+- Record each probe, fixture, flag, and log prefix as you add it. During cleanup, remove only investigation-owned artifacts. Preserve pre-existing and user-owned uncommitted changes.
 
 ## Establish the failure
 
@@ -33,6 +34,15 @@ Prefer an existing test, focused CLI command, API request, browser interaction, 
 
 If direct reproduction is unavailable, use the strongest evidence that exists, state the limitation, and continue with static tracing or historical artifacts. Do not falsely claim reproduction. A missing local reproduction is a constraint, not an automatic reason to stop.
 
+An inconclusive diagnosis is a valid result. When safe discriminating checks stop producing new evidence, stop and report these four items:
+
+1. Observed: facts established by the available evidence.
+2. Ruled out: hypotheses falsified by a discriminating check.
+3. Remaining: plausible hypotheses, labeled as inference.
+4. Next discriminator: the single smallest artifact or probe to obtain next and the prediction that would separate the remaining hypotheses.
+
+Do not turn the leading hypothesis into a root cause to create a tidy ending.
+
 ## Narrow the cause
 
 Trace the path that owns the symptom:
@@ -42,6 +52,8 @@ Trace the path that owns the symptom:
 3. Reduce the scenario while preserving the failure.
 4. Form the smallest set of plausible explanations that the evidence supports.
 5. Test the cheapest discriminating prediction first. Change one variable at a time.
+
+After confirming a defective pattern, search sibling implementations, copied helpers, and other callers far enough to determine whether the same cause exists elsewhere. Separate confirmed affected sites from code that only looks similar.
 
 Use a ranked hypothesis list only when several credible causes remain. For a small local bug, one evidence-backed hypothesis can be enough. Label inference as inference, and discard a theory when its prediction fails.
 
@@ -55,7 +67,9 @@ When authorized to fix the bug:
 2. Confirm that the check fails for the reported behavior when practical.
 3. Correct the cause without unrelated cleanup or speculative fallback paths.
 4. Confirm that the regression check passes.
-5. Re-run the original reproduction or closest boundary-level check.
+5. Before declaring the fix complete, search from the repository root for the confirmed defective sequence, copied helper, and relevant callers. If a root-wide search is impractical, enumerate every configured or top-level source root. A search limited to the reported package or its tests is not evidence of completeness.
+6. Treat confirmed in-repository copies of the same cause as part of an ordinary fix request unless the user limited the target or the correction crosses a public-contract, ownership, security, or migration boundary. Fix those copies; report sites that require broader authority instead of silently leaving them behind.
+7. Re-run the original reproduction or closest boundary-level check, plus checks for every confirmed site changed.
 
 Do not add a shallow test that cannot catch the real bug. If the architecture provides no useful test seam, verify with the best available boundary and report the missing seam as a maintainability risk.
 
@@ -64,6 +78,7 @@ Do not add a shallow test that cannot catch the real bug. If the architecture pr
 - Remove temporary logs, probes, fixtures, flags, and debug-only code.
 - Run nearby checks that could expose collateral regressions.
 - Report the observed cause, the evidence that distinguishes it from alternatives, the change made if any, and the verification command or interaction.
+- When you audit a copied pattern, state the search scope, list confirmed affected sites, and distinguish similar-but-safe sites. Report the exact search and verification commands when they help substantiate completeness.
 - Separate confirmed facts, remaining uncertainty, and deliberately deferred work.
 
 Never describe a theory as the root cause unless the evidence links it to the symptom.

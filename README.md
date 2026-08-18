@@ -76,6 +76,22 @@ node scripts/check-skills.mjs
 
 A successful run reports the number of skills and evaluation cases, then exits with status `0`.
 
+To compare an edited collection with a frozen baseline, use Pi or Codex as the solver and Pi as the blinded grader:
+
+```sh
+node scripts/run-evals.mjs \
+  --candidate-root=. \
+  --baseline-root=../skills-baseline \
+  --case=debug-real-sibling-writers \
+  --runs=3
+```
+
+Add `--harness=codex` to repeat the case with Codex. Fixture-backed cases run in fresh temporary workspaces and may include deterministic hidden verifiers. The command exits nonzero if the baseline wins or the candidate has a critical failure.
+Use `--skill=find-the-bug` to run one skill's cases instead of the full collection.
+Pass comma-separated IDs to `--case` to run a focused set.
+
+Codex defaults to `workspace-write`. On a host where its sandbox cannot start, use `--codex-sandbox=danger-full-access` only for an isolated disposable evaluation workspace.
+
 ## License
 
 [GNU General Public License v3.0](./LICENSE)

@@ -99,6 +99,18 @@ for (const testCase of cases) {
   if (!Array.isArray(testCase.assertions) || testCase.assertions.length === 0) {
     errors.push(`${testCase.id}: missing assertions`);
   }
+  if (testCase.critical_failures !== undefined && !Array.isArray(testCase.critical_failures)) {
+    errors.push(`${testCase.id}: critical_failures must be an array`);
+  }
+  if (testCase.fixture && !(await exists(join(root, testCase.fixture)))) {
+    errors.push(`${testCase.id}: missing fixture ${testCase.fixture}`);
+  }
+  if (testCase.setup !== undefined && (!Array.isArray(testCase.setup) || testCase.setup.length === 0)) {
+    errors.push(`${testCase.id}: setup must be a non-empty command array`);
+  }
+  if (testCase.verify !== undefined && (!Array.isArray(testCase.verify) || testCase.verify.length === 0)) {
+    errors.push(`${testCase.id}: verify must be a non-empty command array`);
+  }
 }
 
 if (errors.length) {

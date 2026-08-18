@@ -1,0 +1,10 @@
+{
+  "name": "status-format",
+  "type": "module",
+  "exports": {
+    "./status": "./src/status.mjs"
+  },
+  "scripts": {
+    "test": "node --test"
+  }
+}

@@ -41,6 +41,8 @@ Do not mention the source style guides in code comments, review comments, commit
 
 Do not use a small diff as an excuse to patch a symptom. Fix the cause at the narrowest shared boundary that owns it.
 
+Before changing a shared signature, serialized value, public export, or externally visible contract, identify its consumers. If the owning fix expands beyond the requested scope or can break another consumer, choose a contract-preserving fix unless the user authorizes the broader change.
+
 ## Choose the simplest complete design
 
 Evaluate options in this order:
@@ -63,7 +65,7 @@ Stop when one option fully meets the task. Do not turn this evaluation into a re
 - Do not add extension points, plugin systems, generic frameworks, fallback paths, or compatibility layers for hypothetical needs.
 - Do not create a helper that hides a single obvious expression or merely renames a standard operation.
 - Do not combine unrelated cleanup with the requested change.
-- Do not preserve dead code, commented-out code, or stale documentation.
+- Remove dead code, commented-out code, or stale documentation only when it is inside the change boundary and evidence shows it is unused. Repository search alone does not prove that a public export, reflective target, dynamically loaded component, or external API is dead. Report uncertain candidates instead of deleting them.
 - Do not compress readable logic into clever expressions.
 
 Add abstraction when it makes a real concept clearer, removes meaningful duplication, enforces an invariant, isolates volatility, or creates a testable boundary. Explain non-obvious complexity in the code or change description.
@@ -100,6 +102,7 @@ Use the repository's existing test tools and conventions.
 - Avoid mocks when a stable in-process dependency or real boundary is practical.
 - Do not add tests for trivial declarations or framework behavior already covered elsewhere.
 - Run the relevant formatter, static checks, tests, and a boundary-level smoke test when practical.
+- Never delete, skip, broaden, or weaken a valid test merely to make the suite pass. Change a test only when the intended contract changed, and state that contract change.
 
 ## Review code comprehensively
 
@@ -116,6 +119,8 @@ When the user requests a review, inspect:
 Prioritize findings that can cause bugs, security problems, data loss, broken contracts, or sustained maintenance cost. Give each finding a location, consequence, and concrete correction. Do not reduce a correctness review to line-count reduction.
 
 After covering correctness and safety, make one explicit pass for high-confidence deletion, reuse, unnecessary dependencies, and abstractions with no current second use. Include those findings when they materially reduce maintenance cost; do not omit them merely because higher-severity issues exist.
+
+Keep that pass inside the reviewed change boundary. Treat deletion as high-confidence only after checking references, public contracts, dynamic use, and configured entry points.
 
 ## Load detailed guidance when needed
 
@@ -137,4 +142,4 @@ Before reporting completion, verify that:
 - relevant checks pass;
 - the diff contains only related changes.
 
-Report what changed and what verified it. Mention a deliberately deferred design only when the current requirement does not justify it and the omission matters to the user.
+Report what changed and list the exact checks you ran. Separately state relevant checks you could not run and why. Never imply that an unrun check passed. Mention a deliberately deferred design only when the current requirement does not justify it and the omission matters to the user.

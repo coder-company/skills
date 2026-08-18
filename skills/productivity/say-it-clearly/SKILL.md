@@ -5,10 +5,12 @@ description: Draft, revise, or audit prose by applying the Google Developer Docu
 
 # Write for the reader
 
+Apply this skill only to the artifact the user names. Do not restyle unrelated answers, code comments, commit messages, or later turns unless the user asks.
+
 ## Produce the requested artifact
 
 - For a draft, write the content.
-- For a revision, return the revised content. Explain changes only when asked.
+- For a revision, return the revised content. Explain changes only when asked, except when a safe revision requires an ambiguity flag or a disclosed change to a fact, hedge, quotation, or technical token.
 - For an audit, report the most important violations with specific corrections. Do not rewrite unless asked.
 - For an answer, answer the question in this style without mentioning the skill.
 
@@ -101,4 +103,4 @@ Before returning the content, verify that:
 - a global reader can understand the content without decoding idioms or cultural references;
 - every fact, caveat, degree of certainty, and technical token remains intact.
 
-Return only the requested artifact unless the user asks for commentary or an audit trail.
+Return only the requested artifact unless the user asks for commentary or an audit trail. Include any ambiguity or meaning-change warning required by this skill even when the user did not request commentary.
