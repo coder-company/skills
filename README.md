@@ -58,6 +58,12 @@ It answers in the conversation by default. It does not litter the repository wit
 
 It follows the Google Developer Documentation Style Guide and Google Technical Writing guidance without making every sentence sound institutional.
 
+### Your agent wrote a prompt and called it a skill
+
+**[`write-a-skill`](./skills/engineering/write-a-skill/SKILL.md)** directs the agent to start from an observed failure, define trigger boundaries, write plain instructions, and test behavior before publishing.
+
+It rejects vague quality claims, unnecessary skill machinery, and evaluation results that cannot support the conclusion.
+
 ## Design rules
 
 These skills are small enough to understand and strict where agents commonly fail:
@@ -67,6 +73,7 @@ These skills are small enough to understand and strict where agents commonly fai
 - Repository conventions before personal taste.
 - Primary sources before confident claims.
 - The reader's task before the writer's performance.
+- Observed failures before skill instructions.
 
 The prompts and expected behaviors used to test each skill live in [`evals/cases.json`](./evals/cases.json). Validate the skill structure, metadata, internal links, and evaluation manifest with:
 

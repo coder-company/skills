@@ -1,0 +1,4 @@
+interface:
+  display_name: "Write a Skill"
+  short_description: "Create and test agent skills from failures"
+  default_prompt: "Use $write-a-skill to create or improve this skill from observed failures and measurable behavior."
