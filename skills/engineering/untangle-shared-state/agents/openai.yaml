@@ -1,0 +1,4 @@
+interface:
+  display_name: "Untangle Shared State"
+  short_description: "Make concurrent ownership explicit"
+  default_prompt: "Use $untangle-shared-state to map the failing interleaving, reduce shared mutation, and verify the invariant under adversarial schedules."

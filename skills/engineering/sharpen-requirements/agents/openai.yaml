@@ -1,0 +1,4 @@
+interface:
+  display_name: "Sharpen Requirements"
+  short_description: "Resolve ambiguity that changes the build"
+  default_prompt: "Use $sharpen-requirements to resolve only the ambiguities that would materially change this work."

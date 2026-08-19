@@ -1,0 +1,4 @@
+interface:
+  display_name: "Read a Runtime Trace"
+  short_description: "Interpret a captured runtime artifact"
+  default_prompt: "Use $read-a-runtime-trace to establish this artifact's provenance, follow its dominant evidence, and separate observations from inference."

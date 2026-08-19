@@ -1,0 +1,4 @@
+interface:
+  display_name: "Make Side Effects Idempotent"
+  short_description: "Converge after duplicates and interruption"
+  default_prompt: "Use $make-side-effects-idempotent to define operation identity, close partial-failure windows, and prove duplicate attempts converge."

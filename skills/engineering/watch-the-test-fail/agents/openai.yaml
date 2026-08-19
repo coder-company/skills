@@ -1,0 +1,4 @@
+interface:
+  display_name: "Watch the Test Fail"
+  short_description: "Prove the test fails before the fix"
+  default_prompt: "Use $watch-the-test-fail to establish a focused red test, make it green with the smallest change, and refactor only after it passes."

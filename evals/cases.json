@@ -1528,5 +1528,207 @@
       "Publishes or attempts to contact a registry",
       "Claims a published immutable version can be overwritten as rollback"
     ]
+  },
+  {
+    "id": "requirements-consequential-ambiguity",
+    "skill": "sharpen-requirements",
+    "prompt": "Add account deletion. The request does not say whether deletion is immediate or scheduled, but billing, recovery, and data retention differ between those interpretations. Prepare us to implement without inventing policy.",
+    "assertions": ["Inspects available product evidence before asking", "Surfaces only decisions that change behavior or data", "Offers concrete interpretations and a recommendation", "Does not implement or invent policy"],
+    "critical_failures": ["Chooses immediate or scheduled deletion without evidence or user authority"]
+  },
+  {
+    "id": "requirements-near-miss",
+    "skill": "sharpen-requirements",
+    "prompt": "Change the button label from Save to Save draft. The file and exact UI state are specified. Implement it.",
+    "assertions": ["Recognizes that no consequential ambiguity remains", "Implements without an unnecessary interview"]
+  },
+  {
+    "id": "domain-overloaded-status",
+    "skill": "model-the-domain",
+    "prompt": "Our order status means payment state in the API, fulfillment state in the warehouse, and customer-visible progress in support. Design the model before we add partial fulfillment.",
+    "assertions": ["Uses real scenarios and current contracts", "Separates concepts with different rules", "Defines identity, lifecycle, and invariants", "Tests the model with partial and invalid scenarios"],
+    "critical_failures": ["Preserves one overloaded status with more undocumented flags"]
+  },
+  {
+    "id": "domain-near-miss-rename",
+    "skill": "model-the-domain",
+    "prompt": "Rename the local loop variable x to customer in this five-line function. No domain contract changes.",
+    "assertions": ["Treats this as ordinary identifier cleanup", "Does not create a glossary or domain model"]
+  },
+  {
+    "id": "tdd-observe-red",
+    "skill": "watch-the-test-fail",
+    "prompt": "Use TDD to fix the slug parser so it rejects a trailing slash. The existing parser test file is fast and local. Run the new regression test before editing production code, then make it pass and report the observed red and green results.",
+    "fixture": "evals/fixtures/test-first-parser",
+    "tools": "read,bash,edit,write,grep,find,ls",
+    "verify": ["node", "{root}/evals/verifiers/test-first-parser.mjs", "{workspace}"],
+    "assertions": ["Adds a focused behavior test", "Runs it before production edits and confirms the intended failure", "Makes the smallest fix", "Reports the encoded behavior, command, red failure and exit result, green result, and broader check"],
+    "critical_failures": ["Claims a red phase without running the failing test", "Weakens the assertion to pass"]
+  },
+  {
+    "id": "tdd-impractical-near-miss",
+    "skill": "watch-the-test-fail",
+    "prompt": "A production-only GPU driver glitch has no local harness and cannot be simulated. I did not ask for TDD. Diagnose it from the supplied capture.",
+    "assertions": ["Does not build a disproportionate test harness", "Uses the supplied evidence and nearest practical verification"]
+  },
+  {
+    "id": "slices-cross-layer-feature",
+    "skill": "build-in-slices",
+    "prompt": "Add saved searches across schema, API, and UI. Break the implementation into increments we can verify without landing three horizontal scaffolding changes first.",
+    "assertions": ["Starts with one thin observable scenario across required layers", "Gives each slice an independent check", "Defers infrastructure without a current consumer", "Keeps each slice runnable"]
+  },
+  {
+    "id": "slices-near-miss-small-change",
+    "skill": "build-in-slices",
+    "prompt": "Add one missing null guard to an established parser and update its existing unit test.",
+    "assertions": ["Does not manufacture multiple slices", "Treats the focused change as one unit"]
+  },
+  {
+    "id": "prototype-settle-question",
+    "skill": "prototype-the-question",
+    "prompt": "We do not know whether browser-native scrolling can preserve the required sticky header behavior. Build a throwaway experiment to decide between native scroll and a virtual scroller.",
+    "assertions": ["States the discriminating question and outcomes", "Builds only the fidelity needed to observe sticky behavior", "Labels simulations and limitations", "Discards or clearly marks the prototype after the decision"]
+  },
+  {
+    "id": "prototype-near-miss-production",
+    "skill": "prototype-the-question",
+    "prompt": "Implement the approved production password reset flow from the complete specification.",
+    "assertions": ["Does not substitute throwaway code for the requested production implementation"]
+  },
+  {
+    "id": "prototype-near-miss-plan-assumption",
+    "skill": "prototype-the-question",
+    "prompt": "Our migration plan assumes the vendor export preserves stable record IDs. If that is false, every downstream step changes. Run the cheapest disposable check before we plan further.",
+    "assertions": ["Routes the plan-invalidating assumption to check-the-premise", "Does not start an open-ended prototype workflow"]
+  },
+  {
+    "id": "performance-measured-regression",
+    "skill": "measure-the-bottleneck",
+    "prompt": "The p95 latency for listing 10,000 records regressed from about 180 ms to 700 ms. Diagnose and improve it without changing results.",
+    "assertions": ["Defines a comparable workload and captures a baseline", "Uses profiling or timing breakdown to locate dominant cost", "Tests one hypothesis at a time", "Reports before and after with units, method, and correctness checks"],
+    "critical_failures": ["Claims a speedup without a comparable baseline and post-change measurement"]
+  },
+  {
+    "id": "performance-near-miss-correctness",
+    "skill": "measure-the-bottleneck",
+    "prompt": "The parser returns the wrong date for leap years. There is no performance complaint.",
+    "assertions": ["Routes this to correctness diagnosis", "Does not start profiling without a performance claim"]
+  },
+  {
+    "id": "runtime-live-idle-cpu",
+    "skill": "observe-the-runtime",
+    "prompt": "A daemon sometimes spins at 100 percent CPU while idle, but existing logs show no requests. Add temporary instrumentation and diagnose the live transition.",
+    "assertions": ["Defines the observable transition and competing causes", "Adds bounded targeted instrumentation", "Captures identities, timing, or lifecycle evidence", "Removes diagnostic residue unless durable value is justified"],
+    "critical_failures": ["Names a cause only because a code path could execute"]
+  },
+  {
+    "id": "runtime-near-miss-existing-trace",
+    "skill": "observe-the-runtime",
+    "prompt": "Analyze this already captured CPU profile. Do not modify or run the application.",
+    "assertions": ["Uses the existing artifact rather than proposing live instrumentation", "Respects the read-only boundary"]
+  },
+  {
+    "id": "trace-cpu-profile",
+    "skill": "read-a-runtime-trace",
+    "prompt": "Read this CPU profile from a 45-second production replay and explain whether JSON parsing or lock waiting dominates. The final five seconds are truncated.",
+    "assertions": ["Establishes capture provenance and truncation", "Distinguishes CPU self time from waiting and cumulative time", "Tests a competing interpretation", "Separates trace observations from source-level inference"],
+    "critical_failures": ["Treats the largest cumulative frame as the root cause without caller or timing analysis"]
+  },
+  {
+    "id": "trace-near-miss-no-artifact",
+    "skill": "read-a-runtime-trace",
+    "prompt": "Users report an intermittent memory leak, but there is no heap snapshot or trace yet. Design the smallest live instrumentation needed.",
+    "assertions": ["Does not pretend an artifact exists", "Routes the task to live runtime observation"]
+  },
+  {
+    "id": "visual-exact-reference",
+    "skill": "match-the-reference",
+    "prompt": "Make this settings panel match the supplied known-good screenshot at 1440 by 900 in dark mode. Preserve keyboard navigation and responsive behavior.",
+    "assertions": ["Reproduces viewport, theme, content, fonts, and state", "Captures and compares rendered output", "Fixes geometry before decorative details", "Preserves accessibility and checks additional supported states"],
+    "critical_failures": ["Hardcodes screenshot content or hides live UI to fake parity"]
+  },
+  {
+    "id": "visual-near-miss-redesign",
+    "skill": "match-the-reference",
+    "prompt": "Redesign this dashboard to feel calmer. There is no reference image or known-good implementation.",
+    "assertions": ["Treats this as open-ended design rather than visual parity", "Does not invent a pixel reference"]
+  },
+  {
+    "id": "blast-radius-shared-cache-key",
+    "skill": "prove-the-blast-radius",
+    "prompt": "This three-line change removes locale from a shared cache key. Tell me what it could break outside the diff and prove whether the key is safe.",
+    "assertions": ["Names the changed cache contract", "Finds direct and indirect consumers", "Ranks locale collision risk rather than listing callers", "Runs a focused proof of the hinge fact"],
+    "critical_failures": ["Declares safety from repository search or prose alone"]
+  },
+  {
+    "id": "blast-radius-near-miss-review",
+    "skill": "prove-the-blast-radius",
+    "prompt": "Review this new isolated pure function for correctness and maintainability. It changes no shared contract.",
+    "assertions": ["Uses ordinary diff review", "Does not manufacture a system-wide blast-radius exercise"]
+  },
+  {
+    "id": "refactor-preserve-contract",
+    "skill": "refactor-without-regressions",
+    "prompt": "Replace the parser's internal recursive representation with an iterative one. Public output, errors, ordering, and serialization must remain identical.",
+    "assertions": ["Freezes the observable contract from evidence", "Separates structural changes from behavior changes", "Runs comparable before and after checks", "Inspects outputs beyond compilation"],
+    "critical_failures": ["Calls the refactor behavior-preserving from compilation alone"]
+  },
+  {
+    "id": "refactor-near-miss-feature",
+    "skill": "refactor-without-regressions",
+    "prompt": "Change checkout so expired coupons are rejected with a new user-visible message.",
+    "assertions": ["Recognizes the intentional behavior change", "Does not claim the task is a behavior-preserving refactor"]
+  },
+  {
+    "id": "retries-duplicate-webhook",
+    "skill": "make-side-effects-idempotent",
+    "prompt": "A payment webhook can arrive concurrently and again after a timeout. Ensure one logical payment grants credit once while every retry receives a stable result.",
+    "assertions": ["Defines stable operation identity and once-only effects", "Maps interruption and response-loss boundaries", "Uses a durable atomic invariant", "Tests duplicates, interruption, and concurrency"],
+    "critical_failures": ["Relies on an in-memory flag or non-atomic check-then-act"]
+  },
+  {
+    "id": "retries-near-miss-single-shot",
+    "skill": "make-side-effects-idempotent",
+    "prompt": "Format a local immutable value in a pure function called once by a unit test.",
+    "assertions": ["Does not introduce idempotency storage or retry machinery"]
+  },
+  {
+    "id": "shared-state-race",
+    "skill": "untangle-shared-state",
+    "prompt": "Two workers update a shared in-memory queue and sometimes lose tasks. Redesign ownership before reaching for one global lock.",
+    "assertions": ["Maps readers, writers, invariant, and failing interleaving", "Considers partitioning or single ownership before serialization", "Defines lock semantics if sharing is truly required", "Tests adversarial schedules and the invariant"],
+    "critical_failures": ["Adds a global lock without examining whether sharing can be removed"]
+  },
+  {
+    "id": "shared-state-near-miss-sync",
+    "skill": "untangle-shared-state",
+    "prompt": "A synchronous local reducer with one owner has a missing branch. Add it.",
+    "assertions": ["Does not add concurrency architecture to a single-owner synchronous update"]
+  },
+  {
+    "id": "types-invalid-combinations",
+    "skill": "make-invalid-states-impossible",
+    "prompt": "A TypeScript Job has isRunning, isDone, error?, result?, and startedAt?, allowing contradictory combinations. Redesign the trusted type and parsing boundary.",
+    "assertions": ["Enumerates valid variants and payloads", "Uses a discriminated representation with exhaustive handling", "Validates untrusted input at the boundary", "Migrates constructors and preserves the wire contract unless authorized"],
+    "critical_failures": ["Uses casts or optional fields that still permit contradictory trusted states"]
+  },
+  {
+    "id": "types-near-miss-style",
+    "skill": "make-invalid-states-impossible",
+    "prompt": "Add an explicit return type to this already safe private helper to satisfy the configured linter.",
+    "assertions": ["Treats this as a local style requirement", "Does not redesign the domain type system"]
+  },
+  {
+    "id": "api-replace-all-callers",
+    "skill": "replace-an-api",
+    "prompt": "Replace the internal parseToken API with parseSession. All consumers are repository-owned, including one dynamic command registry and generated examples. Leave no compatibility alias.",
+    "assertions": ["Inventories direct, dynamic, generated, documented, and test consumers", "Migrates all consumers to one replacement", "Deletes the obsolete surface without a hypothetical shim", "Proves removal in delivered artifacts"],
+    "critical_failures": ["Leaves parseToken reachable or adds an unneeded compatibility alias"]
+  },
+  {
+    "id": "api-near-miss-additive",
+    "skill": "replace-an-api",
+    "prompt": "Add a new endpoint while the existing endpoint remains intentionally supported for a different use case.",
+    "assertions": ["Recognizes that no API is being replaced", "Does not migrate or delete intentional consumers"]
   }
 ]

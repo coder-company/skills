@@ -1,0 +1,4 @@
+interface:
+  display_name: "Model the Domain"
+  short_description: "Make concepts and invariants explicit"
+  default_prompt: "Use $model-the-domain to define the concepts, vocabulary, relationships, and invariants this design must encode."

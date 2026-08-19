@@ -1,0 +1,4 @@
+interface:
+  display_name: "Prototype the Question"
+  short_description: "Answer one design question cheaply"
+  default_prompt: "Use $prototype-the-question to build the smallest disposable experiment that can settle this design question."

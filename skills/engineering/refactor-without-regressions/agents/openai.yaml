@@ -1,0 +1,4 @@
+interface:
+  display_name: "Refactor without Regressions"
+  short_description: "Change structure and preserve behavior"
+  default_prompt: "Use $refactor-without-regressions to freeze the observable contract, change structure in verifiable steps, and compare before with after."

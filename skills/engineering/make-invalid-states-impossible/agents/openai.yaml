@@ -1,0 +1,4 @@
+interface:
+  display_name: "Make Invalid States Impossible"
+  short_description: "Encode domain invariants in types"
+  default_prompt: "Use $make-invalid-states-impossible to enumerate valid variants, validate at the boundary, and remove invalid internal combinations."

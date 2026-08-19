@@ -1,0 +1,4 @@
+interface:
+  display_name: "Prove the Blast Radius"
+  short_description: "Verify what a small change could break"
+  default_prompt: "Use $prove-the-blast-radius to trace this changed contract beyond the diff and prove the facts its safety depends on."

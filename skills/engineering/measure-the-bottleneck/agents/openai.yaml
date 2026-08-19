@@ -1,0 +1,4 @@
+interface:
+  display_name: "Measure the Bottleneck"
+  short_description: "Improve a measured bottleneck"
+  default_prompt: "Use $measure-the-bottleneck to capture a repeatable baseline, locate the dominant cost, and compare the fix against the same workload."

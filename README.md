@@ -33,7 +33,10 @@ Use the one that matches the failure. There is no setup mode, router, or prescri
 ### Before it changes anything
 
 - **[`define-done`](./skills/engineering/define-done/SKILL.md):** Turn a materially vague outcome into checks that can prove it wrong.
+- **[`sharpen-requirements`](./skills/engineering/sharpen-requirements/SKILL.md):** Resolve only the ambiguity that would materially change the build.
 - **[`check-the-premise`](./skills/engineering/check-the-premise/SKILL.md):** Run a disposable experiment against the assumption that could sink the plan.
+- **[`prototype-the-question`](./skills/engineering/prototype-the-question/SKILL.md):** Build disposable code to settle one design or feasibility question.
+- **[`model-the-domain`](./skills/engineering/model-the-domain/SKILL.md):** Define concepts, vocabulary, relationships, and invariants from real scenarios.
 - **[`design-module-boundaries`](./skills/engineering/design-module-boundaries/SKILL.md):** Place modules from caller needs, change coupling, ownership, and dependency direction.
 - **[`sequence-migrations`](./skills/engineering/sequence-migrations/SKILL.md):** Order migrations into compatible states with a check and recovery boundary at every step.
 - **[`confirm-destructive-actions`](./skills/engineering/confirm-destructive-actions/SKILL.md):** Resolve exact targets, exclusions, authority, and recovery before destructive work.
@@ -41,6 +44,13 @@ Use the one that matches the failure. There is no setup mode, router, or prescri
 ### While it changes code
 
 - **[`keep-code-boring`](./skills/engineering/keep-code-boring/SKILL.md):** Choose the smallest complete design and reject abstractions built for imaginary requirements.
+- **[`build-in-slices`](./skills/engineering/build-in-slices/SKILL.md):** Deliver cross-layer features as thin increments with observable behavior.
+- **[`watch-the-test-fail`](./skills/engineering/watch-the-test-fail/SKILL.md):** Observe a focused test fail before making the smallest production change.
+- **[`make-invalid-states-impossible`](./skills/engineering/make-invalid-states-impossible/SKILL.md):** Encode valid variants and reject malformed data at the trust boundary.
+- **[`make-side-effects-idempotent`](./skills/engineering/make-side-effects-idempotent/SKILL.md):** Make duplicate and interrupted operations converge without repeated effects.
+- **[`untangle-shared-state`](./skills/engineering/untangle-shared-state/SKILL.md):** Reduce shared mutation and make concurrent ownership explicit.
+- **[`refactor-without-regressions`](./skills/engineering/refactor-without-regressions/SKILL.md):** Change structure while preserving the observable contract.
+- **[`replace-an-api`](./skills/engineering/replace-an-api/SKILL.md):** Migrate consumers and prove the obsolete surface is gone.
 - **[`fix-generated-files`](./skills/engineering/fix-generated-files/SKILL.md):** Change generated, vendored, and derived artifacts through the source that owns them.
 - **[`preserve-git-state`](./skills/engineering/preserve-git-state/SKILL.md):** Keep unrelated staged, unstaged, untracked, stashed, and unpushed work intact.
 - **[`break-the-loop`](./skills/engineering/break-the-loop/SKILL.md):** Stop retries that produce no new evidence and choose one discriminating action.
@@ -49,6 +59,11 @@ Use the one that matches the failure. There is no setup mode, router, or prescri
 ### Before it calls the work done
 
 - **[`find-the-bug`](./skills/engineering/find-the-bug/SKILL.md):** Diagnose from a reproduced failure and keep evidence separate from inference.
+- **[`measure-the-bottleneck`](./skills/engineering/measure-the-bottleneck/SKILL.md):** Improve a bottleneck against a comparable measured baseline.
+- **[`observe-the-runtime`](./skills/engineering/observe-the-runtime/SKILL.md):** Instrument a running process to expose an intermittent transition.
+- **[`read-a-runtime-trace`](./skills/engineering/read-a-runtime-trace/SKILL.md):** Interpret a captured profile, trace, or snapshot from its dominant evidence.
+- **[`match-the-reference`](./skills/engineering/match-the-reference/SKILL.md):** Close measured visual differences under matched rendering conditions.
+- **[`prove-the-blast-radius`](./skills/engineering/prove-the-blast-radius/SKILL.md):** Trace a changed contract beyond the diff and prove its hinge facts.
 - **[`verify-real-behavior`](./skills/engineering/verify-real-behavior/SKILL.md):** Exercise the nearest real user or system boundary instead of trusting a proxy.
 - **[`review-the-diff`](./skills/engineering/review-the-diff/SKILL.md):** Review changes in risk order and report only actionable findings.
 - **[`validate-review-feedback`](./skills/engineering/validate-review-feedback/SKILL.md):** Reproduce factual inbound review claims before changing code.

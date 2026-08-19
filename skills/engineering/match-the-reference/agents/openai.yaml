@@ -1,0 +1,4 @@
+interface:
+  display_name: "Match the Reference"
+  short_description: "Close measured visual differences"
+  default_prompt: "Use $match-the-reference to reproduce the reference conditions, compare rendered output, and close visual differences without breaking behavior."

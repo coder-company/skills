@@ -1,0 +1,4 @@
+interface:
+  display_name: "Build in Slices"
+  short_description: "Ship thin end-to-end behavior"
+  default_prompt: "Use $build-in-slices to divide this feature into independently verifiable end-to-end increments."

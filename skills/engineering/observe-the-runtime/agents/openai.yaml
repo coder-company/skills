@@ -1,0 +1,4 @@
+interface:
+  display_name: "Observe the Runtime"
+  short_description: "Instrument a live intermittent failure"
+  default_prompt: "Use $observe-the-runtime to add targeted instrumentation, capture the live symptom, and distinguish the competing causes."

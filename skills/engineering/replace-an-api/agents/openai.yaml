@@ -1,0 +1,4 @@
+interface:
+  display_name: "Replace an API"
+  short_description: "Migrate consumers and remove the old path"
+  default_prompt: "Use $replace-an-api to inventory consumers, migrate them to one replacement contract, and prove the obsolete surface is gone."
