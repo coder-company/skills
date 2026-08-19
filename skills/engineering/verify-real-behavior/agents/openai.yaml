@@ -1,0 +1,4 @@
+interface:
+  display_name: "Verify Real Behavior"
+  short_description: "Verify behavior at the real boundary"
+  default_prompt: "Use $verify-real-behavior to prove this change at the nearest real user or system boundary before claiming completion."

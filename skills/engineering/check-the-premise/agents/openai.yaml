@@ -1,0 +1,4 @@
+interface:
+  display_name: "Check the Premise"
+  short_description: "Test the assumption that could sink the plan"
+  default_prompt: "Use $check-the-premise to run the cheapest disposable experiment that can falsify this plan's riskiest assumption."

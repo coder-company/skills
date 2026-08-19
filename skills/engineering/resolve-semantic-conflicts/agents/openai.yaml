@@ -1,0 +1,4 @@
+interface:
+  display_name: "Resolve Semantic Conflicts"
+  short_description: "Resolve behavioral conflicts, not just markers"
+  default_prompt: "Use $resolve-semantic-conflicts to reconstruct both sides' behavior and verify the intended merge result."

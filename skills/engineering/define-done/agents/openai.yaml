@@ -1,0 +1,4 @@
+interface:
+  display_name: "Define Done"
+  short_description: "Turn vague outcomes into observable checks"
+  default_prompt: "Use $define-done to state the smallest observable conditions that distinguish completion from plausible-looking work."

@@ -1,0 +1,4 @@
+interface:
+  display_name: "Trace Code History"
+  short_description: "Explain why code exists from repository evidence"
+  default_prompt: "Use $trace-code-history to trace the recorded rationale, current constraints, and remaining uncertainty behind this code."

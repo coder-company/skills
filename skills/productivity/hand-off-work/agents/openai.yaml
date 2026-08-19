@@ -1,0 +1,4 @@
+interface:
+  display_name: "Hand Off Work"
+  short_description: "Make unfinished work resumable"
+  default_prompt: "Use $hand-off-work to preserve exact state, rejected paths, evidence, and the next action for a fresh context."

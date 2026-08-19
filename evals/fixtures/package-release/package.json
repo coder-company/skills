@@ -1,0 +1,14 @@
+{
+  "name": "fixture-status-label",
+  "version": "3.4.0",
+  "type": "module",
+  "exports": "./dist/index.mjs",
+  "files": [
+    "README.md",
+    "src"
+  ],
+  "scripts": {
+    "build": "node scripts/build.mjs",
+    "test": "node --test test/index.test.mjs"
+  }
+}

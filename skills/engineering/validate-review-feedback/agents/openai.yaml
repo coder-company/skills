@@ -1,0 +1,4 @@
+interface:
+  display_name: "Validate Review Feedback"
+  short_description: "Check review claims before editing"
+  default_prompt: "Use $validate-review-feedback to reproduce factual review claims and resolve each comment from evidence."

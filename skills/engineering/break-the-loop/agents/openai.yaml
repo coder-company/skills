@@ -1,0 +1,4 @@
+interface:
+  display_name: "Break the Loop"
+  short_description: "Replace blind retries with new evidence"
+  default_prompt: "Use $break-the-loop to stop repeating failed attempts and choose one action that can distinguish the remaining causes."

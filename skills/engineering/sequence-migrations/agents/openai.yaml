@@ -1,0 +1,4 @@
+interface:
+  display_name: "Sequence Migrations"
+  short_description: "Order migrations into verifiable states"
+  default_prompt: "Use $sequence-migrations to order this migration into compatible, verifiable units with explicit recovery boundaries."

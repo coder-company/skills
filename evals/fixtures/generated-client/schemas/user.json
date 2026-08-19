@@ -1,0 +1,7 @@
+{
+  "name": "User",
+  "fields": {
+    "id": { "type": "string", "nullable": false },
+    "deletedAt": { "type": "string", "nullable": false }
+  }
+}

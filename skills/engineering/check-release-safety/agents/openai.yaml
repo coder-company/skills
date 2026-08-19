@@ -1,0 +1,4 @@
+interface:
+  display_name: "Check Release Safety"
+  short_description: "Check the exact result before remote release"
+  default_prompt: "Use $check-release-safety to refresh remote state, verify the exact release result, and name the recovery path before publishing."

@@ -1,0 +1,4 @@
+interface:
+  display_name: "Fix Generated Files"
+  short_description: "Change generated artifacts at their owner"
+  default_prompt: "Use $fix-generated-files to find the authoritative input and supported regeneration path before changing this derived artifact."

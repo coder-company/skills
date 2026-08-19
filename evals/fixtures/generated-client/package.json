@@ -1,0 +1,7 @@
+{
+  "type": "module",
+  "scripts": {
+    "generate": "node scripts/generate.mjs",
+    "test": "node --test test/client.test.mjs"
+  }
+}

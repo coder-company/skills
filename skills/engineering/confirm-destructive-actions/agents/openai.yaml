@@ -1,0 +1,4 @@
+interface:
+  display_name: "Confirm Destructive Actions"
+  short_description: "Gate destructive work on targets and recovery"
+  default_prompt: "Use $confirm-destructive-actions to resolve the exact target, exclusions, authority, and recovery path before this destructive action."

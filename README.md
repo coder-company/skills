@@ -28,41 +28,43 @@ npx skills@latest add coder-company/skills --skill keep-code-boring --agent code
 
 ## The skills
 
-### Your agent made the code clever
+Use the one that matches the failure. There is no setup mode, router, or prescribed sequence.
 
-**[`keep-code-boring`](./skills/engineering/keep-code-boring/SKILL.md)** directs the agent to choose the smallest complete design, follow the repository before an external style guide, and reject abstractions built for imaginary requirements.
+### Before it changes anything
 
-It preserves correctness, security, accessibility, and reliability as hard constraints. Boring does not mean careless.
+- **[`define-done`](./skills/engineering/define-done/SKILL.md):** Turn a materially vague outcome into checks that can prove it wrong.
+- **[`check-the-premise`](./skills/engineering/check-the-premise/SKILL.md):** Run a disposable experiment against the assumption that could sink the plan.
+- **[`design-module-boundaries`](./skills/engineering/design-module-boundaries/SKILL.md):** Place modules from caller needs, change coupling, ownership, and dependency direction.
+- **[`sequence-migrations`](./skills/engineering/sequence-migrations/SKILL.md):** Order migrations into compatible states with a check and recovery boundary at every step.
+- **[`confirm-destructive-actions`](./skills/engineering/confirm-destructive-actions/SKILL.md):** Resolve exact targets, exclusions, authority, and recovery before destructive work.
 
-### Your agent jumped to a root cause
+### While it changes code
 
-**[`find-the-bug`](./skills/engineering/find-the-bug/SKILL.md)** directs the agent to start with the failure, build the tightest useful feedback loop, and separate evidence from inference.
+- **[`keep-code-boring`](./skills/engineering/keep-code-boring/SKILL.md):** Choose the smallest complete design and reject abstractions built for imaginary requirements.
+- **[`fix-generated-files`](./skills/engineering/fix-generated-files/SKILL.md):** Change generated, vendored, and derived artifacts through the source that owns them.
+- **[`preserve-git-state`](./skills/engineering/preserve-git-state/SKILL.md):** Keep unrelated staged, unstaged, untracked, stashed, and unpushed work intact.
+- **[`break-the-loop`](./skills/engineering/break-the-loop/SKILL.md):** Stop retries that produce no new evidence and choose one discriminating action.
+- **[`resolve-semantic-conflicts`](./skills/engineering/resolve-semantic-conflicts/SKILL.md):** Reconcile both sides' intended behavior, including conflicts Git merges without markers.
 
-An existing focused test can be the whole feedback loop. An intermittent or production-only failure gets a deeper investigation. A trace is evidence, not a local reproduction.
+### Before it calls the work done
 
-### Your agent rubber-stamped the diff
+- **[`find-the-bug`](./skills/engineering/find-the-bug/SKILL.md):** Diagnose from a reproduced failure and keep evidence separate from inference.
+- **[`verify-real-behavior`](./skills/engineering/verify-real-behavior/SKILL.md):** Exercise the nearest real user or system boundary instead of trusting a proxy.
+- **[`review-the-diff`](./skills/engineering/review-the-diff/SKILL.md):** Review changes in risk order and report only actionable findings.
+- **[`validate-review-feedback`](./skills/engineering/validate-review-feedback/SKILL.md):** Reproduce factual inbound review claims before changing code.
+- **[`check-release-safety`](./skills/engineering/check-release-safety/SKILL.md):** Refresh remote state, inspect the exact release artifact, and name the down path before publishing.
 
-**[`review-the-diff`](./skills/engineering/review-the-diff/SKILL.md)** directs the agent to review changes in risk order: correctness, security, data integrity, user impact, tests, and maintainability.
+### When it needs evidence or another person
 
-Every finding needs a trigger, a consequence, and a precise location. If there is no actionable problem, the skill says so.
+- **[`show-your-sources`](./skills/engineering/show-your-sources/SKILL.md):** Answer technical questions from current primary sources without inventing certainty.
+- **[`trace-code-history`](./skills/engineering/trace-code-history/SKILL.md):** Explain why code exists and whether its recorded constraint still applies.
+- **[`hand-off-work`](./skills/productivity/hand-off-work/SKILL.md):** Pin unfinished state, rejected paths, evidence, and the next action for a fresh context.
+- **[`guide-manual-steps`](./skills/productivity/guide-manual-steps/SKILL.md):** Hand over only actions that require a person's identity, credentials, or physical presence.
 
-### Your agent invented a confident answer
+### When it writes
 
-**[`show-your-sources`](./skills/engineering/show-your-sources/SKILL.md)** directs the agent to answer technical questions from current primary sources and keep facts, inferences, and recommendations distinct.
-
-It answers in the conversation by default. It does not litter the repository with research notes unless the decision belongs there.
-
-### Your agent wrote sludge
-
-**[`say-it-clearly`](./skills/productivity/say-it-clearly/SKILL.md)** directs the agent to write for the reader, preserve the facts, and remove throat-clearing, fake certainty, vague verbs, and decorative structure.
-
-It follows the Google Developer Documentation Style Guide and Google Technical Writing guidance without making every sentence sound institutional.
-
-### Your agent wrote a prompt and called it a skill
-
-**[`write-a-skill`](./skills/engineering/write-a-skill/SKILL.md)** directs the agent to start from an observed failure, define trigger boundaries, write plain instructions, and test behavior before publishing.
-
-It rejects vague quality claims, unnecessary skill machinery, and evaluation results that cannot support the conclusion.
+- **[`say-it-clearly`](./skills/productivity/say-it-clearly/SKILL.md):** Preserve meaning while removing throat-clearing, vague verbs, fake certainty, and decorative structure.
+- **[`write-a-skill`](./skills/engineering/write-a-skill/SKILL.md):** Build skills from observed failures, explicit trigger boundaries, and behavioral evidence.
 
 ## Design rules
 
@@ -74,6 +76,9 @@ These skills are small enough to understand and strict where agents commonly fai
 - Primary sources before confident claims.
 - The reader's task before the writer's performance.
 - Observed failures before skill instructions.
+- Real artifacts before completion claims.
+- Recovery before irreversible actions.
+- Optional skills before workflow ownership.
 
 The prompts and expected behaviors used to test each skill live in [`evals/cases.json`](./evals/cases.json). Validate the skill structure, metadata, internal links, and evaluation manifest with:
 

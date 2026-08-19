@@ -11,3 +11,16 @@ These skills can be invoked by the user or selected automatically when the reque
 - **[review-the-diff](./review-the-diff/SKILL.md):** Review changes for correctness, intent, safety, and maintainability.
 - **[show-your-sources](./show-your-sources/SKILL.md):** Answer technical questions from current primary sources and explicit evidence.
 - **[write-a-skill](./write-a-skill/SKILL.md):** Create and test agent skills from observed failures and measurable behavior.
+- **[confirm-destructive-actions](./confirm-destructive-actions/SKILL.md):** Resolve destructive targets, exclusions, authority, and recovery before mutation.
+- **[verify-real-behavior](./verify-real-behavior/SKILL.md):** Verify changed behavior at the nearest real user or system boundary.
+- **[check-the-premise](./check-the-premise/SKILL.md):** Test the assumption most likely to invalidate an implementation plan.
+- **[fix-generated-files](./fix-generated-files/SKILL.md):** Change generated and derived artifacts through their authoritative inputs.
+- **[break-the-loop](./break-the-loop/SKILL.md):** Replace repeated failed attempts with one discriminating action.
+- **[resolve-semantic-conflicts](./resolve-semantic-conflicts/SKILL.md):** Resolve textual and semantic conflicts by preserving intended behavior.
+- **[preserve-git-state](./preserve-git-state/SKILL.md):** Preserve unrelated and user-owned Git state during repository work.
+- **[validate-review-feedback](./validate-review-feedback/SKILL.md):** Verify factual review claims before changing code.
+- **[define-done](./define-done/SKILL.md):** Turn vague outcomes into observable completion conditions.
+- **[sequence-migrations](./sequence-migrations/SKILL.md):** Order multi-step migrations into compatible, verifiable states.
+- **[design-module-boundaries](./design-module-boundaries/SKILL.md):** Design module ownership and interfaces from caller and change evidence.
+- **[trace-code-history](./trace-code-history/SKILL.md):** Explain why code exists from repository history and durable evidence.
+- **[check-release-safety](./check-release-safety/SKILL.md):** Verify remote state, release results, metadata, and recovery before publishing.

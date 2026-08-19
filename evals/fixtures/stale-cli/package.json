@@ -1,0 +1,8 @@
+{
+  "type": "module",
+  "scripts": {
+    "build": "node scripts/build.mjs",
+    "test": "node --test test/status.test.mjs",
+    "smoke": "node dist/cli.mjs in_progress"
+  }
+}

@@ -1,0 +1,4 @@
+interface:
+  display_name: "Design Module Boundaries"
+  short_description: "Place modules from callers and change evidence"
+  default_prompt: "Use $design-module-boundaries to design this module from caller needs, change coupling, domain ownership, and dependency direction."

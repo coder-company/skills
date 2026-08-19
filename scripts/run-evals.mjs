@@ -232,25 +232,36 @@ async function verifyOutcome(root, testCase, workspace, timeoutMs) {
 }
 
 async function grade({ piBin, provider, graderModel, thinking, prompt, cwd, timeoutMs }) {
-  const output = await run(
-    piBin,
-    [
-      "--provider",
-      provider,
-      "--model",
-      graderModel,
-      "--thinking",
-      thinking,
-      "--no-session",
-      "--no-skills",
-      "--no-context-files",
-      "--no-tools",
-      "-p",
-      prompt,
-    ],
-    { cwd, timeoutMs },
-  );
-  return extractJson(output);
+  let parseError;
+  for (let attempt = 0; attempt < 2; attempt += 1) {
+    const retryInstruction = attempt === 0
+      ? ""
+      : "\n\nYour previous grade was not valid JSON. Return only the requested JSON object with valid string escaping.";
+    const output = await run(
+      piBin,
+      [
+        "--provider",
+        provider,
+        "--model",
+        graderModel,
+        "--thinking",
+        thinking,
+        "--no-session",
+        "--no-skills",
+        "--no-context-files",
+        "--no-tools",
+        "-p",
+        `${prompt}${retryInstruction}`,
+      ],
+      { cwd, timeoutMs },
+    );
+    try {
+      return extractJson(output);
+    } catch (error) {
+      parseError = error;
+    }
+  }
+  throw parseError;
 }
 
 const args = parseArgs(process.argv.slice(2));

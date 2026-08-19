@@ -1,0 +1,4 @@
+interface:
+  display_name: "Preserve Git State"
+  short_description: "Protect unrelated work in a dirty checkout"
+  default_prompt: "Use $preserve-git-state to preserve user-owned and unrelated Git state while completing this repository task."

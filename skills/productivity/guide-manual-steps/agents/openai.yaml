@@ -1,0 +1,4 @@
+interface:
+  display_name: "Guide Manual Steps"
+  short_description: "Guide only the steps a person must perform"
+  default_prompt: "Use $guide-manual-steps to prepare the task, guide each human-only action with a visible checkpoint, and continue after verification."
