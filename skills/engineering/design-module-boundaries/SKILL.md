@@ -1,6 +1,6 @@
 ---
 name: design-module-boundaries
-description: Place responsibilities and design module interfaces from evidence about callers, change coupling, dependency direction, and domain language. Use when ownership or dependency direction is changing: creating a package or module, moving a responsibility across an existing boundary, splitting a subsystem, or replacing a shallow shared or utils container.
+description: Place responsibilities and design module interfaces from evidence about callers, change coupling, dependency direction, and domain language. Use when ownership or dependency direction is changing, such as creating a package or module, moving a responsibility across an existing boundary, splitting a subsystem, or replacing a shallow shared or utils container.
 ---
 
 # Design module boundaries

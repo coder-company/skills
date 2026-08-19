@@ -41,7 +41,11 @@ function parseFrontmatter(text, path) {
   for (const line of match[1].split("\n")) {
     const separator = line.indexOf(":");
     if (separator === -1) continue;
-    fields[line.slice(0, separator).trim()] = line.slice(separator + 1).trim();
+    const value = line.slice(separator + 1).trim();
+    if (!value.startsWith('"') && !value.startsWith("'") && value.includes(": ")) {
+      errors.push(`${path}: plain YAML scalar contains an unquoted colon`);
+    }
+    fields[line.slice(0, separator).trim()] = value;
   }
   return fields;
 }
