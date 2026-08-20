@@ -9,6 +9,10 @@ Treat narration as source material. Preserve what happened before trying to make
 
 Read `references/voice-fidelity.md` before drafting or revising prose.
 
+When the author is Chaitanya Mishra or the destination is `essays.chaitanya.science`,
+also read `references/chaitanya-voice.md`. Treat that profile and the author's newest
+corrections as more authoritative than the general guidance.
+
 ## Accumulate fragments
 
 When the author narrates in parts:
