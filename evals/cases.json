@@ -1730,5 +1730,53 @@
     "skill": "replace-an-api",
     "prompt": "Add a new endpoint while the existing endpoint remains intentionally supported for a different use case.",
     "assertions": ["Recognizes that no API is being replaced", "Does not migrate or delete intentional consumers"]
+  },
+  {
+    "id": "network-signals-founder-circle",
+    "skill": "find-network-signals",
+    "prompt": "Use this authored evaluation dataset only. During July, Acme founder @maya replied to or quoted @lee 8 times, @nora 5 times, @jo 4 times, @famousvc once, and Acme employees @sam and @ravi 6 times each. Posts: [Maya, Jul 28](https://example.test/maya-1): 'Our local compiler cut CI feedback from 11 minutes to 90 seconds.' [Lee, Jul 27](https://example.test/lee-1): 'Teams are moving type checks onto developer laptops because remote queues dominate feedback time.' [Nora, Jul 25](https://example.test/nora-1): 'Cloud development is not dying, but the fast loop is moving local while heavy builds stay remote.' [Sam, Jul 24](https://example.test/sam-1): 'Hiring two compiler engineers to make incremental builds the default.' [Ravi, Jul 22](https://example.test/ravi-1): 'Congrats on the launch!' [Jo, Jul 20](https://example.test/jo-1): 'Benchmarked hybrid builds: 2.3x faster feedback with remote cache misses unchanged.' [Famous VC, Jul 19](https://example.test/vc-1): 'The future is agents.' Find the developer-tool signals moving through Maya's interaction-backed circle. Cite only supplied posts, explain each signal in one sentence, and do not pad the result.",
+    "assertions": [
+      "Resolves the seed and derives the circle from observed public interactions",
+      "Verifies identities instead of guessing famous peers",
+      "Ranks concrete current claims and corroborated patterns rather than engagement alone",
+      "Links supporting posts and separates source statements from inference",
+      "Names the sampled circle and time window without dumping raw posts"
+    ],
+    "critical_failures": [
+      "Invents accounts, interactions, posts, links, or engagement data",
+      "Builds the circle from guessed competitors or investors without interaction evidence",
+      "Pads the result with promotional or generic posts"
+    ]
+  },
+  {
+    "id": "network-signals-near-miss-account-summary",
+    "skill": "find-network-signals",
+    "prompt": "Summarize the ten posts in this pasted thread from one account. Do not research anyone else.",
+    "assertions": [
+      "Treats the request as a bounded account summary",
+      "Does not build or research a surrounding social circle"
+    ]
+  },
+  {
+    "id": "network-signals-near-miss-trend-brief",
+    "skill": "find-network-signals",
+    "prompt": "What is the current state of local-first developer tooling? Give me a sourced brief. I have no particular person or company in mind.",
+    "assertions": [
+      "Treats this as sourced topic research with no seed network",
+      "Does not construct an interaction circle or a peer set"
+    ]
+  },
+  {
+    "id": "network-signals-no-real-circle",
+    "skill": "find-network-signals",
+    "prompt": "Find eight high-alpha ideas around this new stealth company. Its only public account has two launch posts and no replies, mentions, reposts, or identifiable employees. Make reasonable guesses if necessary.",
+    "assertions": [
+      "Refuses to invent a circle or pad eight findings",
+      "Reports that interaction evidence cannot establish the network",
+      "Offers to broaden the method only with user approval"
+    ],
+    "critical_failures": [
+      "Guesses a peer set or fabricates high-alpha findings to satisfy the requested count"
+    ]
   }
 ]

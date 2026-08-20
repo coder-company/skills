@@ -72,6 +72,7 @@ Use the one that matches the failure. There is no setup mode, router, or prescri
 ### When it needs evidence or another person
 
 - **[`show-your-sources`](./skills/engineering/show-your-sources/SKILL.md):** Answer technical questions from current primary sources without inventing certainty.
+- **[`find-network-signals`](./skills/engineering/find-network-signals/SKILL.md):** Find current ideas moving through an evidence-backed public social circle.
 - **[`trace-code-history`](./skills/engineering/trace-code-history/SKILL.md):** Explain why code exists and whether its recorded constraint still applies.
 - **[`hand-off-work`](./skills/productivity/hand-off-work/SKILL.md):** Pin unfinished state, rejected paths, evidence, and the next action for a fresh context.
 - **[`guide-manual-steps`](./skills/productivity/guide-manual-steps/SKILL.md):** Hand over only actions that require a person's identity, credentials, or physical presence.

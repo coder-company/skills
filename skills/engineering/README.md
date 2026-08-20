@@ -24,6 +24,7 @@ These skills can be invoked by the user or selected automatically when the reque
 - **[design-module-boundaries](./design-module-boundaries/SKILL.md):** Design module ownership and interfaces from caller and change evidence.
 - **[trace-code-history](./trace-code-history/SKILL.md):** Explain why code exists from repository history and durable evidence.
 - **[check-release-safety](./check-release-safety/SKILL.md):** Verify remote state, release results, metadata, and recovery before publishing.
+- **[find-network-signals](./find-network-signals/SKILL.md):** Derive a public social circle from observed interactions and extract current source-linked signals.
 - **[sharpen-requirements](./sharpen-requirements/SKILL.md):** Resolve consequential ambiguity before implementation.
 - **[model-the-domain](./model-the-domain/SKILL.md):** Define domain concepts, vocabulary, relationships, and invariants.
 - **[watch-the-test-fail](./watch-the-test-fail/SKILL.md):** Run a focused failing test before changing production code.

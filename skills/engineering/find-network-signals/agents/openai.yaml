@@ -1,0 +1,4 @@
+interface:
+  display_name: "Find Network Signals"
+  short_description: "Find ideas moving through a social circle"
+  default_prompt: "Use $find-network-signals to derive this seed's public interaction network and return only current, source-linked signals."
