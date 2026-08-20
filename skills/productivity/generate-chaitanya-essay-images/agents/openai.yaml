@@ -1,0 +1,4 @@
+interface:
+  display_name: "Generate Chaitanya Essay Images"
+  short_description: "Create images for Chaitanya's Essays"
+  default_prompt: "Use $generate-chaitanya-essay-images to create and verify an OG image for this essay."

@@ -1,0 +1,4 @@
+interface:
+  display_name: "Write a Personal Essay"
+  short_description: "Preserve voice while assembling personal essays"
+  default_prompt: "Use $write-a-personal-essay to turn these narrated fragments into an essay without losing my voice or details."

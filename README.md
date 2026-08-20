@@ -80,6 +80,8 @@ Use the one that matches the failure. There is no setup mode, router, or prescri
 ### When it writes
 
 - **[`say-it-clearly`](./skills/productivity/say-it-clearly/SKILL.md):** Preserve meaning while removing throat-clearing, vague verbs, fake certainty, and decorative structure.
+- **[`write-a-personal-essay`](./skills/productivity/write-a-personal-essay/SKILL.md):** Assemble narrated fragments into a personal essay without erasing the author's voice or lived details.
+- **[`generate-chaitanya-essay-images`](./skills/productivity/generate-chaitanya-essay-images/SKILL.md):** Generate and verify the exact scientific-macro image system used by [Chaitanya Mishra's Essays](https://essays.chaitanya.science).
 - **[`write-a-skill`](./skills/engineering/write-a-skill/SKILL.md):** Build skills from observed failures, explicit trigger boundaries, and behavioral evidence.
 
 ## Design rules

@@ -1778,5 +1778,79 @@
     "critical_failures": [
       "Guesses a peer set or fabricates high-alpha findings to satisfy the requested count"
     ]
+  },
+  {
+    "id": "essay-fragment-accumulation",
+    "skill": "write-a-personal-essay",
+    "prompt": "I am narrating an essay in parts. Save this fragment without publishing it: I missed breakfast, ate the takeaway in the cab, reached the wrong house at 11:10, and knocked on doors for five minutes. I will continue later.",
+    "assertions": [
+      "Preserves every physical detail, time, and sequence",
+      "Stores the fragment in a non-public working draft or source ledger",
+      "Does not invent a thesis, opening flourish, lesson, or ending",
+      "Does not compress the scene into a generic description of a hectic morning"
+    ],
+    "critical_failures": [
+      "Publishes the fragment or drops a supplied detail",
+      "Manufactures a complete essay from the incomplete narration"
+    ]
+  },
+  {
+    "id": "essay-remove-generated-bridges",
+    "skill": "write-a-personal-essay",
+    "prompt": "Revise this paragraph in my voice. Keep the exact quotation and all facts. Remove AI-sounding bridges, especially 'not A, but B', 'Obviously', and 'This does not mean'. Do not shorten the story.",
+    "assertions": [
+      "Preserves exact quotations and source facts",
+      "Removes qualification bridges and false contrast structures",
+      "Changes the narrow offending structure instead of rewriting unrelated prose",
+      "Checks that the revision did not unexpectedly remove material"
+    ],
+    "critical_failures": [
+      "Replaces the author's diction with polished generic prose",
+      "Deletes details to make the paragraph cleaner"
+    ]
+  },
+  {
+    "id": "essay-writer-influence-near-miss",
+    "skill": "write-a-personal-essay",
+    "prompt": "Give this essay the argumentative pressure of a famous living founder-writer. I have not read their book. Do not claim I have.",
+    "assertions": [
+      "Uses only high-level questions or argument structure",
+      "Keeps the narrator's established diction and rhythm",
+      "Does not imitate distinctive phrasing",
+      "Does not name, cite, quote, or claim familiarity with the writer or book"
+    ],
+    "critical_failures": [
+      "Claims the narrator read or learned from the named source",
+      "Produces a stack of simulated aphorisms in the other writer's voice"
+    ]
+  },
+  {
+    "id": "chaitanya-essay-og",
+    "skill": "generate-chaitanya-essay-images",
+    "prompt": "Create the OG image for a new essay on essays.chaitanya.science. The essay is about looking for a company idea while building side projects. Generate, integrate, and verify the final social image.",
+    "assertions": [
+      "Reads the essay and names its central tension before generating",
+      "Uses the fixed teal-black, warm-paper, scientific-macro system with one turquoise signal",
+      "Keeps the left 46 percent quiet and weights the physical apparatus to the lower right",
+      "Generates a text-free background and adds exact Geist typography deterministically",
+      "Produces a 1200 by 630 optimized JPEG with absolute OG and Twitter metadata",
+      "Verifies the live asset with WhatsApp, Facebook, and Twitter crawler user agents",
+      "Links or names essays.chaitanya.science as the canonical visual reference"
+    ],
+    "critical_failures": [
+      "Uses a laptop, notebook, lightbulb, person, fake UI, neon, purple, or generated title text",
+      "Generalizes or restyles the fixed Essays visual language",
+      "Declares completion without checking the live crawler response"
+    ]
+  },
+  {
+    "id": "chaitanya-image-near-miss-diagram",
+    "skill": "generate-chaitanya-essay-images",
+    "prompt": "Create a factual architecture diagram for an unrelated SaaS dashboard. It must use selectable labels and exact measured values.",
+    "assertions": [
+      "Does not apply the Chaitanya Essays image system",
+      "Routes the request to a code-native factual diagram workflow",
+      "Does not use raster generation for measured labels and values"
+    ]
   }
 ]
