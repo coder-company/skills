@@ -1852,5 +1852,116 @@
       "Routes the request to a code-native factual diagram workflow",
       "Does not use raster generation for measured labels and values"
     ]
+  },
+  {
+    "id": "code-rust-ownership-not-clone",
+    "skill": "keep-code-boring",
+    "prompt": "Fix this Rust ownership error. The function clones a 50 MB buffer three times only to satisfy the borrow checker. The caller owns the buffer for the entire operation and no mutation is required.",
+    "assertions": [
+      "Models the required lifetime with borrowing instead of reflexive cloning",
+      "Keeps ownership visible in the function signature",
+      "Does not introduce Rc, Arc, interior mutability, or unsafe code without an ownership need",
+      "Runs rustfmt, Clippy, and the focused tests when configured"
+    ],
+    "critical_failures": [
+      "Preserves or adds large clones solely to silence the borrow checker"
+    ]
+  },
+  {
+    "id": "code-go-goroutine-lifetime",
+    "skill": "keep-code-boring",
+    "prompt": "Review and fix a Go helper that starts a goroutine on every request, ignores context cancellation, and has no owner that closes its output channel.",
+    "assertions": [
+      "Defines who owns the goroutine, cancellation, channel closure, and completion",
+      "Propagates context rather than adding an unrelated stop flag",
+      "Uses the race detector or a focused concurrency test when available"
+    ],
+    "critical_failures": [
+      "Leaves a goroutine whose stop condition or channel owner is undefined"
+    ]
+  },
+  {
+    "id": "code-c-resource-boundary",
+    "skill": "keep-code-boring",
+    "prompt": "Repair a C parser that allocates three buffers, returns early from five error branches, narrows size_t to int, and copies untrusted input without checking the destination bound.",
+    "assertions": [
+      "Makes allocation ownership and one auditable cleanup path explicit",
+      "Checks bounds and narrowing before copying or converting",
+      "Uses the repository compiler warnings and sanitizers when configured",
+      "Does not treat a clean ordinary build as proof of memory safety"
+    ],
+    "critical_failures": [
+      "Leaves an unchecked copy, truncating conversion, leak, or double-free path"
+    ]
+  },
+  {
+    "id": "code-kotlin-null-and-coroutines",
+    "skill": "keep-code-boring",
+    "prompt": "Simplify Kotlin code that chains four nested scope functions, uses !! on an API response, launches work in GlobalScope, and blocks inside the coroutine.",
+    "assertions": [
+      "Parses nullable external data at the boundary without non-null assertions",
+      "Replaces nested scope-function ambiguity with direct readable flow",
+      "Uses an owned structured-concurrency scope with cancellation",
+      "Moves blocking work to the repository's appropriate dispatcher or boundary"
+    ],
+    "critical_failures": [
+      "Retains GlobalScope or uses !! to hide an unresolved state"
+    ]
+  },
+  {
+    "id": "code-typescript-unknown-boundary",
+    "skill": "keep-code-boring",
+    "prompt": "A TypeScript webhook handler casts JSON.parse(body) as PaymentEvent, disables strict checks locally, and uses any through the payment path. Fix the boundary without changing the wire format.",
+    "assertions": [
+      "Treats parsed input as unknown until runtime validation succeeds",
+      "Models event variants with a discriminated and exhaustively handled type",
+      "Preserves the wire contract",
+      "Does not use any, unchecked assertions, or non-null assertions to suppress the mismatch"
+    ],
+    "critical_failures": [
+      "Keeps an unchecked cast from untrusted JSON into the trusted payment type"
+    ]
+  },
+  {
+    "id": "code-csharp-async-resource-lifetime",
+    "skill": "keep-code-boring",
+    "prompt": "Fix a C# service method that returns async void, creates an HttpClient response without disposing it, drops CancellationToken, and suppresses nullable warnings around the response body.",
+    "assertions": [
+      "Returns Task or Task<T> instead of async void for a service method",
+      "Propagates cancellation through the asynchronous call chain",
+      "Disposes synchronous or asynchronous resources through the language construct",
+      "Models the nullable response instead of suppressing analysis"
+    ],
+    "critical_failures": [
+      "Leaves an unobservable async void failure or undisposed response"
+    ]
+  },
+  {
+    "id": "code-python-state-and-cleanup",
+    "skill": "keep-code-boring",
+    "prompt": "Fix a Python function whose default list accumulates values across calls, opens a file without a context manager, catches Exception, and uses a dense comprehension with three branches and a side effect.",
+    "assertions": [
+      "Removes the shared mutable default",
+      "Binds file lifetime to a context manager",
+      "Catches only exceptions the function can handle or contextualize",
+      "Uses ordinary control flow for the stateful branched transformation"
+    ],
+    "critical_failures": [
+      "Retains the mutable default or broad exception swallowing"
+    ]
+  },
+  {
+    "id": "code-sql-dialect-and-transaction",
+    "skill": "keep-code-boring",
+    "prompt": "Fix a PostgreSQL transfer routine that interpolates account IDs, uses SELECT *, updates two balances outside a transaction, and claims it is portable to every SQL database. The repository targets PostgreSQL only.",
+    "assertions": [
+      "Uses parameters for values and names required columns",
+      "Defines transaction, locking, isolation, and retry behavior for the two-account invariant",
+      "Uses PostgreSQL semantics instead of inventing an unused portability layer",
+      "Tests concurrent transfers and failure between statements"
+    ],
+    "critical_failures": [
+      "Leaves injectable SQL or permits a committed one-sided transfer"
+    ]
   }
 ]
