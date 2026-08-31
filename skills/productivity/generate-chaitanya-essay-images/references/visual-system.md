@@ -1,60 +1,43 @@
-# Chaitanya's Essays image system
+# chaitanya.gg image system
 
-This reference applies only to [essays.chaitanya.science](https://essays.chaitanya.science) and direct continuations of that system.
+This reference applies only to [chaitanya.gg](https://chaitanya.gg) and direct continuations of that system.
 
 ## Character
 
-Create quiet editorial images that feel like photographed research apparatus or a material experiment. The image should be precise, tactile, slightly strange, and believable.
+Hand-drawn ink sketches that read like a careful person thinking on paper. Each image is one physical scene carrying one deep message from the essay. Calm, precise, humane — the clean-water restraint of a premium product page, drawn by hand.
 
 ## Palette
 
-- Teal-black field: `#091717`
-- Turquoise signal: `#20808D`
-- Warm paper: `#FBFAF4`
-- Ivory, smoke glass, black thread, and restrained aged brass
+- Warm paper: `#faf9f6`
+- Ink: `#1c1b18` (black ink only; hatching may soften it)
+- Muted caption gray: `#71706a` (rendered type only, never inside the sketch)
 
-Use one accent. Avoid purple, blue neon, multicolor light, and decorative glow.
+No color inside the artwork. No accent colors anywhere in the system.
 
-## Material vocabulary
+## Drawing vocabulary
 
-Prefer paper fibers, ink channels, glass tubing, optical lenses, brass fasteners, physical paths, specimen holders, cross-sections, and analog measuring instruments.
+Fine single-line ink work with delicate cross-hatching. Hands, seeds, kites, strings, paper planes, flight paths, footprints, houses and chimneys, ladders, masks, shadows, arrows, spirals. Everyday physical things, allowed one quiet impossibility that states the essay's argument (a ladder whose rungs are papers; a shadow that works while the mask performs).
 
-Objects must have weight, joints, surface wear, and plausible lighting. Avoid fantasy machinery and random steampunk ornament.
+Objects keep believable weight and perspective. No fantasy machinery, no decorative texture, no backgrounds beyond the paper itself.
 
-## OG composition
+## Composition
 
-- Final size: 1200 by 630
-- Left 46 percent: quiet type field
-- Lower right: primary apparatus
-- Far right: secondary detail may leave the frame
-- Title: warm white, restrained size, left aligned
-- Author: muted teal-gray below title
-- Domain: small and low on the left
+- Generate at 16:9. Keep the subject weighted low or to one side; most of the paper stays empty.
+- The upper-left quadrant must stay quiet: OG titles are overlaid there.
+- The sketch must stay legible at a 352px square center crop (homepage thumbnail).
 
-Use Geist at the established coordinates: title 64px at `+76+205`, author 28px at `+76+300`, and domain 20px at `+76+548`.
+## Deliverables per essay
 
-## Homepage hero
+| Asset | Size | Location |
+| --- | --- | --- |
+| Essay hero | 1360×640 webp | `public/images/art/{slug}-wide.webp` |
+| Thumbnail | 352×352 webp | `public/images/art/{slug}.webp` |
+| OG card | 1200×630 jpg | `public/og-{slug}-YYYYMMDD.jpg` |
 
-- Crop: 3:1
-- Radius in the page: 12px
-- Subject: paper fibers, capillary ink, a material cross-section, or an optical artifact
-- Composition: quiet negative space with one turquoise focal detail
-- Text: none
+## Rendered type
 
-## Site icon
+Switzer only (Fontshare). OG title: Semibold, ink, top-left at +72+64 in a 760px column. Domain line: Medium 26px, muted gray, bottom-left at +72+56. Never ask the image model to render text.
 
-Keep the existing folded-paper `C` mark. Use warm paper on `#0B6963`. The fold and counter must remain readable at 16px. Produce and inspect 16px, 32px, 48px, 180px, 192px, and 512px exports.
+## Icon
 
-## Prompt scaffold
-
-```text
-Use case: stylized-concept
-Asset type: Open Graph background for an essay, final crop 1200×630
-Primary request: Create a quiet scientific-macro editorial photograph about <central tension>.
-Composition: Dark teal-black field. Keep the left 46% calm and nearly empty for later typography. Weight the objects into the lower-right and far-right.
-Scene: A physical experimental system made from <two to four relevant materials>. One restrained turquoise #20808D signal expresses <specific change or unresolved path>.
-Lighting: Subdued directional studio light, deep teal-black shadows, restrained contrast, tactile detail, no glow.
-Avoid: text, letters, numbers, logos, watermarks, people, hands, laptops, notebooks, lightbulbs, question marks, arrows, fake UI, neon, purple, gradients, centered subjects, and symmetry.
-```
-
-Change the physical system for each essay. Do not reuse one apparatus with a different title.
+One hand-drawn ink open circle — an unfinished loop with a gap at the upper right, natural taper at the stroke ends — centered on paper. It must read at 16px. All favicon sizes derive from this one mark.

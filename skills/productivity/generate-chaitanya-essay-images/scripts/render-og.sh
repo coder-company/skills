@@ -1,51 +1,27 @@
 #!/usr/bin/env bash
+# chaitanya.gg OG card: hand-drawn essay sketch as the field, clean Switzer
+# title top-left, small domain bottom-left. 1200x630 JPEG.
 set -euo pipefail
 
-if [[ $# -ne 6 ]]; then
-  echo "usage: $0 INPUT OUTPUT TITLE AUTHOR DOMAIN FONT" >&2
-  exit 2
-fi
+ART="$1"     # source art png (16:9 generation)
+OUT="$2"
+TITLE="$3"
+SEMIBOLD="${SEMIBOLD:-/tmp/switzer/Switzer_Complete/Fonts/OTF/Switzer-Semibold.otf}"
+MEDIUM="${MEDIUM:-/tmp/switzer/Switzer_Complete/Fonts/OTF/Switzer-Medium.otf}"
 
-input=$1
-output=$2
-title=$3
-author=$4
-domain=$5
-font=$6
+INK="#1c1b18"
+MUTED="#71706a"
 
-for path in "$input" "$font"; do
-  if [[ ! -f "$path" ]]; then
-    echo "missing file: $path" >&2
-    exit 2
-  fi
-done
+TITLE_PNG=$(mktemp --suffix=.png)
+trap 'rm -f "$TITLE_PNG"' EXIT
 
-if command -v magick >/dev/null 2>&1; then
-  image=(magick)
-  identify_image=(magick identify)
-elif command -v convert >/dev/null 2>&1; then
-  image=(convert)
-  identify_image=(identify)
-else
-  echo "ImageMagick is required (magick or convert)" >&2
-  exit 2
-fi
+convert -background none -fill "$INK" -font "$SEMIBOLD" \
+  -size 760x220 -gravity northwest caption:"$TITLE" "$TITLE_PNG"
 
-mkdir -p "$(dirname "$output")"
+convert "$ART" -gravity center -crop '1536x806+0+60' +repage -resize '1200x630!' \
+  "$TITLE_PNG" -gravity northwest -geometry +72+64 -composite \
+  -font "$MEDIUM" -pointsize 26 -fill "$MUTED" \
+  -gravity southwest -annotate +72+56 "chaitanya.gg" \
+  -colorspace sRGB -quality 92 "$OUT"
 
-"${image[@]}" "$input" \
-  -resize '1200x630^' -gravity center -extent 1200x630 \
-  -font "$font" \
-  -fill '#F4F1EA' -pointsize 64 -gravity northwest -annotate +76+205 "$title" \
-  -fill '#8EA8A4' -pointsize 28 -annotate +76+300 "$author" \
-  -fill '#CDD5D2' -pointsize 20 -annotate +76+548 "$domain" \
-  -colorspace sRGB -sampling-factor 4:2:0 -quality 88 -strip \
-  "$output"
-
-dimensions=$("${identify_image[@]}" -format '%wx%h' "$output")
-if [[ "$dimensions" != "1200x630" ]]; then
-  echo "unexpected dimensions: $dimensions" >&2
-  exit 1
-fi
-
-echo "$output ($dimensions)"
+echo "wrote $OUT"
