@@ -1,0 +1,4 @@
+interface:
+  display_name: "Keep Execution State"
+  short_description: "Carry facts and ruled-out paths as explicit state"
+  default_prompt: "Use $keep-execution-state to track this long task as explicit state instead of transcript memory."

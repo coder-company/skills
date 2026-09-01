@@ -1,0 +1,4 @@
+interface:
+  display_name: "Work Unattended"
+  short_description: "Fixed stop predicate, autonomy boundary, stall rule"
+  default_prompt: "Use $work-unattended to run this to completion without me, stopping only at the predicate or an irreversible action."

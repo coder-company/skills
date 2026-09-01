@@ -1,0 +1,4 @@
+interface:
+  display_name: "Remove Code Slop"
+  short_description: "Delete generated excess without changing behavior"
+  default_prompt: "Use $remove-code-slop to find and remove machine-generated excess in this change without altering behavior."

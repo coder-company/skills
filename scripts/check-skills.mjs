@@ -52,6 +52,52 @@ function parseFrontmatter(text, path) {
 
 const skillFiles = await findSkillFiles(skillsRoot);
 const skillNames = new Set();
+const requiredSections = ["## Stop signals", "## Shortcuts that fail", "## Report", "## Critical failures"];
+const vagueWords = /\b(properly|carefully|robust|comprehensive|thorough|thoroughly|seamless|seamlessly|high quality|state of the art|battle-tested)\b/gi;
+const maxBodyLines = 500;
+const maxDescriptionChars = 500;
+const maxBodyWords = 1000;
+const broadSkills = new Set(["find-the-bug", "keep-code-boring", "review-the-diff", "write-a-skill"]);
+const maxBroadBodyWords = 1350;
+let totalDescriptionChars = 0;
+
+function checkBody(text, displayPath, name) {
+  const lines = text.split("\n");
+  const wordLimit = broadSkills.has(name) ? maxBroadBodyWords : maxBodyWords;
+  if (lines.length > maxBodyLines) {
+    errors.push(`${displayPath}: ${lines.length} lines exceeds ${maxBodyLines}`);
+  }
+  lines.forEach((line, index) => {
+    if (/[\u2013\u2014]/.test(line)) {
+      errors.push(`${displayPath}:${index + 1}: contains an em or en dash`);
+    }
+  });
+  for (const section of requiredSections) {
+    if (!text.includes(`\n${section}`)) {
+      errors.push(`${displayPath}: missing section ${section}`);
+    }
+  }
+  const body = text.replace(/^---[\s\S]*?---\n/, "");
+  const words = body.split(/\s+/).filter(Boolean).length;
+  if (words > wordLimit) {
+    errors.push(`${displayPath}: body is ${words} words; limit ${wordLimit}`);
+  }
+  const prose = text.replace(/`[^`\n]*`/g, "").replace(/"[^"\n]*"/g, "");
+  const vague = [...prose.matchAll(vagueWords)].map((match) => match[0]);
+  if (vague.length) {
+    errors.push(`${displayPath}: vague quality words: ${[...new Set(vague.map((word) => word.toLowerCase()))].join(", ")}`);
+  }
+}
+
+function checkDescription(description, displayPath) {
+  const value = description.replace(/^["']|["']$/g, "");
+  if (value.length > maxDescriptionChars) {
+    errors.push(`${displayPath}: description is ${value.length} characters; limit ${maxDescriptionChars} (descriptions load into every session)`);
+  }
+  if (/[<>]/.test(value)) errors.push(`${displayPath}: description contains angle brackets`);
+  if (!/\bUse when\b/.test(value)) errors.push(`${displayPath}: description lacks a "Use when" trigger clause`);
+  if (!/\bDo not use\b/.test(value)) errors.push(`${displayPath}: description lacks a "Do not use" near-miss clause`);
+}
 
 for (const path of skillFiles) {
   const text = await readFile(path, "utf8");
@@ -65,7 +111,15 @@ for (const path of skillFiles) {
     }
   }
   if (!fields.name) errors.push(`${displayPath}: missing name`);
+  if (fields.name && (fields.name.length > 64 || !/^[a-z0-9]+(-[a-z0-9]+)*$/.test(fields.name))) {
+    errors.push(`${displayPath}: name must be kebab-case and at most 64 characters`);
+  }
   if (!fields.description) errors.push(`${displayPath}: missing description`);
+  if (fields.description) {
+    checkDescription(fields.description, displayPath);
+    totalDescriptionChars += fields.description.length;
+  }
+  checkBody(text, displayPath, fields.name);
 
   const folderName = path.split("/").at(-2);
   if (fields.name && fields.name !== folderName) {
@@ -73,7 +127,7 @@ for (const path of skillFiles) {
   }
   if (fields.name) skillNames.add(fields.name);
 
-  for (const [, reference] of text.matchAll(/`(references\/[^`]+\.md)`/g)) {
+  for (const [, reference] of text.matchAll(/`((?:references|scripts)\/[^`\s<]+\.(?:md|sh|mjs|js|py))/g)) {
     const referencePath = join(path, "..", reference);
     if (!(await exists(referencePath))) {
       errors.push(`${displayPath}: missing ${reference}`);
@@ -103,8 +157,8 @@ for (const testCase of cases) {
   if (!Array.isArray(testCase.assertions) || testCase.assertions.length === 0) {
     errors.push(`${testCase.id}: missing assertions`);
   }
-  if (testCase.critical_failures !== undefined && !Array.isArray(testCase.critical_failures)) {
-    errors.push(`${testCase.id}: critical_failures must be an array`);
+  if (!Array.isArray(testCase.critical_failures) || testCase.critical_failures.length === 0) {
+    errors.push(`${testCase.id}: missing critical_failures (the grader has no automatic-loss condition without them)`);
   }
   if (testCase.fixture && !(await exists(join(root, testCase.fixture)))) {
     errors.push(`${testCase.id}: missing fixture ${testCase.fixture}`);
@@ -116,6 +170,14 @@ for (const testCase of cases) {
     errors.push(`${testCase.id}: verify must be a non-empty command array`);
   }
 }
+
+const casesPerSkill = new Map();
+for (const testCase of cases) casesPerSkill.set(testCase.skill, (casesPerSkill.get(testCase.skill) ?? 0) + 1);
+for (const name of skillNames) {
+  if ((casesPerSkill.get(name) ?? 0) < 2) errors.push(`evals/cases.json: ${name} has fewer than 2 evaluation cases`);
+}
+
+console.log(`descriptions: ${skillFiles.length} skills, ${totalDescriptionChars} chars (~${Math.round(totalDescriptionChars / 4)} tokens in every session)`);
 
 if (errors.length) {
   for (const error of errors) console.error(`FAIL ${error}`);

@@ -1,0 +1,4 @@
+interface:
+  display_name: "Dispatch Subagents"
+  short_description: "Standalone briefs, disjoint scopes, verified results"
+  default_prompt: "Use $dispatch-subagents to split this work into independent briefs and verify each result."

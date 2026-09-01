@@ -1,0 +1,4 @@
+interface:
+  display_name: "Stress-Test the Design"
+  short_description: "Adversarial rubric review with lead judgment"
+  default_prompt: "Use $stress-test-the-design to attack this design along a fixed rubric and sort the findings."

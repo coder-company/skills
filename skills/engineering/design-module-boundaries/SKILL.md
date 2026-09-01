@@ -1,62 +1,101 @@
 ---
 name: design-module-boundaries
-description: Place responsibilities and design module interfaces from evidence about callers, change coupling, dependency direction, and domain language. Use when ownership or dependency direction is changing, such as creating a package or module, moving a responsibility across an existing boundary, splitting a subsystem, or replacing a shallow shared or utils container.
+description: Decide where a responsibility lives and what its interface is from evidence about callers, change coupling, dependency direction, and domain vocabulary, producing a deep module with a small surface. Use when creating a package or module, moving a responsibility across a boundary, splitting a subsystem, or replacing a utils grab-bag. Do not use for one file added to an established module. Do not use for unsettled vocabulary; use model-the-domain.
 ---
 
 # Design module boundaries
 
-## Start from callers and change evidence
+Write the caller's usage first, name the one decision or invariant the module owns, check the dependency direction, then pressure the proposed boundary with a current caller, the next known variation, and one failure path. A boundary that callers must look through is not a boundary.
 
-Inspect:
+## Route first
 
-- how callers use the capability today;
-- which files and concepts change together in repository history;
-- data and control flow across the proposed boundary;
-- current dependency direction and cycles;
-- vocabulary in product requirements, issues, ADRs, and public APIs;
-- tests that reveal what consumers need to observe.
+- The terms are contested or overloaded: `model-the-domain` first.
+- The boundary change requires callers to move to a new interface: `replace-an-api` for the migration.
+- The move is purely structural with the interface unchanged: `refactor-without-regressions`.
+- A one-file addition to an established module: implement it; no boundary decision is being made.
 
-Do not create a module because several files look similar. Similar syntax can serve different reasons to change. Co-change history is evidence, not an automatic boundary: distinguish repeated product coupling from mechanical formatting or generated churn.
+## Gather the evidence
+
+Inspect before proposing:
+
+- how each current caller uses the capability, by file:line, and what it needs to observe;
+- which files change together in history (`git log --format=%h --name-only` over the relevant paths, then count co-occurrence), distinguishing product coupling from formatting or generated churn;
+- data and control flow across the proposed line;
+- current imports and their direction, and any cycles (`madge`, `go list -deps`, `cargo tree`, or reading the imports);
+- vocabulary in requirements, issues, and the public API;
+- tests, for what consumers assert.
+
+Similar syntax is not shared responsibility; two functions that look alike but change for different reasons belong apart.
+
+## Write the caller's view first
+
+Before choosing files or types, write the two or three call sites a realistic caller would have, as code. The interface should:
+
+- expose the capability without exposing internal sequencing (no "call `init`, then `load`, then `apply`");
+- keep invariants inside (callers cannot produce an invalid state through the surface);
+- use domain types where primitives would allow invalid values;
+- make error and lifecycle behavior visible in the signature;
+- have no configuration for variation that does not exist yet.
+
+If the caller's view needs internal knowledge to be correct, the boundary is in the wrong place.
 
 ## Name one responsibility
 
-State the decision or invariant the module owns. Derive its name from recognizable domain or infrastructure vocabulary.
+State, in one sentence, the decision or invariant the module owns ("decides which price applies to a cart line", "guarantees every outbound event has a version"). Derive the name from that sentence in the domain's vocabulary or the mechanism's (`http`, `postgres`, `codegen` are valid names for adapters that isolate an external mechanism behind a domain-facing interface).
 
-Reject a new boundary when its only distinguishing name is `utils`, `helpers`, `common`, `shared`, `core`, `lib`, `manager`, or `handler`. These words can appear as supporting context, but they do not identify ownership.
+Reject the boundary if its only available name is `utils`, `helpers`, `common`, `shared`, `core`, `lib`, `manager`, or `handler`. Those words describe a location, not ownership.
 
-Technical adapter boundaries such as `http`, `db`, `codegen`, or `filesystem` are valid when they isolate an external mechanism behind a domain-facing interface. Do not force domain names onto implementation adapters.
+## Prefer depth
 
-## Write the caller-facing surface first
+A deep module has a small stable surface hiding substantial decisions. Tests:
 
-Sketch the smallest realistic caller usage before choosing internal files. The interface should:
+- **Deletion test:** delete the module and inline its contents; if complexity did not move, the module was a pass-through.
+- **Adapter count:** one adapter behind an interface is a hypothetical seam; two real adapters justify the interface. Do not introduce an interface for one implementation without a current test or volatility need.
+- **Leak test:** if a caller must change when the module's storage, transport, or algorithm changes, the module leaks that decision.
 
-- expose the capability callers need without leaking internal sequencing;
-- keep invariants inside the module;
-- avoid pass-through methods that add navigation without hiding complexity;
-- use domain types where primitive values would permit invalid states;
-- make error and lifecycle behavior explicit;
-- avoid configuration for variation that does not exist.
-
-Prefer a deep module: a small stable surface that hides substantial decisions. Do not split code merely to produce more packages.
+Do not split code to produce more packages. Fewer, deeper modules beat many shallow ones.
 
 ## Protect dependency direction
 
-The new module must not import from a layer that already depends on it. Identify allowed dependencies and check for cycles before moving code.
+The new module must not import from anything that already imports it. Write down the allowed dependencies. Keep policy (domain rules) independent of mechanism (frameworks, I/O) when that separation reduces the co-change you observed; do not add the separation to satisfy a diagram.
 
-Keep policy independent of external mechanisms when that separation reduces change coupling. Do not introduce an interface only to satisfy a diagram when there is one implementation and no useful test or volatility seam.
+Check for cycles after the move, with the tool or by reading imports, and confirm the build's module graph agrees.
 
-## Test the proposed boundary
+## Pressure the boundary
 
-Pressure the design with whichever of these exist:
+Walk through whichever of these exist and record the result:
 
-- a current caller;
-- the next known variation;
-- one failure path;
-- a change that previously touched several files;
-- deletion of one internal implementation detail.
+1. A current caller: does it get what it needs without reaching inside?
+2. The next known variation: does it fit behind the surface or force a change to every caller?
+3. One failure path: is the error visible where the caller can act on it?
+4. A change that previously touched several files: does it now touch one module?
+5. Deleting one internal detail: does anything outside the module notice?
 
-If callers still need internal knowledge, the boundary is shallow or misplaced. If unrelated changes now touch the module, the responsibility is too broad.
+If callers still need internals, the boundary is shallow or misplaced. If unrelated changes now touch the module, the responsibility is too broad. Revise before moving code.
 
-Do not produce an architecture memo for one ordinary file added to an established module. Use this skill only when ownership or dependency direction is actually changing.
+## Stop signals
 
-Report the evidence, caller-facing interface, owned invariant, allowed dependencies, any alternative that was seriously considered and rejected, and the first check that would reveal a bad boundary.
+- You are choosing files before writing the caller's usage: write the usage.
+- The module's name is a location word: find the owned decision or drop the module.
+- The interface has an "options" bag with one used field: remove the variation.
+- A cycle appears after the move: the direction is wrong; do not break it with a lazy import.
+- Two modules changed together in every commit of the last quarter: they are one module.
+
+## Shortcuts that fail
+
+- "These files look alike, group them": syntactic similarity groups code that changes for different reasons, so every change touches the group.
+- "Add an interface so it's testable later": one implementation behind an interface is indirection with no seam; add the interface when the second implementation or the test exists.
+- "Put it in shared for now": nothing leaves `shared`; it becomes the dependency of everything and the owner of nothing.
+- "Split it into small modules for clarity": each caller now assembles the pieces, and the assembly knowledge is duplicated.
+
+## Report
+
+Give the evidence gathered (callers, co-change findings, dependency direction), the caller's view as code, the owned responsibility and name, allowed dependencies, the depth tests' results, the pressure walk results, alternatives seriously considered with the reason each lost, and the first check that would reveal the boundary is wrong. If the evidence shows no boundary change is warranted, say so.
+
+## Critical failures
+
+- A module created or named by location words with no stated owned decision.
+- An interface introduced for a single implementation with no current test or volatility need.
+- A dependency cycle introduced or hidden with a lazy import.
+- Files chosen before the caller's view was written.
+- Boundary proposed without the co-change or caller evidence.

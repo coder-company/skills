@@ -1,0 +1,4 @@
+interface:
+  display_name: "Log Decisions"
+  short_description: "Append-only decision trail, audited before ending"
+  default_prompt: "Use $log-decisions to keep an auditable trail of every judgment call during this run."

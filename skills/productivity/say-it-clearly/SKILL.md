@@ -1,106 +1,86 @@
 ---
 name: say-it-clearly
-description: Draft, revise, or audit prose by applying the Google Developer Documentation Style Guide and Google Technical Writing guidance. Use for developer documentation, technical explanations, procedures, tutorials, release notes, help content, UI copy, reports, emails, and general answers when the user requests Google style, clearer writing, plain language, or less ChatGPT-like or Claude-like prose. Preserve facts, uncertainty, technical tokens, quotations, and the author's intended voice. Do not impose documentation style on legal text, quotations, fiction, poetry, or required academic conventions.
+description: Draft, revise, or audit prose using Google developer documentation style and technical writing guidance, preserving facts, hedges, technical tokens, quotations, and voice. Use when the user asks for clearer writing, plain language, Google style, less AI-sounding prose, or when producing documentation, procedures, release notes, help content, UI copy, or reports. Do not apply to legal text, quotations, fiction, or poetry. Do not use for a first-person essay; use write-a-personal-essay.
 ---
 
-# Write for the reader
+# Say it clearly
 
-Apply this skill only to the artifact the user names. Do not restyle unrelated answers, code comments, commit messages, or later turns unless the user asks.
+Produce only the artifact the user named (draft, revision, audit, or answer), put the reader's key point or task first, and keep every fact, hedge, and technical token intact. Do not restyle unrelated answers, code comments, commit messages, or later turns unless asked.
+
+## Route first
+
+- The text is a first-person essay: `write-a-personal-essay`.
+- The text is code, not prose: `remove-code-slop`.
+- A procedure, tutorial, or content with code, UI elements, links, lists, tables, images, dates, or accessibility needs: read `references/google-style.md` before writing or auditing.
 
 ## Produce the requested artifact
 
-- For a draft, write the content.
-- For a revision, return the revised content. Explain changes only when asked, except when a safe revision requires an ambiguity flag or a disclosed change to a fact, hedge, quotation, or technical token.
-- For an audit, report the most important violations with specific corrections. Do not rewrite unless asked.
-- For an answer, answer the question in this style without mentioning the skill.
+- **Draft:** write the content.
+- **Revision:** return the revised content. Explain changes only when asked, except to flag an ambiguity you could not resolve or a disclosed change to a fact, hedge, quotation, or technical token.
+- **Audit:** report the most important violations with specific corrections; do not rewrite unless asked.
+- **Answer:** answer in this style without mentioning the skill.
 
-Infer the operation from the request. Ask only when a wrong choice would materially change the result.
+Infer the operation from the request; ask only when a wrong choice would materially change the result.
 
 ## Apply the authority order
 
-Use the following order:
+1. The user's explicit instructions and the destination's requirements.
+2. Source facts, intent, uncertainty, quotations, citations, and exact technical text.
+3. The project's style guide and established terminology.
+4. Google developer documentation style.
+5. Google technical writing guidance for clarity and structure.
 
-1. Follow the user's explicit instructions and the destination's requirements.
-2. Preserve source facts, intent, uncertainty, quotations, citations, and exact technical text.
-3. Follow the project's style guide and established terminology.
-4. Apply the Google Developer Documentation Style Guide.
-5. Use Google Technical Writing guidance to resolve questions about clarity and structure.
-
-Google treats its guidance as guidelines, not rigid rules. Depart from a guideline when doing so makes the content clearer for its actual readers. Stay consistent after making that choice.
+Depart from a guideline when doing so makes the content clearer for its actual readers; stay consistent after that choice.
 
 ## Write for the reader
 
-Identify the reader, their goal, and what they already know. Then apply these rules:
+Identify the reader, their goal, and what they already know. Then:
 
 1. Put the key point, result, or task first.
-2. Use a conversational, friendly, respectful tone. Sound like a knowledgeable person helping a reader who might be in a hurry.
-3. Address the reader as `you`. Use `we` only for an organization with a clear antecedent. Use `user` for a user of software that the reader develops.
-4. Use imperative verbs for instructions. The subject `you` is implied.
-5. Prefer active voice and name the actor. Use passive voice when the actor is unknown, irrelevant, or intentionally de-emphasized.
-6. Use present tense for general behavior. Use future tense only for an action that actually occurs later.
-7. Put a condition, circumstance, location, or goal before the instruction it controls when that order improves clarity.
-8. Choose strong, specific verbs. Replace vague adjectives and adverbs with facts when the source provides them.
-9. Keep one main idea in each sentence and one topic in each paragraph. Make the opening sentence establish the paragraph's point.
-10. Use familiar, precise terms consistently. Define necessary unfamiliar terms and abbreviations on first use.
+2. Use a conversational, respectful tone: a knowledgeable person helping a reader in a hurry.
+3. Address the reader as `you`; use `we` only for an organization with a clear antecedent; use `user` for a user of software the reader develops.
+4. Use imperative verbs for instructions.
+5. Prefer active voice with a named actor; use passive when the actor is unknown, irrelevant, or deliberately de-emphasized.
+6. Use present tense for general behavior; future tense only for an action that occurs later.
+7. Put the condition or goal before the instruction it controls when that improves clarity.
+8. Choose specific verbs; replace vague adjectives and adverbs with facts the source provides.
+9. One main idea per sentence; one topic per paragraph, established by its opening sentence.
+10. Use familiar, precise terms consistently; define unfamiliar terms and abbreviations on first use.
 
 ## Keep the meaning intact
 
-- Do not add facts, certainty, praise, urgency, or product claims.
-- Preserve distinctions such as `can`, `may`, `might`, `should`, `must`, and `will`.
-- Preserve code, commands, flags, identifiers, filenames, paths, API names, product names, version numbers, UI labels, quotations, and links unless the user asks to correct them.
-- Flag source ambiguity that you cannot resolve safely.
-- Keep accepted technical terms when they are more accurate than an everyday substitute.
+Do not add facts, certainty, praise, urgency, or product claims. Preserve `can`, `may`, `might`, `should`, `must`, and `will` distinctions. Preserve code, commands, flags, identifiers, filenames, paths, API and product names, versions, UI labels, quotations, and links unless asked to correct them. Keep an accepted technical term when it is more accurate than an everyday substitute. Flag source ambiguity you cannot resolve safely.
 
-## Remove language Google advises against
+## Remove what the style advises against
 
-- Remove pre-announcements such as "This section explains."
-- Remove placeholder phrases such as "please note" and "at this time."
-- Avoid buzzwords, unnecessary jargon, clichés, idioms, slang, internet abbreviations, pop-culture references, and culture-specific humor.
-- Avoid figurative language when literal language states the point.
-- Do not describe a task as easy, simple, obvious, quick, or trivial.
-- Avoid `let's` in instructions and repeated `please`.
-- Avoid excessive exclamation marks, cuteness, wackiness, or sales language in educational content.
-- Avoid choppy prose and long-winded sentences. Vary sentence openings and use natural transitions when they help.
-- Do not replace these patterns mechanically. Preserve a phrase when it is accurate, necessary, and appropriate for the reader.
+Pre-announcements ("This section explains"); placeholders ("please note", "at this time"); buzzwords, unnecessary jargon, clichés, idioms, slang, internet abbreviations, pop-culture references, culture-specific humor; figurative language where literal states the point; describing a task as easy, simple, obvious, quick, or trivial; `let's` in instructions and repeated `please`; exclamation marks, cuteness, and sales language in educational content; choppy or long-winded sentences. Do not remove these mechanically; keep a phrase that is accurate, necessary, and right for the reader.
 
 ## Structure for scanning
 
-- Use sentence case for titles and headings.
-- Use numbered lists for sequences and bulleted lists for most unordered items.
-- In a procedure, make each optional action a separate numbered step that starts with `Optional:`.
-- Use parallel grammar in list items and introduce a list when its purpose is not clear.
-- Use a description list or equivalent structure for terms paired with descriptions.
-- Use the serial comma.
-- Format code-related text as code.
-- Format named UI elements in bold, not quotation marks or code font.
-- Use descriptive link text instead of generic text such as "click here."
-- Use unambiguous dates and times.
-- Provide useful alt text for informative images.
-- Use US English unless the user or destination requires another variety.
+Sentence case for headings. Numbered lists for sequences, bullets for unordered items, each optional step its own numbered step starting with `Optional:`. Parallel grammar in lists; introduce a list when its purpose is unclear. Serial comma. Code font for code-related text; bold for named UI elements; descriptive link text; unambiguous dates and times; alt text for informative images. US English unless the destination requires another variety.
 
-## Load detailed Google guidance when needed
+## Stop signals
 
-Read `references/google-style.md` before writing or auditing any of the following:
+- You changed a hedge word or a technical token: revert it or disclose the change.
+- The opening does not give the reader the point or task: move it up.
+- You are rewriting a sentence that was already clear: leave it.
+- The request was an audit and you are rewriting: list violations instead.
 
-- a procedure or tutorial;
-- content that includes code, commands, UI elements, links, lists, tables, images, dates, or accessibility requirements;
-- content for a global or translation-sensitive audience;
-- a request for Google Style Guide compliance or a line-level audit.
+## Shortcuts that fail
 
-For a specialized question about punctuation, grammar, word choice, naming, units, mathematical notation, HTML, Markdown, filenames, or trademarks, consult the relevant live Google Developer Documentation Style Guide page when the answer is ambiguous or consequential, or when the user requests strict compliance.
+- "Tighten it by cutting the qualifiers": the qualifier was the author's uncertainty; removing it states something the author did not claim.
+- "Swap in a plainer word": the accepted technical term was precise; the plain word is ambiguous to the expert reader.
+- "Apply every rule everywhere": mechanical replacement produces prose that is compliant and wrong for the reader.
+- "Restyle the whole reply while I'm here": the user named one artifact; restyling the rest changes text they did not ask you to touch.
 
-## Check the result silently
+## Report
 
-Before returning the content, verify that:
+Return only the requested artifact, plus any required ambiguity or meaning-change warning. For an audit, return violations ordered by impact, each with location and correction; if none, write "No style issues found." Do not add commentary the user did not ask for.
 
-- the opening gives the reader the key point or task;
-- the audience and the meaning of `you` stay consistent;
-- actors, actions, conditions, and pronoun referents are clear;
-- general behavior uses present tense;
-- each sentence carries one main idea;
-- headings and lists help the reader scan instead of decorating the response;
-- terminology, capitalization, punctuation, and formatting stay consistent;
-- a global reader can understand the content without decoding idioms or cultural references;
-- every fact, caveat, degree of certainty, and technical token remains intact.
+## Critical failures
 
-Return only the requested artifact unless the user asks for commentary or an audit trail. Include any ambiguity or meaning-change warning required by this skill even when the user did not request commentary.
+- A fact, hedge, quotation, or technical token changed without disclosure.
+- Content added (facts, certainty, praise, claims) that the source did not state.
+- Style applied to excluded text (legal, quotations, fiction, poetry, required academic conventions).
+- Unrelated text restyled without the user asking.
+- An audit answered with a rewrite.

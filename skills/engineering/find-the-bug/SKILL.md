@@ -1,84 +1,112 @@
 ---
 name: find-the-bug
-description: Diagnose bugs, crashes, incorrect output, flaky behavior, and performance regressions with evidence before changing code. Use when a user asks to debug, diagnose, investigate, find a root cause, or fix a reported failure. Scale the investigation to the problem, protect secrets, distinguish symptoms from causes, and verify any fix at the real failure boundary.
+description: Diagnose bugs, crashes, wrong output, flaky behavior, and regressions from a reproduced failure and a ledger of tested hypotheses before changing code, then fix the owning cause and verify at the real boundary. Use when the user says debug, diagnose, why is this failing, root cause, or reports a symptom. Do not use for performance-only complaints; use measure-the-bottleneck. Do not use when reproduction needs live capture; use observe-the-runtime.
 ---
 
-# Debug from evidence
+# Find the bug
 
-## Match the work to the request
+Reproduce the failure with a command whose output shows the user's exact symptom, then form hypotheses and test the cheapest discriminating one, recording each result in a ledger so no test is repeated. Fix the boundary that owns the cause, prove the fix against the original reproduction, and search for the same cause elsewhere.
 
-- If the user asks for diagnosis, find and explain the cause. Do not implement a fix unless the request includes one.
-- If the user asks for a fix, diagnose, implement the narrowest complete correction, and verify it.
-- If the user reports a simple, local failure with an obvious executable check, keep the loop short.
-- If the failure is intermittent, distributed, destructive, production-only, or security-sensitive, use the full investigation process.
+## Route first
 
-Do not turn routine debugging into a ceremony. Do not skip evidence because a theory sounds plausible.
+- The complaint is slowness or memory with no wrong output: `measure-the-bottleneck`.
+- The failure will not reproduce and needs runtime capture: `observe-the-runtime`.
+- Two fixes have failed without narrowing the cause: `break-the-loop`.
+- A captured profile or trace is the primary evidence: `read-a-runtime-trace`.
+- The user asked only for a diagnosis: stop after the cause is proven; do not implement.
 
-## Protect the system and its data
+## Match the depth to the failure
 
-- Redact credentials, tokens, cookies, personal data, and private payloads from commands and excerpts.
-- Prefer read-only inspection before mutation.
-- Do not reproduce destructive behavior against production data.
-- Ask for new access or authority only after safe in-scope checks cannot answer the question.
-- Keep temporary instrumentation narrow, identifiable, and removable.
-- Record each probe, fixture, flag, and log prefix as you add it. During cleanup, remove only investigation-owned artifacts. Preserve pre-existing and user-owned uncommitted changes.
+- A local, deterministic failure with an existing test or command: keep the loop short. Reproduce, narrow, fix, verify.
+- An intermittent, distributed, production-only, destructive, or security-sensitive failure: use every section below and keep the ledger from the first step.
 
-## Establish the failure
+Do not skip reproduction because a theory sounds plausible. Do not turn a one-line fix into ceremony.
 
-1. Restate the observed behavior and the expected behavior in testable terms.
-2. Identify the smallest command or interaction that exercises the actual failure boundary.
-3. Run it and capture the relevant signal: assertion, error, output difference, trace, metric, or visible behavior.
-4. Repeat it enough to understand whether the result is deterministic.
+## Protect the system
 
-Prefer an existing test, focused CLI command, API request, browser interaction, trace replay, benchmark, or minimal harness. For an intermittent bug, improve the reproduction rate with repetition, a fixed seed, controlled time, concurrency, or stress.
+- Redact credentials, tokens, cookies, personal data, and private payloads from every command and excerpt.
+- Prefer read-only inspection before mutation. Never reproduce destructive behavior against production data.
+- Tag every temporary probe, log line, fixture, and flag with one unique marker (for example `[DBG-4c1e]`) and record its location as you add it, so cleanup is a search. Leave pre-existing and user-owned changes untouched.
+- Ask for new access only after safe in-scope checks cannot answer the question.
 
-If direct reproduction is unavailable, use the strongest evidence that exists, state the limitation, and continue with static tracing or historical artifacts. Do not falsely claim reproduction. A missing local reproduction is a constraint, not an automatic reason to stop.
+## Establish a reproduction
 
-An inconclusive diagnosis is a valid result. When safe discriminating checks stop producing new evidence, stop and report these four items:
+1. Restate observed and expected behavior in testable terms.
+2. Find the smallest command or interaction that exercises the failing boundary: an existing test, a focused CLI call, an API request, a browser step, a replayed trace, a minimal script.
+3. Run it. Capture the assertion, error, output difference, or visible behavior. The output must show the user's symptom, not a related one.
+4. Run it again to learn whether it is deterministic. For intermittent failures, raise the rate with repetition, a fixed seed, controlled time, concurrency, or load before proceeding.
 
-1. Observed: facts established by the available evidence.
-2. Ruled out: hypotheses falsified by a discriminating check.
-3. Remaining: plausible hypotheses, labeled as inference.
-4. Next discriminator: the single smallest artifact or probe to obtain next and the prediction that would separate the remaining hypotheses.
+No reproduction, no hypothesis testing. If you catch yourself reading code to build a theory before this command exists, stop and build the command.
 
-Do not turn the leading hypothesis into a root cause to create a tidy ending.
+If direct reproduction is unavailable (production-only data, hardware you lack), use the strongest evidence that exists (logs, traces, a recorded request), state the limitation, and continue with static tracing. Do not claim reproduction you did not achieve.
+
+## Keep the ledger
+
+From the first hypothesis, maintain a compact record and consult it before every test:
+
+```
+observed:   <facts established, each with the command or file:line>
+ruled_out:  <hypothesis> : <the check whose result falsified it>
+open:       <hypotheses still live, ranked by cheapest discriminator>
+next:       <the single check to run and the result that would separate the open hypotheses>
+```
+
+Do not rerun a check listed under `ruled_out` under unchanged conditions. Do not promote an `open` hypothesis to a cause without an observation that only it predicts. See `keep-execution-state` when the investigation grows long.
 
 ## Narrow the cause
 
-Trace the path that owns the symptom:
+- Trace the path that owns the symptom: inputs, state changes, calls, errors, outputs, across the failing boundary. Log what enters and exits each component boundary on the path when the path is unclear.
+- Compare working and failing cases when both exist: a passing input, a previous revision (`git bisect` when the regression window is known), another environment.
+- Reduce the scenario while preserving the failure. Take the split that cuts the most remaining possibility space.
+- For failures after a restart, deploy, or upgrade, suspect state (caches, migrations, config, stale artifacts) before code.
+- Form three to five plausible explanations when several remain; one is enough for a small local bug. Test the cheapest discriminating prediction first. Change one variable at a time.
 
-1. Follow inputs, state changes, calls, errors, and outputs across the failing boundary.
-2. Compare working and failing cases when both exist.
-3. Reduce the scenario while preserving the failure.
-4. Form the smallest set of plausible explanations that the evidence supports.
-5. Test the cheapest discriminating prediction first. Change one variable at a time.
+After confirming a defective pattern, search from the repository root for the same sequence, copied helpers, and other callers. Separate confirmed affected sites from code that only looks similar.
 
-After confirming a defective pattern, search sibling implementations, copied helpers, and other callers far enough to determine whether the same cause exists elsewhere. Separate confirmed affected sites from code that only looks similar.
+## Stop after three failed fixes
 
-Use a ranked hypothesis list only when several credible causes remain. For a small local bug, one evidence-backed hypothesis can be enough. Label inference as inference, and discard a theory when its prediction fails.
-
-For performance failures, measure before optimizing. Capture a baseline, inspect the relevant profiler, query plan, allocation data, or timing breakdown, and compare the same workload after the change.
+If three attempted fixes have each failed or each revealed a new failure elsewhere, stop fixing. That pattern is evidence of a wrong model of the system or a design problem, not a fourth bug. Record the three attempts in the ledger, state what they jointly rule out, and either redesign the affected boundary (see `design-module-boundaries`) or report the architectural finding to the user.
 
 ## Fix the owning boundary
 
-When authorized to fix the bug:
+When authorized to fix:
 
-1. Add or identify a regression check at the narrowest boundary that can express the real failure.
-2. Confirm that the check fails for the reported behavior when practical.
-3. Correct the cause without unrelated cleanup or speculative fallback paths.
-4. Confirm that the regression check passes.
-5. Before declaring the fix complete, search from the repository root for the confirmed defective sequence, copied helper, and relevant callers. If a root-wide search is impractical, enumerate every configured or top-level source root. A search limited to the reported package or its tests is not evidence of completeness.
-6. Treat confirmed in-repository copies of the same cause as part of an ordinary fix request unless the user limited the target or the correction crosses a public-contract, ownership, security, or migration boundary. Fix those copies; report sites that require broader authority instead of silently leaving them behind.
-7. Re-run the original reproduction or closest boundary-level check, plus checks for every confirmed site changed.
+1. Add or identify a regression check at the narrowest boundary that expresses the real failure. Confirm it fails for the reported behavior.
+2. Correct the cause at the boundary that owns it. Do not patch the symptom at a caller when the shared function is wrong; a guard in one caller leaves its siblings broken.
+3. Confirm the regression check passes and rerun the original reproduction.
+4. Fix confirmed copies of the same cause in the repository unless the user limited the target or a copy crosses a public-contract, ownership, security, or migration boundary; report those instead.
+5. Run nearby checks that could expose collateral regressions.
 
-Do not add a shallow test that cannot catch the real bug. If the architecture provides no useful test seam, verify with the best available boundary and report the missing seam as a maintainability risk.
+Do not add a shallow test that cannot catch the real bug. If no useful seam exists, verify at the nearest real boundary (see `verify-real-behavior`) and report the missing seam.
 
-## Clean up and report
+## Clean up
 
-- Remove temporary logs, probes, fixtures, flags, and debug-only code.
-- Run nearby checks that could expose collateral regressions.
-- Report the observed cause, the evidence that distinguishes it from alternatives, the change made if any, and the verification command or interaction.
-- When you audit a copied pattern, state the search scope, list confirmed affected sites, and distinguish similar-but-safe sites. Report the exact search and verification commands when they help substantiate completeness.
-- Separate confirmed facts, remaining uncertainty, and deliberately deferred work.
+Search for your marker and remove every probe, fixture, flag, and debug path. Confirm the diff contains only the fix and its test.
 
-Never describe a theory as the root cause unless the evidence links it to the symptom.
+## Stop signals
+
+- You have a theory and no reproduction command: build the command.
+- You are about to run a check already in `ruled_out`: state what changed, or pick another check.
+- The fix is a null check, try/catch, or retry at the point where the error appears: ask what produced the bad value and fix there.
+- The third fix just failed: stop and reassess the model.
+- You are writing "root cause" for a hypothesis with no discriminating observation: label it inference.
+
+## Shortcuts that fail
+
+- "The stack trace points here, so fix here": the frame where the error surfaces is usually the consumer of a bad value produced earlier; the fix there hides the producer.
+- "I'll try a change and see": an untested change with no predicted outcome produces no information when it fails and false confidence when it passes.
+- "It passed once after my change, so it's fixed": for an intermittent failure, one pass is within the original failure rate; rerun at scale.
+- "Reading the code is faster than reproducing": reading produces plausible theories; only the reproduction shows which one is true, and the ledger of what you ruled out is what saves time.
+- "Add logging everywhere": untargeted logs bury the transition that matters; log at the boundaries that separate hypotheses.
+
+## Report
+
+State: the reproduction command and its observed output; the cause with the evidence that distinguishes it from the alternatives; the ledger's `ruled_out` list; the change made, if any, with the regression check and the rerun of the original reproduction; sibling sites searched (scope, confirmed, similar-but-safe); cleanup confirmed by marker search; and remaining uncertainty. An inconclusive result is valid: report observed, ruled out, remaining (as inference), and the single next discriminator.
+
+## Critical failures
+
+- A cause named without a reproduction or an observation that distinguishes it from alternatives.
+- A symptom patched at the consumer while the producing boundary stays wrong.
+- Continuing to attempt fixes after three failures without reassessing.
+- A test added that would pass with the bug present.
+- Probes, fixtures, or flags left in the change, or user-owned changes disturbed.

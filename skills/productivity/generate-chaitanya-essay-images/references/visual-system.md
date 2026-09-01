@@ -4,7 +4,7 @@ This reference applies only to [chaitanya.gg](https://chaitanya.gg) and direct c
 
 ## Character
 
-Hand-drawn ink sketches that read like a careful person thinking on paper. Each image is one physical scene carrying one deep message from the essay. Calm, precise, humane — the clean-water restraint of a premium product page, drawn by hand.
+Hand-drawn ink sketches that read like a careful person thinking on paper. Each image is one physical scene carrying one deep message from the essay. Calm, precise, humane, with the clean-water restraint of a premium product page, drawn by hand.
 
 ## Palette
 
@@ -40,4 +40,4 @@ Switzer only (Fontshare). OG title: Semibold, ink, top-left at +72+64 in a 760px
 
 ## Icon
 
-One hand-drawn ink open circle — an unfinished loop with a gap at the upper right, natural taper at the stroke ends — centered on paper. It must read at 16px. All favicon sizes derive from this one mark.
+One hand-drawn ink open circle (an unfinished loop with a gap at the upper right and natural taper at the stroke ends) centered on paper. It must read at 16px. All favicon sizes derive from this one mark.

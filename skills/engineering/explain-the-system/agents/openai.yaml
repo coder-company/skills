@@ -1,0 +1,4 @@
+interface:
+  display_name: "Explain the System"
+  short_description: "Entry-to-exit walkthrough with file pointers"
+  default_prompt: "Use $explain-the-system to walk me through how this subsystem works with file and line pointers."

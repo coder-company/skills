@@ -1,67 +1,73 @@
 ---
 name: trace-code-history
-description: Explain why code, architecture, configuration, or a workaround exists by tracing repository history and durable decision evidence. Use when the user asks why something was built this way, whether a constraint still applies, or which original decision a proposed change could undo.
+description: Explain why code, a configuration, an architecture, or a workaround exists by tracing repository history and durable decision records, labeling each conclusion as recorded, behavioral constraint, inference, unknown, or superseded, and testing whether the reason still applies. Use when the user asks why was this built this way, does this constraint still apply, who added this and why, or what would removing this undo. Do not use to explain how the code works today; use explain-the-system.
 ---
 
 # Trace code history
 
+Establish what the code does now, then find why it took that shape from sources created near the decision, label each conclusion by the strength of its evidence, and test whether the original reason still holds before saying what a change would undo.
+
+## Route first
+
+- The question is how it works, not why: `explain-the-system`.
+- The question is whether removing it would break something today: `prove-the-blast-radius` for the hinge facts, after this skill establishes the recorded reason.
+- The user wants the answer recorded durably: put it in the repository's existing decision location only if one exists and the user asks.
+
 ## Separate how from why
 
-First establish what the current code does from callers, data flow, tests, and runtime behavior. Then investigate why that shape was chosen.
-
-Current behavior does not prove original intent. A comment can be stale. A commit message can describe the change without explaining the decision. Treat each source according to what it can establish.
-
-If the user asks only how a subsystem works, explain the current path without inventing rationale or opening a historical investigation.
+First establish current behavior from callers, data flow, tests, and, when cheap, a run. Then investigate why. Current behavior does not prove intent: a comment can be stale, a commit message can describe the change without the decision, and a pattern can be an accident.
 
 ## Build the evidence chain
 
-Search proportionally across:
+Search proportionally, starting with the cheapest:
 
-- ADRs, design documents, specifications, and issue discussions;
-- commits that introduced and materially changed the code;
-- blame as a pointer to those commits, not as a conclusion;
-- tests and compatibility fixtures added with the decision;
-- dependency versions, platform constraints, incidents, or migration notes;
-- current callers that still rely on the behavior.
+1. `git log -S'<distinctive token>' --oneline` and `git log --follow -p -- <path>` to find the introducing and materially changing commits; `git blame` only as a pointer to those commits.
+2. The commit messages, linked issues or PRs (`gh pr view <n>` when the message references one), and review threads.
+3. ADRs, design documents, specifications, and migration notes in the repository.
+4. Tests and compatibility fixtures added with the change; they state what the author needed to remain true.
+5. Dependency versions, platform constraints, and incident references near the commit date.
+6. Current callers that still rely on the behavior.
 
-Prefer sources created near the decision, but check whether later evidence superseded them. Cite exact files, commits, issues, or lines that are available in the current environment.
-
-Do not infer author motivation from a code pattern alone. Do not present a plausible architectural story as recorded intent.
+Prefer sources created near the decision, then check whether later evidence superseded them. Cite exact commits, files, lines, and issues that exist in the current environment. Never infer motivation from a pattern alone or present a plausible story as recorded intent.
 
 ## Classify each conclusion
 
-Use one of:
+Attach one label to every claim:
 
-- **Recorded decision:** A durable source states the rationale and scope.
-- **Behavioral constraint:** Tests, callers, or runtime evidence prove what must remain, even if the original rationale is missing.
-- **Historical inference:** Several sources support a likely explanation but do not state it directly.
-- **Unknown:** Available evidence does not establish why.
-- **Superseded:** The original reason is recorded, but later changes remove or replace the constraint.
-
-Keep these labels close to the claims they qualify.
+- **Recorded decision:** a durable source states the rationale and scope.
+- **Behavioral constraint:** tests, callers, or runtime evidence prove what must remain even though the rationale is missing.
+- **Historical inference:** several sources support a likely explanation without stating it.
+- **Unknown:** the evidence does not establish why.
+- **Superseded:** the original reason is recorded and later changes removed or replaced the constraint.
 
 ## Test whether the reason still applies
 
-Trace the original constraint to current state:
+Trace the original constraint to the present: is the dependency or platform version still pinned; do external consumers still use the contract; does the failure the workaround prevented still reproduce; did a migration or redesign remove the boundary; does a later decision explicitly replace this one?
 
-- Is the affected dependency or platform version still pinned?
-- Do external consumers still use the contract?
-- Does the failure the workaround prevented still reproduce?
-- Did a migration or redesign remove the old boundary?
-- Does a later ADR explicitly replace the decision?
+Absence of a local caller does not prove a public contract unused. Absence of a current failure does not prove a guard obsolete. When a safe bounded check settles the question (run the old failing case, query the consumer), run it; otherwise state the remaining uncertainty and the evidence that would remove the constraint.
 
-Absence of a local caller is not proof that a public contract is unused. Lack of a current failure is not proof that a guard is obsolete.
+## Stop signals
 
-When a safe, bounded check can settle the question, run it. Otherwise state the remaining uncertainty and the evidence needed to remove the constraint.
+- You are writing "this was probably added because": label it inference or find the source.
+- `git blame` gave you a name and you stopped: open the commit and what it references.
+- The commit message describes the change but not the reason: keep following the linked issue or the tests it added.
+- You are about to say the constraint no longer applies without a check: run one or say untested.
 
-## Return the useful explanation
+## Shortcuts that fail
 
-Lead with the current answer. Then give:
+- "The comment explains it": comments outlive the constraint they describe and are edited less than the code.
+- "Blame says who, that's the why": blame names the last formatter run or the person who moved the file.
+- "No caller uses it, so the reason is gone": the caller is in another repository or a persisted format.
+- "It looks like a hack, so it's safe to remove": the hack is holding back a reproducible failure nobody documented; reproduce before removing.
 
-- what the code does now;
-- the recorded decision or strongest evidence for why;
-- what is fact, inference, unknown, or superseded;
-- whether the constraint still applies;
-- the consequence of changing it.
+## Report
 
-Do not create a repository history document unless the user asks or the decision belongs in the project's established durable record.
+Lead with the current answer in one or two sentences. Then: what the code does now; the recorded decision or strongest evidence with exact citations; each claim's label; whether the constraint still applies and the check that established it (or "untested"); and the consequence of changing it. If the evidence does not establish why, say "Unknown: <what was searched>" rather than supplying a story.
+
+## Critical failures
+
+- A rationale presented as recorded that no cited source states.
+- A claim without a label, or an inference labeled as a recorded decision.
+- "No longer applies" asserted without a check or an "untested" marker.
+- Blame output used as a conclusion rather than a pointer.
+- A history document created in the repository without the user asking.

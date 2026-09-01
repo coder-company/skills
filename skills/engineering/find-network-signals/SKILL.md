@@ -1,42 +1,64 @@
 ---
 name: find-network-signals
-description: Find current, source-linked ideas moving through the public social network around a person, company, product, or community. Use when the user asks what a founder's circle is discussing, wants emerging signals from posts around a named seed account, or needs patterns beyond that one account. Do not use for a general company brief, an account summary, or broad trend research without a seed network.
+description: Find current, source-linked ideas moving through the public social circle around a named person, company, or community, building the circle from observed interactions and ranking posts that carry a concrete claim. Use when the user asks what a founder's circle is discussing or what signals are emerging around a named account. Do not use for a company brief, a single-account summary, or research with no seed account; use show-your-sources.
 ---
 
 # Find network signals
 
+Resolve the seed and the time window, derive the circle from observed interactions rather than from fame, collect posts that carry a claim, rank them by specificity and independent corroboration, and return a short list with direct links and an auditable methods note.
+
+## Route first
+
+- No seed account or community is named: `show-your-sources` for general research.
+- The user wants a summary of one account's posts: summarize it; no circle is needed.
+- The platform requires access you do not have: say so; do not scrape or bypass authentication.
+
 ## Define the search
 
-Resolve the seed, question, relevant platforms, and time window. Use the shortest window that can answer the request. If the seed is ambiguous, resolve it from current public evidence before collecting posts.
+Resolve the seed (verified accounts, current organization), the question, the platforms in scope, and the shortest time window that can answer the request. If the seed is ambiguous, resolve it from current public evidence before collecting.
 
-Use public, authorized access methods. Respect platform limits and privacy boundaries. Do not bypass authentication, scrape private accounts, or expose personal data unrelated to the request.
+Use public, authorized access methods only. Respect platform limits and privacy boundaries; do not expose personal data unrelated to the request. If a platform tool bills per call, estimate the cost before the first call and stop at the budget the user set.
 
 ## Build the circle from interactions
 
-Start with the seed's verified accounts and current organization. Derive the surrounding circle from observed replies, mentions, reposts, quotes, collaborations, and recurring conversation partners during the chosen window.
+Start from the seed's verified accounts. Derive the circle from observed replies, mentions, reposts, quotes, collaborations, and recurring conversation partners within the window. Verify each identity from profiles and first-party links.
 
-Include insiders and outsiders when both affect the conversation, but do not force a fixed ratio or count. Verify identity from profiles and first-party links. Do not substitute famous peers, competitors, or investors merely because they seem relevant. If the interaction evidence cannot establish a circle, say so and stop or ask whether to broaden the method.
+Include insiders and outsiders when both shape the conversation, with no fixed count or ratio. Do not substitute famous peers, competitors, or investors because they seem relevant; membership comes from interaction evidence. If the evidence cannot establish a circle, say so and stop, or ask whether to broaden the method.
 
-## Collect enough evidence
+## Collect evidence
 
-Gather recent original posts, substantive replies, quoted commentary, and threads from the seed and the evidence-backed circle. Preserve the source URL, author, timestamp, and reported engagement data. Treat engagement as reach, not quality.
+Gather recent original posts, substantive replies, quoted commentary, and threads from the seed and the evidence-backed circle. For each, keep the URL, author, timestamp, and reported engagement. Engagement measures reach, not quality.
 
-Ignore empty reposts, promotion without a claim, congratulations, generic inspiration, and repeated announcements. Do not silently replace an unavailable account with another platform unless the user permits cross-platform evidence.
+Discard empty reposts, promotion without a claim, congratulations, generic inspiration, and repeated announcements. Do not silently substitute another platform for an unavailable account unless the user permits cross-platform evidence.
 
 ## Rank signals
 
-A signal must contain at least one of these:
+A post qualifies as a signal only if it contains at least one of: a concrete claim or prediction; a disclosed number, experiment, or result; a product, hiring, market, or technical move; a specific disagreement with a widely held view; the same specific idea appearing independently across the circle.
 
-- a concrete claim or prediction;
-- a disclosed number, experiment, or result;
-- a product, hiring, market, or technical move;
-- a specific disagreement with a widely stated view;
-- the same specific idea appearing independently across the circle.
+Rank by relevance to the question, specificity, independent corroboration, recency, and decision value. Group posts that support one idea. Separate what a source states from your inference about the pattern.
 
-Rank by relevance to the question, specificity, independent corroboration, recency, and decision value. Group posts that support the same idea. Distinguish what a source states from your inference about the pattern.
+## Stop signals
 
-## Return only the signal
+- You are adding a well-known account with no observed interaction with the seed: remove it.
+- A candidate signal is an announcement or vibe with no claim: drop it.
+- The list has a fixed target length and you are stretching to fill it: return fewer.
+- You are about to describe a pattern with no post that states it: label it inference or drop it.
 
-Lead with a short numbered list. For each item, give an idea-led title, one concise explanation, and direct links to the strongest supporting posts. Include dates and reported reach only when they help interpretation.
+## Shortcuts that fail
 
-Name the people sampled and the time window in one compact methods note so the circle can be audited. If fewer strong signals survive, return fewer. If none survive, say that plainly and identify the evidence gap. Never pad the list or invent a peer set.
+- "Everyone knows who's in this founder's circle": the assumed peer set is a press narrative; the interaction graph is the circle.
+- "High engagement means important": reach rewards outrage and announcements, not claims.
+- "Pad to ten items": items six through ten are noise the reader must sift, and they discredit the first five.
+- "Summarize the mood": mood is not a signal; a specific claim with a link is.
+
+## Report
+
+A short numbered list. Each item: an idea-led title, one explanation, and direct links to the strongest supporting posts, with dates and reach only where they aid interpretation. Then one compact methods note: seed accounts, circle members sampled, platforms, time window, and access method. If fewer strong signals survive, return fewer; if none, write "No qualifying signals in <window>" and name the evidence gap.
+
+## Critical failures
+
+- A circle member included without observed interaction evidence.
+- A signal with no direct link to a post that states it.
+- An inferred pattern presented as something a source said.
+- List padded to a target length, or an invented peer set.
+- Private accounts scraped, authentication bypassed, or unrelated personal data exposed.

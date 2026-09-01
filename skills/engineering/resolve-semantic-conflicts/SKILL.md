@@ -1,67 +1,86 @@
 ---
 name: resolve-semantic-conflicts
-description: Resolve merge, rebase, cherry-pick, or revert conflicts by reconstructing the behavior each side intended. Use for unmerged behavioral files or when both branches changed the same configuration, state machine, contract, or policy even if Git merged the text automatically.
+description: Resolve merge, rebase, cherry-pick, or revert conflicts by reconstructing what each side intended from the merge base and choosing a result that satisfies both or stopping for a decision. Use when the tree has unmerged paths, when the user says resolve the conflicts or fix the merge, or when both branches changed the same configuration, state machine, contract, or policy even though Git merged the text cleanly. Do not use for unrelated dirty-tree work; use preserve-git-state.
 ---
 
 # Resolve semantic conflicts
 
+Find every place both sides changed interacting behavior, not only the marker blocks; reconstruct what the base did and what each side intended; choose one of five intentional outcomes; and verify the merged behavior before the operation records a commit.
+
+## Route first
+
+- Unrelated staged, stashed, or unpushed work sits in the tree: `preserve-git-state` before touching the operation.
+- A resolution requires force-pushing or rewriting shared history: `confirm-destructive-actions`.
+- The two sides encode incompatible product or policy choices: stop and surface the decision; do not choose.
+
 ## Find textual and semantic conflicts
 
-Inspect the operation state, merge base, commits being combined, and complete diff from each side. Do not limit the search to conflict markers.
+Inspect the operation state (`git status`, the `.git/MERGE_HEAD` or rebase directory), the merge base (`git merge-base`), the commits being combined on each side, and each side's complete diff against the base.
 
-A semantic conflict exists when both sides change behavior that interacts, including:
+Semantic conflicts exist without markers when both sides change behavior that interacts: different fields of one policy or configuration object; adjacent transitions in one state machine; a caller contract on one side and its implementation on the other; schema, serializer, and consumer changes split across branches; deletion on one side and extension on the other; a rename on one side and an edit to the old name on the other.
 
-- different fields in the same policy or configuration object;
-- adjacent transitions in the same state machine;
-- a caller contract on one side and its implementation on the other;
-- schema, serializer, and consumer changes split across branches;
-- deletion on one side and extension on the other;
-- renamed symbols whose old name is edited by the other side.
-
-Generated files, lockfiles, snapshots, and import blocks usually need mechanical regeneration after their owning sources are resolved. Do not spend behavioral judgment on derived noise.
+Generated files, lockfiles, snapshots, and import blocks are regenerated after their owning sources are resolved (see `fix-generated-files`); do not spend judgment on them.
 
 ## Reconstruct each side from the base
 
-For every behavioral conflict, state:
+For every behavioral conflict, write:
 
 1. What the base did.
-2. What side A intended to change and the evidence for that intent.
-3. What side B intended to change and the evidence for that intent.
-4. What behavior a combined result would create.
-5. Whether that combined behavior is compatible with both intentions.
+2. What side A intended, with evidence (commit message, test, issue, changed callers).
+3. What side B intended, with evidence.
+4. What behavior the combined text would produce.
+5. Whether that combination satisfies both intentions.
 
-Use commit messages, tests, issue or specification references, changed callers, and repository history as evidence. Do not equate `ours` with correct or `theirs` with incoming. Those labels change meaning across merge and rebase operations.
+`ours` and `theirs` swap meaning between merge and rebase. Name sides by branch or commit, never by those labels.
 
 ## Choose an intentional result
 
-Use one of these outcomes:
+Exactly one of:
 
-- preserve side A because side B is obsolete or superseded;
-- preserve side B because side A is obsolete or superseded;
+- keep side A because side B is obsolete or superseded;
+- keep side B because side A is obsolete or superseded;
 - combine both because their invariants remain compatible;
-- redesign the combined behavior because neither textual version satisfies both intentions;
-- stop for an authority decision because the sides encode incompatible product, policy, or data choices.
+- redesign the combined behavior because neither text satisfies both intentions;
+- stop for an authority decision because the sides encode incompatible choices.
 
-Do not take both merely because the lines compose. Do not choose the version that compiles while silently dropping an invariant.
+Do not take both because the lines compose. Do not choose the version that compiles while dropping an invariant.
 
-## Verify the merged behavior
+## Verify before recording
 
-When you run the operation yourself, pause before it records a commit (for example, with `--no-commit`) so semantic checks run first. For a merge, the resolution belongs in the merge commit that retains both parents. For a rebase, cherry-pick, or revert, it belongs in the commit being created. Do not report the operation as complete when the repair is only a follow-up commit above an already-broken result, unless repository policy requires that history shape.
+When you run the operation, pause before it commits (`git merge --no-commit`, or resolve during the rebase step) so checks run on the resolved tree. For a merge, the resolution belongs in the merge commit with both parents; for a rebase, cherry-pick, or revert, in the commit being created. A follow-up fix above a broken merge is not a resolution unless repository policy requires that shape.
 
-Identify an existing check for each preserved intention. Write a new one only where loss of that intention would otherwise be silent. Run checks against the resolved result, not against either parent in isolation.
+Run, against the resolved tree:
 
-Also inspect:
+- an existing check for each preserved intention; write a new one only where loss would otherwise be silent;
+- regeneration of derived files, then their consumer checks;
+- tests from both branches, including ones not in the default target;
+- callers of renamed or deleted contracts;
+- `git diff <merge-base>` for accidental loss, and `git diff --check` for leftover markers.
 
-- conflict markers and unmerged paths;
-- generated outputs after regeneration;
-- callers affected by renamed or deleted contracts;
-- tests from both branches that may not run in the same default target;
-- the final diff relative to the merge base for accidental loss.
+If Git auto-merged interacting edits, add the combined-behavior check; a marker-free merge can encode a policy no author chose.
 
-If Git auto-merged interacting behavioral edits, add the missing combined-behavior check. A marker-free merge can still encode a policy no author chose.
+## Stop signals
 
-## Preserve history and scope
+- You are resolving by choosing `ours` or `theirs` without stating each side's intent: reconstruct first.
+- The combined text compiles and you have not checked that both invariants hold: check.
+- Both sides changed the same config object and Git reported no conflict: inspect it as a semantic conflict.
+- The resolution is a commit above the merge rather than in it: redo it inside the operation.
 
-Do not rewrite published history, force-push, drop commits, or resolve unrelated working-tree changes unless the user authorized those actions. Preserve user-owned modifications around the operation. Treat unrelated staged, stashed, or unpushed work as a separate Git preservation task rather than folding it into conflict resolution.
+## Shortcuts that fail
 
-Report each behavioral conflict as: side A intent, side B intent, chosen result, and proof. Keep mechanical conflict details brief.
+- "Take theirs, it's the newer branch": the older side may carry the fix the newer side never saw; newer is not correct.
+- "No markers, merge is done": the two policy fields Git merged cleanly now describe a state neither author wanted.
+- "Fix it in a follow-up commit": the merge commit itself is broken, and any bisect or revert lands on it.
+- "Regenerate the lockfile and move on": the lockfile conflict came from source manifests that still disagree.
+
+## Report
+
+For each behavioral conflict: side A intent, side B intent, chosen outcome, and the proof (check run and result). Mechanical conflicts in one line each. Then the checks run on the resolved tree, the merge-base diff review result, and any decision surfaced for the user. If the operation was completed, state the resulting commit and that no markers remain.
+
+## Critical failures
+
+- A resolution chosen by `ours`/`theirs` label without reconstructing intent.
+- A semantic conflict in an auto-merged file left unexamined.
+- Checks run against a parent instead of the resolved tree.
+- Resolution recorded as a follow-up commit above a broken merge without policy requiring it.
+- Conflict markers or unmerged paths remaining at completion.

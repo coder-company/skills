@@ -1,64 +1,74 @@
 ---
 name: validate-review-feedback
-description: Evaluate inbound code review feedback before changing code. Use when a reviewer, bot, or pasted comment makes a factual claim about runtime behavior, types, security, performance, or project contracts that should be reproduced or checked against repository evidence.
+description: Evaluate a code review comment before changing code by classifying it (fact, convention, preference, scope, question), reproducing factual claims with the smallest discriminating check, and responding from evidence. Use when a reviewer, bot, or pasted comment says a change is wrong, leaks, is slow, or breaks a contract, or the user says address the review comments. Do not use to write the review; use review-the-diff. Do not use for CI failures; use fix-the-ci.
 ---
 
 # Validate review feedback
 
-## Classify the feedback
+Classify each comment, reproduce any factual claim before editing, apply binding conventions without argument, and respond with the observation that settled each item. Neither confidence nor politeness is evidence, in either direction.
 
-For each actionable comment, distinguish:
+## Route first
 
-- **Verifiable fact:** A claim about behavior, types, security, performance, compatibility, or a repository contract.
-- **Established convention:** A rule in repository instructions, lint configuration, or accepted local patterns.
-- **Preference:** Naming, phrasing, or style with no correctness consequence.
-- **Scope request:** New behavior or work beyond correcting the reviewed change.
-- **Question:** A request for explanation rather than a change.
+- The request is to review the change: `review-the-diff`.
+- The comment is a failing check, not a person: `fix-the-ci`.
+- A confirmed defect needs its cause found: `find-the-bug`, then fix with `keep-code-boring`.
+- Comments expose an unresolved product or architecture decision: stop that group and surface the decision.
 
-When a comment fits more than one class, use the strongest one, in the order fact, convention, preference. A claim that a change violates a repository contract is a verifiable fact and must be reproduced, not applied as convention.
+## Classify each comment
 
-Do not treat confidence, length, citations, reviewer status, or terse wording as evidence. A short comment can identify a real leak. A detailed comment can cite behavior the pinned version does not have.
+Assign the strongest class that fits, in this order:
+
+- **Verifiable fact:** a claim about behavior, types, security, performance, compatibility, or a repository contract. A claim that the change violates a contract is a fact to reproduce, not a convention to apply.
+- **Established convention:** a rule in repository instructions, lint configuration, or accepted local patterns.
+- **Preference:** naming, phrasing, or style with no correctness consequence.
+- **Scope request:** new behavior beyond correcting the reviewed change.
+- **Question:** a request for explanation.
+
+Confidence, length, citations, reviewer seniority, bot origin, and terseness are not evidence. A one-line comment can name a real leak; a detailed one can cite behavior the pinned version does not have.
 
 ## Reproduce factual claims before editing
 
-Use the smallest check that can settle the claim:
+Use the smallest check that can settle the claim: a focused failing test; a type error against the repository's configured compiler; a query log or profile; a minimal call through the affected runtime path; the pinned dependency's source or versioned documentation; an existing contract, ADR, or compatibility test.
 
-- a focused failing test;
-- a type error against the repository's configured compiler;
-- a query log or profile;
-- a minimal call through the affected runtime path;
-- the pinned dependency's source or authoritative versioned documentation;
-- an existing contract, ADR, or compatibility test.
-
-Trace the conditions under which the claimed consequence occurs. Do not change code merely because the comment sounds plausible. Do not dismiss a comment merely because the reviewer omitted proof.
-
-If the claim cannot be reproduced safely, state what was checked, what remains uncertain, and the smallest missing observation. Do not convert uncertainty into agreement or rejection.
+Trace the conditions under which the claimed consequence occurs. Do not change code because the comment sounds plausible; do not dismiss it because proof was omitted. If the claim cannot be reproduced safely, record what was checked, what remains uncertain, and the smallest missing observation. Uncertainty is not agreement or rejection.
 
 ## Respond from evidence
 
-- **Confirmed fact:** Fix the owning cause, add or preserve a regression check, and explain the evidence briefly.
-- **Incorrect fact:** Keep the code unchanged and respond with the check or source that disproves the claim.
-- **Convention:** Apply it when it is binding and in scope. Do not litigate cheap established style.
-- **Preference:** Apply it when harmless or explain the tradeoff without manufacturing a correctness argument.
-- **Scope request:** Separate it from the reviewed defect and obtain authority when it materially expands the task.
-- **Question:** Answer it directly; do not edit code unless the answer exposes a defect.
+- **Confirmed fact:** fix the owning cause, add or keep a regression check, cite the evidence in one line.
+- **Incorrect fact:** leave the code unchanged; reply with the check or source that disproves the claim.
+- **Convention:** apply it when binding and in scope; do not litigate established style.
+- **Preference:** apply when harmless, or state the tradeoff without manufacturing a correctness argument.
+- **Scope request:** separate it from the defect; obtain authority when it materially expands the task.
+- **Question:** answer it; edit code only if the answer exposes a defect.
 
-Do not perform agreement. Phrases such as "great catch" are not verification. Do not reject feedback performatively either.
+Do not perform agreement ("great catch") or disagreement. State the observation.
 
 ## Handle the review as a set
 
-Comments can interact. A local fix for one may invalidate another or reveal that several comments share one cause. Group comments by owning boundary before editing, then rerun the evidence for each resolved claim.
+Group comments by owning boundary before editing. A fix for one can invalidate another, and several comments often share one cause. After resolving a group, rerun the evidence for each claim in it.
 
-Keep the review bounded. If comments expose an unresolved architectural or product decision, stop that group and surface the decision rather than arguing through every comment independently.
+## Stop signals
 
-## Report resolution
+- You are editing because the reviewer sounded certain: reproduce first.
+- You are rejecting because the reviewer gave no proof: reproduce first.
+- Two comments point at the same function from different angles: they may share a cause; group them.
+- A comment asks for a feature: it is scope, not a defect; separate it.
 
-For each comment, return one compact status:
+## Shortcuts that fail
 
-- confirmed and fixed, with the proving check;
-- disproved, with evidence;
-- applied convention or preference;
-- separated scope request;
-- unresolved, with the missing observation.
+- "Apply everything, it's faster than arguing": an incorrect factual claim applied introduces the bug the reviewer imagined.
+- "The bot is usually wrong, ignore it": bots find the null dereference on line 412 that nobody read.
+- "Senior reviewer, must be right": seniority does not know which version of the library is pinned.
+- "Fix each comment in order": the third fix reverts the first when they share a cause.
 
-For a factual claim, include the concrete observation that settled it: the failing assertion or runtime result before the fix, or the query count, type error, versioned source, or other discriminating evidence that disproved it. Do not replace the observation with a generic statement that the claim was reproduced or checked.
+## Report
+
+For each comment, one line: confirmed and fixed (with the proving check and its output); disproved (with the evidence); applied convention or preference; separated scope request; or unresolved (with the missing observation). For factual claims, include the concrete observation (failing assertion, query count, type error, versioned source line), not "checked". If no comment required a change, say so with the evidence per comment.
+
+## Critical failures
+
+- Code changed for a factual claim that was not reproduced.
+- A factual claim dismissed without a check or source.
+- A binding repository convention argued against instead of applied.
+- A scope request implemented as part of the fix without authority.
+- A resolution reported without the concrete observation that settled it.

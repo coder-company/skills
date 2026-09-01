@@ -40,3 +40,12 @@ These skills can be invoked by the user or selected automatically when the reque
 - **[untangle-shared-state](./untangle-shared-state/SKILL.md):** Redesign concurrent mutable state around explicit ownership.
 - **[make-invalid-states-impossible](./make-invalid-states-impossible/SKILL.md):** Encode valid states and reject malformed boundary data.
 - **[replace-an-api](./replace-an-api/SKILL.md):** Migrate consumers and remove an obsolete contract.
+- **[keep-execution-state](./keep-execution-state/SKILL.md):** Carry facts, ruled-out paths, and next action as explicit state on long tasks.
+- **[write-a-plan](./write-a-plan/SKILL.md):** Produce executable tasks with exact paths, interfaces, and checks with expected output.
+- **[dispatch-subagents](./dispatch-subagents/SKILL.md):** Delegate with standalone briefs, disjoint write scopes, and verified results.
+- **[run-parallel-candidates](./run-parallel-candidates/SKILL.md):** Compare independent design attempts against a fixed rubric and graft onto a base.
+- **[fix-the-ci](./fix-the-ci/SKILL.md):** Drive failing checks to green from the real log, classifying each failure with evidence.
+- **[make-the-pr-reviewable](./make-the-pr-reviewable/SKILL.md):** Shape commits and description so a reviewer can verify the PR in one pass.
+- **[explain-the-system](./explain-the-system/SKILL.md):** Walk through a subsystem from entry to exit with file and line pointers.
+- **[stress-test-the-design](./stress-test-the-design/SKILL.md):** Adversarial review of a design against a fixed rubric with lead judgment.
+- **[remove-code-slop](./remove-code-slop/SKILL.md):** Remove machine-generated excess without changing behavior.

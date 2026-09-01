@@ -1,0 +1,4 @@
+interface:
+  display_name: "Write a Plan"
+  short_description: "Executable tasks with paths, checks, and expected output"
+  default_prompt: "Use $write-a-plan to turn this design into small verifiable tasks with exact files and checks."

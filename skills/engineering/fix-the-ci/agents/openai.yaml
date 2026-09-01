@@ -1,0 +1,4 @@
+interface:
+  display_name: "Fix the CI"
+  short_description: "Read the log, classify the failure, fix the first cause"
+  default_prompt: "Use $fix-the-ci to drive this pull request's failing checks to green from the real check output."

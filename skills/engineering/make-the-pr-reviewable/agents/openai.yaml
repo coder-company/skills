@@ -1,0 +1,4 @@
+interface:
+  display_name: "Make the PR Reviewable"
+  short_description: "Ordered commits, identical tree, verifiable description"
+  default_prompt: "Use $make-the-pr-reviewable to shape this branch into a pull request a reviewer can verify in one pass."

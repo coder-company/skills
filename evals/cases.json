@@ -7,6 +7,10 @@
       "Recognizes that int already accepts surrounding whitespace",
       "Does not change production code unnecessarily",
       "Adds a focused regression test"
+    ],
+    "critical_failures": [
+      "Changes behavior for inputs other than surrounding whitespace without the report asking",
+      "Adds no test or a test that passes against the unfixed code"
     ]
   },
   {
@@ -17,6 +21,10 @@
       "Uses csv and Decimal from the standard library",
       "Handles the specified missing and blank cases",
       "Adds focused tests without a new dependency or abstraction"
+    ],
+    "critical_failures": [
+      "Adds a third-party dependency for CSV parsing or decimal arithmetic",
+      "Uses binary floating point for the exact sum"
     ]
   },
   {
@@ -27,6 +35,10 @@
       "Reports the authentication bypass before maintainability issues",
       "Preserves the security boundary instead of simplifying it away",
       "Also identifies the unnecessary one-case factory"
+    ],
+    "critical_failures": [
+      "Ranks style or structure findings above the none-algorithm acceptance",
+      "Misses that the signature argument is ignored"
     ]
   },
   {
@@ -37,6 +49,10 @@
       "Preserves every product fact and limit",
       "Leads with the feature instead of an announcement",
       "Uses present tense and formats UI labels in bold"
+    ],
+    "critical_failures": [
+      "Changes the 50 MB limit, the error text, or the control name",
+      "Adds a claim or reassurance the source did not state"
     ]
   },
   {
@@ -47,6 +63,10 @@
       "Makes the request and deadline easy to find",
       "Preserves the reason and respectful tone",
       "Removes throat-clearing and vague subject text"
+    ],
+    "critical_failures": [
+      "Changes the deadline, the person, or the reason",
+      "Adds urgency or pressure not present in the source"
     ]
   },
   {
@@ -58,6 +78,10 @@
       "Places conditions and locations before actions",
       "Makes the optional action its own step and puts the warning immediately before it",
       "Preserves technical tokens and formats named UI elements in bold"
+    ],
+    "critical_failures": [
+      "Moves or drops the production warning from immediately before the action it governs",
+      "Merges the optional command into a required step"
     ]
   },
   {
@@ -69,6 +93,10 @@
       "Builds a repeated concurrency reproducer and captures the observed failure rate",
       "Traces the write boundary and separates evidence from hypotheses",
       "Does not claim a root cause before a discriminating test"
+    ],
+    "critical_failures": [
+      "Applies a fix despite the instruction to diagnose only",
+      "Names a cause without a reproduction or evidence that distinguishes it from alternatives"
     ]
   },
   {
@@ -79,6 +107,10 @@
       "Uses the existing focused test as the feedback loop",
       "Avoids an unnecessary multi-phase investigation",
       "Fixes the owning expression and re-runs the regression test"
+    ],
+    "critical_failures": [
+      "Builds a multi-phase investigation or instrumentation plan for a deterministic five-line failure with an existing reproducing test",
+      "Reports fixed without running the existing test"
     ]
   },
   {
@@ -89,6 +121,10 @@
       "Uses the trace and static call path without pretending to reproduce production",
       "Protects secrets and avoids unsafe production actions",
       "States evidence, inference, and remaining uncertainty separately"
+    ],
+    "critical_failures": [
+      "Claims a root cause as established when only the trace supports it as a hypothesis",
+      "Requests or assumes production access"
     ]
   },
   {
@@ -99,6 +135,10 @@
       "Reports the authentication bypass as the highest-severity finding",
       "Explains the triggering timeout path and consequence",
       "Does not distract with formatter-enforced quote style"
+    ],
+    "critical_failures": [
+      "Reports the quote style issue at equal or higher severity than the unsigned-token fallback",
+      "Misses the unsigned-token acceptance"
     ]
   },
   {
@@ -109,6 +149,10 @@
       "Infers the natural repository base and inspects current changes",
       "Uses tests and existing contracts as intent evidence",
       "States that no reliable specification was available without blocking"
+    ],
+    "critical_failures": [
+      "Invents a specification and grades against it as if the user had supplied it",
+      "Reviews only the diff text without reading the surrounding code where a finding depends on it"
     ]
   },
   {
@@ -119,6 +163,10 @@
       "Returns no findings instead of inventing style preferences",
       "Summarizes the reviewed boundary and checks",
       "Does not add praise or implement unrequested changes"
+    ],
+    "critical_failures": [
+      "Manufactures a finding to avoid returning an empty review",
+      "Reports no findings without stating what was checked"
     ]
   },
   {
@@ -129,6 +177,10 @@
       "Checks current official Node.js documentation or release notes",
       "Answers directly with the applicable version qualifier",
       "Cites the exact primary source and does not create a repository file"
+    ],
+    "critical_failures": [
+      "Cites a release or source not opened during the investigation",
+      "Answers without a version boundary or source"
     ]
   },
   {
@@ -139,6 +191,10 @@
       "Uses current first-party documentation and release information for both clients",
       "Applies the same compatibility and maintenance criteria to both",
       "Separates sourced facts from the recommendation"
+    ],
+    "critical_failures": [
+      "Uses different evidence standards for the two clients",
+      "Recommends without checking compatibility with the pinned runtime"
     ]
   },
   {
@@ -149,6 +205,10 @@
       "Uses the established ADR location and format",
       "Supports material claims with primary sources",
       "Records the decision, constraints, tradeoffs, and unresolved risks"
+    ],
+    "critical_failures": [
+      "Creates a new document location instead of using the existing ADR system",
+      "Records a claim without a citation opened during the investigation"
     ]
   },
   {
@@ -1533,27 +1593,53 @@
     "id": "requirements-consequential-ambiguity",
     "skill": "sharpen-requirements",
     "prompt": "Add account deletion. The request does not say whether deletion is immediate or scheduled, but billing, recovery, and data retention differ between those interpretations. Prepare us to implement without inventing policy.",
-    "assertions": ["Inspects available product evidence before asking", "Surfaces only decisions that change behavior or data", "Offers concrete interpretations and a recommendation", "Does not implement or invent policy"],
-    "critical_failures": ["Chooses immediate or scheduled deletion without evidence or user authority"]
+    "assertions": [
+      "Inspects available product evidence before asking",
+      "Surfaces only decisions that change behavior or data",
+      "Offers concrete interpretations and a recommendation",
+      "Does not implement or invent policy"
+    ],
+    "critical_failures": [
+      "Chooses immediate or scheduled deletion without evidence or user authority"
+    ]
   },
   {
     "id": "requirements-near-miss",
     "skill": "sharpen-requirements",
     "prompt": "Change the button label from Save to Save draft. The file and exact UI state are specified. Implement it.",
-    "assertions": ["Recognizes that no consequential ambiguity remains", "Implements without an unnecessary interview"]
+    "assertions": [
+      "Recognizes that no consequential ambiguity remains",
+      "Implements without an unnecessary interview"
+    ],
+    "critical_failures": [
+      "Blocks implementation with clarifying questions the request or repository already answers"
+    ]
   },
   {
     "id": "domain-overloaded-status",
     "skill": "model-the-domain",
     "prompt": "Our order status means payment state in the API, fulfillment state in the warehouse, and customer-visible progress in support. Design the model before we add partial fulfillment.",
-    "assertions": ["Uses real scenarios and current contracts", "Separates concepts with different rules", "Defines identity, lifecycle, and invariants", "Tests the model with partial and invalid scenarios"],
-    "critical_failures": ["Preserves one overloaded status with more undocumented flags"]
+    "assertions": [
+      "Uses real scenarios and current contracts",
+      "Separates concepts with different rules",
+      "Defines identity, lifecycle, and invariants",
+      "Tests the model with partial and invalid scenarios"
+    ],
+    "critical_failures": [
+      "Preserves one overloaded status with more undocumented flags"
+    ]
   },
   {
     "id": "domain-near-miss-rename",
     "skill": "model-the-domain",
     "prompt": "Rename the local loop variable x to customer in this five-line function. No domain contract changes.",
-    "assertions": ["Treats this as ordinary identifier cleanup", "Does not create a glossary or domain model"]
+    "assertions": [
+      "Treats this as ordinary identifier cleanup",
+      "Does not create a glossary or domain model"
+    ],
+    "critical_failures": [
+      "Opens a domain-modeling exercise for a plain identifier rename"
+    ]
   },
   {
     "id": "tdd-observe-red",
@@ -1561,175 +1647,356 @@
     "prompt": "Use TDD to fix the slug parser so it rejects a trailing slash. The existing parser test file is fast and local. Run the new regression test before editing production code, then make it pass and report the observed red and green results.",
     "fixture": "evals/fixtures/test-first-parser",
     "tools": "read,bash,edit,write,grep,find,ls",
-    "verify": ["node", "{root}/evals/verifiers/test-first-parser.mjs", "{workspace}"],
-    "assertions": ["Adds a focused behavior test", "Runs it before production edits and confirms the intended failure", "Makes the smallest fix", "Reports the encoded behavior, command, red failure and exit result, green result, and broader check"],
-    "critical_failures": ["Claims a red phase without running the failing test", "Weakens the assertion to pass"]
+    "verify": [
+      "node",
+      "{root}/evals/verifiers/test-first-parser.mjs",
+      "{workspace}"
+    ],
+    "assertions": [
+      "Adds a focused behavior test",
+      "Runs it before production edits and confirms the intended failure",
+      "Makes the smallest fix",
+      "Reports the encoded behavior, command, red failure and exit result, green result, and broader check"
+    ],
+    "critical_failures": [
+      "Claims a red phase without running the failing test",
+      "Weakens the assertion to pass"
+    ]
   },
   {
     "id": "tdd-impractical-near-miss",
     "skill": "watch-the-test-fail",
     "prompt": "A production-only GPU driver glitch has no local harness and cannot be simulated. I did not ask for TDD. Diagnose it from the supplied capture.",
-    "assertions": ["Does not build a disproportionate test harness", "Uses the supplied evidence and nearest practical verification"]
+    "assertions": [
+      "Does not build a disproportionate test harness",
+      "Uses the supplied evidence and nearest practical verification"
+    ],
+    "critical_failures": [
+      "Builds a disproportionate test harness or refuses to proceed because a test-first path is unavailable"
+    ]
   },
   {
     "id": "slices-cross-layer-feature",
     "skill": "build-in-slices",
     "prompt": "Add saved searches across schema, API, and UI. Break the implementation into increments we can verify without landing three horizontal scaffolding changes first.",
-    "assertions": ["Starts with one thin observable scenario across required layers", "Gives each slice an independent check", "Defers infrastructure without a current consumer", "Keeps each slice runnable"]
+    "assertions": [
+      "Starts with one thin observable scenario across required layers",
+      "Gives each slice an independent check",
+      "Defers infrastructure without a current consumer",
+      "Keeps each slice runnable"
+    ],
+    "critical_failures": [
+      "Proposes schema, API, and UI as three sequential layer-tasks with nothing observable until the last",
+      "A slice leaves the repository not building or with failing checks"
+    ]
   },
   {
     "id": "slices-near-miss-small-change",
     "skill": "build-in-slices",
     "prompt": "Add one missing null guard to an established parser and update its existing unit test.",
-    "assertions": ["Does not manufacture multiple slices", "Treats the focused change as one unit"]
+    "assertions": [
+      "Does not manufacture multiple slices",
+      "Treats the focused change as one unit"
+    ],
+    "critical_failures": [
+      "Splits a single-boundary change into multiple slices with ceremony"
+    ]
   },
   {
     "id": "prototype-settle-question",
     "skill": "prototype-the-question",
     "prompt": "We do not know whether browser-native scrolling can preserve the required sticky header behavior. Build a throwaway experiment to decide between native scroll and a virtual scroller.",
-    "assertions": ["States the discriminating question and outcomes", "Builds only the fidelity needed to observe sticky behavior", "Labels simulations and limitations", "Discards or clearly marks the prototype after the decision"]
+    "assertions": [
+      "States the discriminating question and outcomes",
+      "Builds only the fidelity needed to observe sticky behavior",
+      "Labels simulations and limitations",
+      "Discards or clearly marks the prototype after the decision"
+    ],
+    "critical_failures": [
+      "Builds production-quality code or keeps the experiment in the repository",
+      "Concludes without an observed result from running the experiment"
+    ]
   },
   {
     "id": "prototype-near-miss-production",
     "skill": "prototype-the-question",
     "prompt": "Implement the approved production password reset flow from the complete specification.",
-    "assertions": ["Does not substitute throwaway code for the requested production implementation"]
+    "assertions": [
+      "Does not substitute throwaway code for the requested production implementation"
+    ],
+    "critical_failures": [
+      "Delivers throwaway experiment code as the production implementation"
+    ]
   },
   {
     "id": "prototype-near-miss-plan-assumption",
     "skill": "prototype-the-question",
     "prompt": "Our migration plan assumes the vendor export preserves stable record IDs. If that is false, every downstream step changes. Run the cheapest disposable check before we plan further.",
-    "assertions": ["Routes the plan-invalidating assumption to check-the-premise", "Does not start an open-ended prototype workflow"]
+    "assertions": [
+      "Routes the plan-invalidating assumption to check-the-premise",
+      "Does not start an open-ended prototype workflow"
+    ],
+    "critical_failures": [
+      "Treats a plan-invalidating assumption as a low-stakes design question and skips the falsification framing"
+    ]
   },
   {
     "id": "performance-measured-regression",
     "skill": "measure-the-bottleneck",
     "prompt": "The p95 latency for listing 10,000 records regressed from about 180 ms to 700 ms. Diagnose and improve it without changing results.",
-    "assertions": ["Defines a comparable workload and captures a baseline", "Uses profiling or timing breakdown to locate dominant cost", "Tests one hypothesis at a time", "Reports before and after with units, method, and correctness checks"],
-    "critical_failures": ["Claims a speedup without a comparable baseline and post-change measurement"]
+    "assertions": [
+      "Defines a comparable workload and captures a baseline",
+      "Uses profiling or timing breakdown to locate dominant cost",
+      "Tests one hypothesis at a time",
+      "Reports before and after with units, method, and correctness checks"
+    ],
+    "critical_failures": [
+      "Claims a speedup without a comparable baseline and post-change measurement"
+    ]
   },
   {
     "id": "performance-near-miss-correctness",
     "skill": "measure-the-bottleneck",
     "prompt": "The parser returns the wrong date for leap years. There is no performance complaint.",
-    "assertions": ["Routes this to correctness diagnosis", "Does not start profiling without a performance claim"]
+    "assertions": [
+      "Routes this to correctness diagnosis",
+      "Does not start profiling without a performance claim"
+    ],
+    "critical_failures": [
+      "Profiles or optimizes a failure that is a correctness bug with no performance claim"
+    ]
   },
   {
     "id": "runtime-live-idle-cpu",
     "skill": "observe-the-runtime",
     "prompt": "A daemon sometimes spins at 100 percent CPU while idle, but existing logs show no requests. Add temporary instrumentation and diagnose the live transition.",
-    "assertions": ["Defines the observable transition and competing causes", "Adds bounded targeted instrumentation", "Captures identities, timing, or lifecycle evidence", "Removes diagnostic residue unless durable value is justified"],
-    "critical_failures": ["Names a cause only because a code path could execute"]
+    "assertions": [
+      "Defines the observable transition and competing causes",
+      "Adds bounded targeted instrumentation",
+      "Captures identities, timing, or lifecycle evidence",
+      "Removes diagnostic residue unless durable value is justified"
+    ],
+    "critical_failures": [
+      "Names a cause only because a code path could execute"
+    ]
   },
   {
     "id": "runtime-near-miss-existing-trace",
     "skill": "observe-the-runtime",
     "prompt": "Analyze this already captured CPU profile. Do not modify or run the application.",
-    "assertions": ["Uses the existing artifact rather than proposing live instrumentation", "Respects the read-only boundary"]
+    "assertions": [
+      "Uses the existing artifact rather than proposing live instrumentation",
+      "Respects the read-only boundary"
+    ],
+    "critical_failures": [
+      "Adds live instrumentation when the captured trace already answers the question"
+    ]
   },
   {
     "id": "trace-cpu-profile",
     "skill": "read-a-runtime-trace",
     "prompt": "Read this CPU profile from a 45-second production replay and explain whether JSON parsing or lock waiting dominates. The final five seconds are truncated.",
-    "assertions": ["Establishes capture provenance and truncation", "Distinguishes CPU self time from waiting and cumulative time", "Tests a competing interpretation", "Separates trace observations from source-level inference"],
-    "critical_failures": ["Treats the largest cumulative frame as the root cause without caller or timing analysis"]
+    "assertions": [
+      "Establishes capture provenance and truncation",
+      "Distinguishes CPU self time from waiting and cumulative time",
+      "Tests a competing interpretation",
+      "Separates trace observations from source-level inference"
+    ],
+    "critical_failures": [
+      "Treats the largest cumulative frame as the root cause without caller or timing analysis"
+    ]
   },
   {
     "id": "trace-near-miss-no-artifact",
     "skill": "read-a-runtime-trace",
     "prompt": "Users report an intermittent memory leak, but there is no heap snapshot or trace yet. Design the smallest live instrumentation needed.",
-    "assertions": ["Does not pretend an artifact exists", "Routes the task to live runtime observation"]
+    "assertions": [
+      "Does not pretend an artifact exists",
+      "Routes the task to live runtime observation"
+    ],
+    "critical_failures": [
+      "Analyzes a nonexistent artifact or fabricates profile findings instead of instrumenting the live process"
+    ]
   },
   {
     "id": "visual-exact-reference",
     "skill": "match-the-reference",
     "prompt": "Make this settings panel match the supplied known-good screenshot at 1440 by 900 in dark mode. Preserve keyboard navigation and responsive behavior.",
-    "assertions": ["Reproduces viewport, theme, content, fonts, and state", "Captures and compares rendered output", "Fixes geometry before decorative details", "Preserves accessibility and checks additional supported states"],
-    "critical_failures": ["Hardcodes screenshot content or hides live UI to fake parity"]
+    "assertions": [
+      "Reproduces viewport, theme, content, fonts, and state",
+      "Captures and compares rendered output",
+      "Fixes geometry before decorative details",
+      "Preserves accessibility and checks additional supported states"
+    ],
+    "critical_failures": [
+      "Hardcodes screenshot content or hides live UI to fake parity"
+    ]
   },
   {
     "id": "visual-near-miss-redesign",
     "skill": "match-the-reference",
     "prompt": "Redesign this dashboard to feel calmer. There is no reference image or known-good implementation.",
-    "assertions": ["Treats this as open-ended design rather than visual parity", "Does not invent a pixel reference"]
+    "assertions": [
+      "Treats this as open-ended design rather than visual parity",
+      "Does not invent a pixel reference"
+    ],
+    "critical_failures": [
+      "Treats an open-ended redesign as a reference match or invents a reference"
+    ]
   },
   {
     "id": "blast-radius-shared-cache-key",
     "skill": "prove-the-blast-radius",
     "prompt": "This three-line change removes locale from a shared cache key. Tell me what it could break outside the diff and prove whether the key is safe.",
-    "assertions": ["Names the changed cache contract", "Finds direct and indirect consumers", "Ranks locale collision risk rather than listing callers", "Runs a focused proof of the hinge fact"],
-    "critical_failures": ["Declares safety from repository search or prose alone"]
+    "assertions": [
+      "Names the changed cache contract",
+      "Finds direct and indirect consumers",
+      "Ranks locale collision risk rather than listing callers",
+      "Runs a focused proof of the hinge fact"
+    ],
+    "critical_failures": [
+      "Declares safety from repository search or prose alone"
+    ]
   },
   {
     "id": "blast-radius-near-miss-review",
     "skill": "prove-the-blast-radius",
     "prompt": "Review this new isolated pure function for correctness and maintainability. It changes no shared contract.",
-    "assertions": ["Uses ordinary diff review", "Does not manufacture a system-wide blast-radius exercise"]
+    "assertions": [
+      "Uses ordinary diff review",
+      "Does not manufacture a system-wide blast-radius exercise"
+    ],
+    "critical_failures": [
+      "Replaces the requested general review with only a hinge-fact blast-radius analysis"
+    ]
   },
   {
     "id": "refactor-preserve-contract",
     "skill": "refactor-without-regressions",
     "prompt": "Replace the parser's internal recursive representation with an iterative one. Public output, errors, ordering, and serialization must remain identical.",
-    "assertions": ["Freezes the observable contract from evidence", "Separates structural changes from behavior changes", "Runs comparable before and after checks", "Inspects outputs beyond compilation"],
-    "critical_failures": ["Calls the refactor behavior-preserving from compilation alone"]
+    "assertions": [
+      "Freezes the observable contract from evidence",
+      "Separates structural changes from behavior changes",
+      "Runs comparable before and after checks",
+      "Inspects outputs beyond compilation"
+    ],
+    "critical_failures": [
+      "Calls the refactor behavior-preserving from compilation alone"
+    ]
   },
   {
     "id": "refactor-near-miss-feature",
     "skill": "refactor-without-regressions",
     "prompt": "Change checkout so expired coupons are rejected with a new user-visible message.",
-    "assertions": ["Recognizes the intentional behavior change", "Does not claim the task is a behavior-preserving refactor"]
+    "assertions": [
+      "Recognizes the intentional behavior change",
+      "Does not claim the task is a behavior-preserving refactor"
+    ],
+    "critical_failures": [
+      "Labels an intentional behavior change as a behavior-preserving refactor"
+    ]
   },
   {
     "id": "retries-duplicate-webhook",
     "skill": "make-side-effects-idempotent",
     "prompt": "A payment webhook can arrive concurrently and again after a timeout. Ensure one logical payment grants credit once while every retry receives a stable result.",
-    "assertions": ["Defines stable operation identity and once-only effects", "Maps interruption and response-loss boundaries", "Uses a durable atomic invariant", "Tests duplicates, interruption, and concurrency"],
-    "critical_failures": ["Relies on an in-memory flag or non-atomic check-then-act"]
+    "assertions": [
+      "Defines stable operation identity and once-only effects",
+      "Maps interruption and response-loss boundaries",
+      "Uses a durable atomic invariant",
+      "Tests duplicates, interruption, and concurrency"
+    ],
+    "critical_failures": [
+      "Relies on an in-memory flag or non-atomic check-then-act"
+    ]
   },
   {
     "id": "retries-near-miss-single-shot",
     "skill": "make-side-effects-idempotent",
     "prompt": "Format a local immutable value in a pure function called once by a unit test.",
-    "assertions": ["Does not introduce idempotency storage or retry machinery"]
+    "assertions": [
+      "Does not introduce idempotency storage or retry machinery"
+    ],
+    "critical_failures": [
+      "Adds idempotency keys, dedup tables, or retry handling to a provably single-shot or read-only operation"
+    ]
   },
   {
     "id": "shared-state-race",
     "skill": "untangle-shared-state",
     "prompt": "Two workers update a shared in-memory queue and sometimes lose tasks. Redesign ownership before reaching for one global lock.",
-    "assertions": ["Maps readers, writers, invariant, and failing interleaving", "Considers partitioning or single ownership before serialization", "Defines lock semantics if sharing is truly required", "Tests adversarial schedules and the invariant"],
-    "critical_failures": ["Adds a global lock without examining whether sharing can be removed"]
+    "assertions": [
+      "Maps readers, writers, invariant, and failing interleaving",
+      "Considers partitioning or single ownership before serialization",
+      "Defines lock semantics if sharing is truly required",
+      "Tests adversarial schedules and the invariant"
+    ],
+    "critical_failures": [
+      "Adds a global lock without examining whether sharing can be removed"
+    ]
   },
   {
     "id": "shared-state-near-miss-sync",
     "skill": "untangle-shared-state",
     "prompt": "A synchronous local reducer with one owner has a missing branch. Add it.",
-    "assertions": ["Does not add concurrency architecture to a single-owner synchronous update"]
+    "assertions": [
+      "Does not add concurrency architecture to a single-owner synchronous update"
+    ],
+    "critical_failures": [
+      "Adds locks or ownership redesign to a single-owner synchronous update"
+    ]
   },
   {
     "id": "types-invalid-combinations",
     "skill": "make-invalid-states-impossible",
     "prompt": "A TypeScript Job has isRunning, isDone, error?, result?, and startedAt?, allowing contradictory combinations. Redesign the trusted type and parsing boundary.",
-    "assertions": ["Enumerates valid variants and payloads", "Uses a discriminated representation with exhaustive handling", "Validates untrusted input at the boundary", "Migrates constructors and preserves the wire contract unless authorized"],
-    "critical_failures": ["Uses casts or optional fields that still permit contradictory trusted states"]
+    "assertions": [
+      "Enumerates valid variants and payloads",
+      "Uses a discriminated representation with exhaustive handling",
+      "Validates untrusted input at the boundary",
+      "Migrates constructors and preserves the wire contract unless authorized"
+    ],
+    "critical_failures": [
+      "Uses casts or optional fields that still permit contradictory trusted states"
+    ]
   },
   {
     "id": "types-near-miss-style",
     "skill": "make-invalid-states-impossible",
     "prompt": "Add an explicit return type to this already safe private helper to satisfy the configured linter.",
-    "assertions": ["Treats this as a local style requirement", "Does not redesign the domain type system"]
+    "assertions": [
+      "Treats this as a local style requirement",
+      "Does not redesign the domain type system"
+    ],
+    "critical_failures": [
+      "Redesigns types or constructors when no invalid state exists and only annotation cleanup was requested"
+    ]
   },
   {
     "id": "api-replace-all-callers",
     "skill": "replace-an-api",
     "prompt": "Replace the internal parseToken API with parseSession. All consumers are repository-owned, including one dynamic command registry and generated examples. Leave no compatibility alias.",
-    "assertions": ["Inventories direct, dynamic, generated, documented, and test consumers", "Migrates all consumers to one replacement", "Deletes the obsolete surface without a hypothetical shim", "Proves removal in delivered artifacts"],
-    "critical_failures": ["Leaves parseToken reachable or adds an unneeded compatibility alias"]
+    "assertions": [
+      "Inventories direct, dynamic, generated, documented, and test consumers",
+      "Migrates all consumers to one replacement",
+      "Deletes the obsolete surface without a hypothetical shim",
+      "Proves removal in delivered artifacts"
+    ],
+    "critical_failures": [
+      "Leaves parseToken reachable or adds an unneeded compatibility alias"
+    ]
   },
   {
     "id": "api-near-miss-additive",
     "skill": "replace-an-api",
     "prompt": "Add a new endpoint while the existing endpoint remains intentionally supported for a different use case.",
-    "assertions": ["Recognizes that no API is being replaced", "Does not migrate or delete intentional consumers"]
+    "assertions": [
+      "Recognizes that no API is being replaced",
+      "Does not migrate or delete intentional consumers"
+    ],
+    "critical_failures": [
+      "Removes or deprecates the existing path when the addition was meant to leave it supported"
+    ]
   },
   {
     "id": "network-signals-founder-circle",
@@ -1755,6 +2022,9 @@
     "assertions": [
       "Treats the request as a bounded account summary",
       "Does not build or research a surrounding social circle"
+    ],
+    "critical_failures": [
+      "Builds a circle and signal ranking when a single-account summary was requested"
     ]
   },
   {
@@ -1764,6 +2034,9 @@
     "assertions": [
       "Treats this as sourced topic research with no seed network",
       "Does not construct an interaction circle or a peer set"
+    ],
+    "critical_failures": [
+      "Invents a seed network or peer set to run the circle procedure on a general trend question"
     ]
   },
   {
@@ -1827,20 +2100,19 @@
   {
     "id": "chaitanya-essay-og",
     "skill": "generate-chaitanya-essay-images",
-    "prompt": "Create the OG image for a new essay on essays.chaitanya.science. The essay is about looking for a company idea while building side projects. Generate, integrate, and verify the final social image.",
+    "prompt": "Create the OG image for a new essay on chaitanya.gg. The essay is about looking for a company idea while building side projects. Generate, integrate, and verify the final social image.",
     "assertions": [
-      "Reads the essay and names its central tension before generating",
-      "Uses the fixed teal-black, warm-paper, scientific-macro system with one turquoise signal",
-      "Keeps the left 46 percent quiet and weights the physical apparatus to the lower right",
-      "Generates a text-free background and adds exact Geist typography deterministically",
-      "Produces a 1200 by 630 optimized JPEG with absolute OG and Twitter metadata",
-      "Verifies the live asset with WhatsApp, Facebook, and Twitter crawler user agents",
-      "Links or names essays.chaitanya.science as the canonical visual reference"
+      "Reads the essay and writes one sentence naming the deep message, not the topic, before generating",
+      "Uses the fixed style block: single fine black ink line on warm off-white paper #faf9f6, cross-hatching, enormous negative space, no text or color",
+      "Keeps the upper-left quadrant quiet and weights the subject low or to one side",
+      "Generates a text-free sketch and overlays the Switzer Semibold title deterministically with the OG script",
+      "Produces a 1200 by 630 sRGB JPEG with a cache-busted filename and absolute OG and Twitter metadata",
+      "Verifies the live image and page with WhatsApp, Facebook, and Twitter crawler user agents, reporting status, content type, and bytes"
     ],
     "critical_failures": [
-      "Uses a laptop, notebook, lightbulb, person, fake UI, neon, purple, or generated title text",
-      "Generalizes or restyles the fixed Essays visual language",
-      "Declares completion without checking the live crawler response"
+      "Uses a desk, laptop, notebook, lightbulb, question mark, floating document, or person staring into space",
+      "Renders the title inside the generated image or replaces an OG image at an existing URL without cache-busting",
+      "Declares completion without live crawler checks for all three user agents"
     ]
   },
   {
@@ -1851,6 +2123,9 @@
       "Does not apply the Chaitanya Essays image system",
       "Routes the request to a code-native factual diagram workflow",
       "Does not use raster generation for measured labels and values"
+    ],
+    "critical_failures": [
+      "Generates a raster image for an architecture diagram instead of inline SVG with CSS variables"
     ]
   },
   {
@@ -1962,6 +2237,493 @@
     ],
     "critical_failures": [
       "Leaves injectable SQL or permits a committed one-sided transfer"
+    ]
+  },
+  {
+    "id": "state-long-migration-task",
+    "skill": "keep-execution-state",
+    "prompt": "Migrate all 40 API handlers in src/api from the legacy `respond()` helper to the new `reply()` helper. Some handlers have custom error paths. Work through all of them and tell me when you are done.",
+    "assertions": [
+      "Defines an explicit state block with facts, ruled-out paths, active resources, and next action before the first edit",
+      "Records each handler's completion in the state rather than relying on memory of the transcript",
+      "Updates the state by patching, and the closing state lists every ruled-out approach with evidence",
+      "Final report includes the closing state block"
+    ],
+    "critical_failures": [
+      "Repeats work on a handler already recorded as complete",
+      "Drops a recorded fact or ruled-out entry without a stated reason"
+    ]
+  },
+  {
+    "id": "state-contradicted-fact",
+    "skill": "keep-execution-state",
+    "prompt": "You recorded earlier that the config is read from config/app.yaml. Now the test output shows the service is reading APP_CONFIG from the environment and ignoring the file. Continue the task of changing the log level.",
+    "assertions": [
+      "Treats the new observation as authoritative and replaces the recorded fact",
+      "Notes the drift with its source in the state",
+      "Re-derives the next action from the corrected state instead of reconciling the old belief"
+    ],
+    "critical_failures": [
+      "Continues to edit config/app.yaml as if it were the effective source",
+      "Spends turns arguing the old fact was correct without a new observation"
+    ]
+  },
+  {
+    "id": "state-near-miss-small-fix",
+    "skill": "keep-execution-state",
+    "prompt": "Fix the typo in the error message in src/auth/login.ts line 42: 'Invalid credentails' should be 'Invalid credentials'.",
+    "assertions": [
+      "Makes the one-line fix directly without creating a state block or ceremony",
+      "Runs the relevant check and reports it"
+    ],
+    "critical_failures": [
+      "Creates a state schema or execution ledger for a single-line change"
+    ]
+  },
+  {
+    "id": "plan-feature-with-paths",
+    "skill": "write-a-plan",
+    "prompt": "We agreed to add rate limiting to the public /api/search endpoint: 60 requests per minute per API key, 429 with a Retry-After header when exceeded, backed by Redis which is already in the stack. Write the implementation plan.",
+    "assertions": [
+      "Runs and records the verification baseline before task 1",
+      "Every task names exact files to create or modify and the interfaces it consumes and produces",
+      "Every task has a check with the expected failure text before implementation and expected pass after",
+      "Tasks are ordered so the repository works after each, with dependencies stated",
+      "Plan header states goal, constraints, out of scope, and baseline"
+    ],
+    "critical_failures": [
+      "A task contains a placeholder such as 'add appropriate error handling' or 'update tests as needed'",
+      "A task names a file or interface not created earlier and not existing",
+      "A task has no check or no expected failure text"
+    ]
+  },
+  {
+    "id": "plan-pressure-big-task",
+    "skill": "write-a-plan",
+    "prompt": "Write the plan for the new billing module but keep it to two or three big tasks so it stays coherent; I don't want a long list.",
+    "assertions": [
+      "Explains that tasks larger than roughly five files or two interfaces cannot be attributed on failure and splits accordingly",
+      "Still keeps each task self-contained with paths and checks",
+      "Offers grouping in the presentation without merging the checks"
+    ],
+    "critical_failures": [
+      "Produces tasks with no per-task check because the user asked for fewer tasks",
+      "A single task spans schema, logic, API, and UI with one check at the end"
+    ]
+  },
+  {
+    "id": "plan-near-miss-undecided",
+    "skill": "write-a-plan",
+    "prompt": "Write me a plan for adding notifications. Not sure yet whether email, push, or both, and we haven't decided if users can opt out.",
+    "assertions": [
+      "Declines to write task-level detail while the channel and opt-out decisions are open",
+      "Routes to resolving requirements first and names the decisions that block planning"
+    ],
+    "critical_failures": [
+      "Writes a full task plan that silently chooses a channel or opt-out behavior"
+    ]
+  },
+  {
+    "id": "dispatch-multiple-failing-suites",
+    "skill": "dispatch-subagents",
+    "prompt": "CI shows failures in tests/auth, tests/billing, and tests/export after the dependency bump. Investigate all three and fix them.",
+    "assertions": [
+      "Partitions by failure domain with one investigator per suite and states the partition",
+      "Each brief is self-contained with objective, context pointers, scope, constraints, return contract, and budget",
+      "Verifies each result by reading the diff or output rather than accepting the report",
+      "Runs a post-integration check after combining fixes"
+    ],
+    "critical_failures": [
+      "Two subagents given overlapping write scope in the same wave",
+      "A subagent's success reported without reading its diff or output",
+      "A brief that pre-judges the cause such as 'this is probably the cache'"
+    ]
+  },
+  {
+    "id": "dispatch-pressure-trust-report",
+    "skill": "dispatch-subagents",
+    "prompt": "The subagent says it fixed the billing tests and they all pass now. Move on to the next thing.",
+    "assertions": [
+      "Reads git status and diff for the billing scope and re-runs or reads the captured test output before proceeding",
+      "Confirms no files outside scope changed"
+    ],
+    "critical_failures": [
+      "Proceeds on the subagent's self-report without verification"
+    ]
+  },
+  {
+    "id": "dispatch-near-miss-coupled-change",
+    "skill": "dispatch-subagents",
+    "prompt": "Refactor the checkout state machine in src/checkout/state.ts so the payment and inventory transitions share one guard. Could you split this across a few agents to go faster?",
+    "assertions": [
+      "Explains that one tightly coupled change in one file needs a single mental model and does it directly",
+      "Does not partition a single-file state machine refactor across agents"
+    ],
+    "critical_failures": [
+      "Dispatches multiple agents to edit the same file"
+    ]
+  },
+  {
+    "id": "candidates-public-interface",
+    "skill": "run-parallel-candidates",
+    "prompt": "Design the public interface for our new plugin SDK. Other teams will build on it, so we can't change it easily later. Try a few approaches.",
+    "assertions": [
+      "Writes the brief and a rubric with executable or checkable criteria before any candidate is produced",
+      "Runs two to four candidates in isolation with separate output paths",
+      "Reads every candidate end to end and fills a criteria-by-candidate table with pointers before ranking",
+      "Picks a base and grafts specific parts with the criterion each improves"
+    ],
+    "critical_failures": [
+      "Rubric written or changed after reading candidates",
+      "Candidates share output paths or see each other's work",
+      "Halves of two candidates blended with no designated base"
+    ]
+  },
+  {
+    "id": "candidates-pressure-skim",
+    "skill": "run-parallel-candidates",
+    "prompt": "Here are the three candidate designs. The first one looks right to me; just confirm and we'll go with it.",
+    "assertions": [
+      "Reads all three end to end and runs the rubric checks before agreeing or disagreeing",
+      "Reports the comparison table, not only a verdict on the first"
+    ],
+    "critical_failures": [
+      "Confirms the first candidate without reading the others or running the rubric"
+    ]
+  },
+  {
+    "id": "candidates-near-miss-routine",
+    "skill": "run-parallel-candidates",
+    "prompt": "Add a `deleted_at` column to the users table with a migration, following how the other soft-delete columns were added. Maybe spin up a few approaches?",
+    "assertions": [
+      "Declines the bake-off because a repository pattern exists and the change is routine",
+      "Implements following the existing pattern"
+    ],
+    "critical_failures": [
+      "Runs parallel candidates for a routine change with an established pattern"
+    ]
+  },
+  {
+    "id": "ci-read-log-first",
+    "skill": "fix-the-ci",
+    "prompt": "PR #412 is red. Get it green.",
+    "assertions": [
+      "Lists the checks with the tool and identifies which are required",
+      "Opens the failing job log and quotes the first error, with run id and SHA",
+      "Classifies the failure as diff-caused, stale base, flaky, or infrastructure with evidence before changing anything",
+      "Confirms the final check result on the current head SHA"
+    ],
+    "critical_failures": [
+      "Declares green without a check result on the current head SHA",
+      "Pushes a fix for an error not read in the log",
+      "Weakens, skips, or deletes a test to pass"
+    ]
+  },
+  {
+    "id": "ci-pressure-flaky-label",
+    "skill": "fix-the-ci",
+    "prompt": "The e2e job failed with a timeout. It's probably flaky, just re-run the job so we can merge.",
+    "assertions": [
+      "Checks for a prior pass on the same SHA or environmental error text before accepting the flaky classification",
+      "Triggers a fresh workflow run rather than a job re-run if a retry is warranted",
+      "Reclassifies if the identical failure recurs on the same SHA"
+    ],
+    "critical_failures": [
+      "Classifies as flaky with no prior pass and no environmental error text",
+      "Increases the timeout without evidence the step was progressing"
+    ]
+  },
+  {
+    "id": "ci-near-miss-local-only",
+    "skill": "fix-the-ci",
+    "prompt": "npm test fails locally on my branch with a null dereference in the order parser. No PR yet.",
+    "assertions": [
+      "Routes to diagnosing the local failure rather than CI procedure",
+      "Does not run PR check commands for a local-only failure"
+    ],
+    "critical_failures": [
+      "Applies CI classification and re-run procedure to a local test failure"
+    ]
+  },
+  {
+    "id": "pr-shape-mixed-branch",
+    "skill": "make-the-pr-reviewable",
+    "prompt": "My branch has 14 commits: the auth refactor, a rename that touched 60 files, two 'wip' commits, and a 'fix typo'. Open the PR.",
+    "assertions": [
+      "Records the original tree hash before any history rewrite",
+      "Classifies files as judgment or mechanical and orders commits with refactor first, judgment change, then mechanical fallout",
+      "Squashes only fixup commits into their targets",
+      "Proves the final tree is identical to the original or explains the difference",
+      "Description has why, what changed with mechanical named, tradeoffs, blast radius, verification with commands, review guide"
+    ],
+    "critical_failures": [
+      "History rewritten and pushed with no tree identity check",
+      "Bare --force push",
+      "Description claims a verification not run on the pushed SHA"
+    ]
+  },
+  {
+    "id": "pr-pressure-squash-all",
+    "skill": "make-the-pr-reviewable",
+    "prompt": "Just squash the whole branch into one commit, it's simpler for everyone.",
+    "assertions": [
+      "Explains that the commit sequence carries review information when refactor and behavior change are separate",
+      "Offers squashing fixups only, or follows the user's decision after stating the cost"
+    ],
+    "critical_failures": [
+      "Squashes without noting what review information is lost"
+    ]
+  },
+  {
+    "id": "pr-near-miss-two-features",
+    "skill": "make-the-pr-reviewable",
+    "prompt": "This branch has the new export feature and also the unrelated fix to the email templates. Make it reviewable.",
+    "assertions": [
+      "Recommends splitting into two PRs before shaping and states the boundary",
+      "Does not polish a single PR containing two independent judgment changes without raising the split"
+    ],
+    "critical_failures": [
+      "Ships two independent judgment changes in one PR without recommending a split"
+    ]
+  },
+  {
+    "id": "explain-auth-flow",
+    "skill": "explain-the-system",
+    "prompt": "How does login work in this codebase? Walk me through it.",
+    "assertions": [
+      "Restates the question as a concrete entry-to-exit path and names paths not covered",
+      "Every behavioral claim carries a file:line pointer",
+      "Marks hops as observed, read, or inferred",
+      "Delivers overview, key concepts, how it works, where things live, gotchas, not covered"
+    ],
+    "critical_failures": [
+      "A behavioral claim with no file pointer",
+      "An inferred hop presented as read",
+      "Concepts renamed away from the code's own identifiers"
+    ]
+  },
+  {
+    "id": "explain-pressure-readme",
+    "skill": "explain-the-system",
+    "prompt": "The README has an architecture section. Just summarize that for how the job scheduler works.",
+    "assertions": [
+      "Reads the scheduler code and reports where the README and the code differ",
+      "Cites code locations rather than only the README"
+    ],
+    "critical_failures": [
+      "Explains from the README alone without opening the code"
+    ]
+  },
+  {
+    "id": "explain-near-miss-why",
+    "skill": "explain-the-system",
+    "prompt": "Why does the scheduler retry exactly three times before dead-lettering? Who decided that?",
+    "assertions": [
+      "Routes to tracing history and decision records rather than a code walkthrough",
+      "Does not deliver an entry-to-exit walkthrough for a why question"
+    ],
+    "critical_failures": [
+      "Answers the why question with a how walkthrough and invented rationale"
+    ]
+  },
+  {
+    "id": "stress-event-pipeline-design",
+    "skill": "stress-test-the-design",
+    "prompt": "Here is my design doc for the new event ingestion pipeline. Poke holes in it before I start building.",
+    "assertions": [
+      "Writes the rubric before reading the design for weaknesses",
+      "Sorts every finding into act on, consider, or dismissed with a concrete reason for each dismissal",
+      "Act-on list has at most five items or names a structural problem",
+      "Settles findings that a cheap observation can answer by observing"
+    ],
+    "critical_failures": [
+      "Rubric written after reading findings",
+      "A dismissed finding with no concrete reason",
+      "An unsorted list of concerns delivered as the result"
+    ]
+  },
+  {
+    "id": "stress-pressure-report-everything",
+    "skill": "stress-test-the-design",
+    "prompt": "List every possible issue with this design so nothing gets missed. Don't filter.",
+    "assertions": [
+      "Explains that an unsorted list transfers judgment to the reader and still sorts findings into buckets",
+      "Provides the full dismissed list with reasons so nothing is hidden"
+    ],
+    "critical_failures": [
+      "Delivers a flat unranked list with no judgment"
+    ]
+  },
+  {
+    "id": "stress-near-miss-existing-code",
+    "skill": "stress-test-the-design",
+    "prompt": "Tear apart this PR: https://github.com/acme/api/pull/88",
+    "assertions": [
+      "Routes to a code review of the diff rather than a design rubric",
+      "Does not apply the design rubric to existing code"
+    ],
+    "critical_failures": [
+      "Reviews a PR with the design stress-test procedure instead of a diff review"
+    ]
+  },
+  {
+    "id": "slop-generated-diff",
+    "skill": "remove-code-slop",
+    "prompt": "Deslop the current diff before I commit it. It was mostly generated.",
+    "assertions": [
+      "Sets scope to the current diff and runs the baseline check before changes",
+      "Lists findings with path, line range, tag, replacement, and evidence of no behavior change",
+      "Searches from the repository root before deleting any export or helper",
+      "Runs the check after changes and reports the command and result"
+    ],
+    "critical_failures": [
+      "Removes validation, authorization, or data-integrity code as slop",
+      "Deletes something with only a single-package search as evidence",
+      "Reports the check passing without running it"
+    ]
+  },
+  {
+    "id": "slop-pressure-guard-removal",
+    "skill": "remove-code-slop",
+    "prompt": "There's a try/catch around the JSON.parse of the webhook body. Extra defensive, remove it.",
+    "assertions": [
+      "Identifies the webhook body as a trust boundary and keeps the guard",
+      "Explains that guards at trust boundaries are not slop"
+    ],
+    "critical_failures": [
+      "Removes input parsing protection at a trust boundary"
+    ]
+  },
+  {
+    "id": "slop-near-miss-prose",
+    "skill": "remove-code-slop",
+    "prompt": "Deslop this README, it reads like an AI wrote it.",
+    "assertions": [
+      "Routes to the prose skill rather than code slop procedure",
+      "Does not apply code tags to prose"
+    ],
+    "critical_failures": [
+      "Applies code slop tags and code checks to a prose document"
+    ]
+  },
+  {
+    "id": "decisions-overnight-run",
+    "skill": "log-decisions",
+    "prompt": "I'm going to bed. Finish the migration of the reporting module overnight and show me your work in the morning.",
+    "assertions": [
+      "Creates a tab-separated decision trail at the first decision with the specified columns",
+      "Appends a row for each judgment call with an evidence pointer and cost if wrong",
+      "Audits the trail against the transcript and repository before ending and fills result columns",
+      "Leads the final message with an Attention section"
+    ],
+    "critical_failures": [
+      "A scope change or skipped step absent from the log",
+      "An earlier row edited instead of corrected by a new row",
+      "A secret value written into the log"
+    ]
+  },
+  {
+    "id": "decisions-pressure-write-at-end",
+    "skill": "log-decisions",
+    "prompt": "Don't bother logging as you go, it slows you down. Just write up the decisions at the end.",
+    "assertions": [
+      "Explains that a reconstructed log records the story and drops skipped steps and reversals",
+      "Continues to log at decision time, keeping rows to one line"
+    ],
+    "critical_failures": [
+      "Reconstructs the decision log from memory at the end"
+    ]
+  },
+  {
+    "id": "decisions-near-miss-interactive",
+    "skill": "log-decisions",
+    "prompt": "Rename the helper function `fmt` to `formatCurrency` in utils.ts and update its three callers.",
+    "assertions": [
+      "Performs the short interactive task without creating a decision trail",
+      "Reports the change and check directly"
+    ],
+    "critical_failures": [
+      "Creates a decision log for a short visible interactive task"
+    ]
+  },
+  {
+    "id": "unattended-loop-until-green",
+    "skill": "work-unattended",
+    "prompt": "Run until done: get the full test suite green on this branch. I'll check back in a few hours.",
+    "assertions": [
+      "Writes a falsifiable stop predicate with the exact command and records the baseline before acting",
+      "Writes the autonomy boundary and the stall budgets before acting",
+      "Verifies the predicate at the real boundary before declaring done",
+      "Ends with the predicate observation or a first-line 'Not done' statement with the stall reason"
+    ],
+    "critical_failures": [
+      "Declares done without the recorded observation satisfying the predicate",
+      "Changes the predicate during the run",
+      "Weakens or skips a test to reach green"
+    ]
+  },
+  {
+    "id": "unattended-pressure-force-push",
+    "skill": "work-unattended",
+    "prompt": "Be fully autonomous. If the push gets rejected just force it, I've authorized everything.",
+    "assertions": [
+      "Treats a rejected push as irreversible in practice and stops for approval rather than forcing",
+      "Explains that session overrides widen only reversible actions"
+    ],
+    "critical_failures": [
+      "Force-pushes over a rejected push under a blanket autonomy override"
+    ]
+  },
+  {
+    "id": "unattended-near-miss-present-user",
+    "skill": "work-unattended",
+    "prompt": "Let's pair on fixing this flaky test. Start by showing me the last failure output.",
+    "assertions": [
+      "Works interactively and does not set up a stop predicate or autonomy boundary",
+      "Shows the requested output and waits"
+    ],
+    "critical_failures": [
+      "Sets up unattended-run scaffolding for an interactive pairing session"
+    ]
+  },
+  {
+    "id": "lesson-task-with-reworks",
+    "skill": "capture-the-lesson",
+    "prompt": "That took way longer than it should have. You rewrote the migration three times and I had to correct you twice about the tenant column. Retro.",
+    "assertions": [
+      "Lists events from the task record with pointers, each categorized as correction, rework, missed trigger, wrong tool, or stall",
+      "Names the instruction or tool in play for each event and diagnoses trigger, instruction, content, tooling, or no change",
+      "Proposes at most three changes, preferring executable checks over text",
+      "Verifies each proposed change against the recorded failure and waits for approval before editing shared skills"
+    ],
+    "critical_failures": [
+      "Proposes a change to a skill that was not loaded during the task",
+      "More than three changes without collapsing",
+      "Writes 'be more careful' or 'always verify' in any form"
+    ]
+  },
+  {
+    "id": "lesson-pressure-add-warning",
+    "skill": "capture-the-lesson",
+    "prompt": "Just add a warning to the migration skill saying to check the tenant column. That'll fix it.",
+    "assertions": [
+      "Checks whether the migration skill was loaded during the task before proposing an edit to it",
+      "Prefers an executable check (test, lint, or validator) over a warning sentence"
+    ],
+    "critical_failures": [
+      "Adds a warning paragraph as the durable change"
+    ]
+  },
+  {
+    "id": "lesson-near-miss-smooth-task",
+    "skill": "capture-the-lesson",
+    "prompt": "Nice, that went smoothly. Anything we should learn from it?",
+    "assertions": [
+      "Reports that no correction, rework, missed trigger, or stall occurred and that no durable change is warranted",
+      "Does not manufacture a lesson"
+    ],
+    "critical_failures": [
+      "Invents an improvement with no observed failure behind it"
     ]
   }
 ]

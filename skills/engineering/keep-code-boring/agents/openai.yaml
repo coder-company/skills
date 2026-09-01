@@ -1,4 +1,4 @@
 interface:
   display_name: "Keep Code Boring"
-  short_description: "Build simple, readable, well-tested code"
+  short_description: "Implement the smallest complete change that follows the repository"
   default_prompt: "Use $keep-code-boring to implement the smallest clear change that fully solves this task."

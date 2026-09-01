@@ -1,71 +1,81 @@
 ---
 name: preserve-git-state
-description: Preserve user-owned and unrelated Git state while changing, committing, rebasing, or cleaning a repository. Use when the checkout contains pre-existing staged, unstaged, untracked, stashed, or unpushed work that is not clearly owned by the current task.
+description: Keep user-owned and unrelated Git state intact while editing, committing, rebasing, or cleaning, by inventorying the checkout first, touching only task-owned paths, and staging by explicit path or hunk. Use when the checkout already has staged, unstaged, untracked, stashed, or unpushed work not clearly owned by the current task, or before any git add, commit, stash, or restore in a dirty tree. Do not use for target and recovery judgment on a destructive command; use confirm-destructive-actions.
 ---
 
 # Preserve Git state
 
-## Inventory before changing Git state
+Inventory the checkout before the first Git mutation, record what the task creates or changes, operate only on that set with explicit paths, and compare the final state with the inventory before reporting.
 
-Inspect:
+## Route first
 
-- the current branch and `HEAD`;
-- upstream and ahead or behind state;
-- staged, unstaged, and untracked paths;
-- existing stashes;
-- unpushed commits and active merge, rebase, cherry-pick, or revert state;
-- nested repositories or submodules relevant to the task.
+- A destructive command (`reset --hard`, `clean`, `checkout --`, `restore`, stash drop, branch delete, history rewrite, force-push) is needed: `confirm-destructive-actions` for its target and recovery.
+- The task is shaping commits for review: `make-the-pr-reviewable`, which applies this skill's staging rules.
+- The tree has unmerged paths: `resolve-semantic-conflicts`.
 
-Do not infer ownership from the current diff. A change that was present when the task began belongs to the user or another workflow unless evidence establishes otherwise.
+## Inventory before changing
 
-Record the paths and Git state the current task creates or changes. This task-owned set controls later staging and cleanup.
+Record, before any mutation:
+
+- current branch and `HEAD`; upstream and ahead or behind counts;
+- staged, unstaged, and untracked paths (`git status --porcelain=v2 --branch`);
+- stashes (`git stash list`);
+- unpushed commits and any active merge, rebase, cherry-pick, or revert state;
+- submodules or nested repositories the task touches.
+
+A change present when the task began belongs to the user or another workflow unless evidence says otherwise. Do not infer ownership from the diff content. Keep a task-owned set (paths and Git state the task creates or changes); it controls staging and cleanup.
 
 ## Work around unrelated state
 
-Prefer operations that leave unrelated state untouched:
+- Edit only requested paths.
+- Stage and commit with explicit path lists; inspect `git diff --cached` and `git diff` separately.
+- Use an isolated worktree or branch when the operation needs a clean checkout.
+- Leave pre-existing instrumentation, untracked notes, stashes, and local commits in place.
+- Rebase or merge only after deciding how local and upstream work are preserved.
 
-- edit only the requested paths;
-- stage and commit with explicit path lists;
-- use `git diff --cached` and `git diff` separately;
-- create an isolated worktree or branch when the operation needs a clean checkout;
-- preserve pre-existing instrumentation, untracked notes, stashes, and local commits;
-- rebase or merge only after resolving how local and upstream work must be preserved.
+Do not use `git add -A`, `git add .`, `git commit -a`, or broad restore or clean commands when they could capture or discard unrelated state. Do not stash user work to make the tree look clean; a stash is a state change that gets lost.
 
-Do not use `git add -A`, `git add .`, `git commit -a`, broad restore commands, or cleanup commands when they could capture or discard unrelated state. Do not stash user work merely to make the tree look clean. A stash changes state and can be lost or forgotten.
-
-If isolation is impossible and the task requires touching a path with mixed ownership, inspect hunks and stage only the task-owned changes. Stop before overwriting a conflicting user hunk.
-
-## Separate destructive Git actions
-
-Commands such as `reset --hard`, `clean`, `checkout --`, `restore`, stash deletion, branch deletion, history rewrite, and force-push require exact target and recovery judgment. When one is necessary, resolve its exact target, exclusions, recovery path, and user authority before running it.
-
-Do not run them as routine preparation. A request to "get to a clean state" does not authorize discarding or hiding user work.
+When a path has mixed ownership, stage by hunk (`git add -p` is interactive; use `git apply --cached` with a filtered patch instead) and stop before overwriting a conflicting user hunk.
 
 ## Recognize disposable output
 
-Do not protect reproducible task-owned output as though it were user work. Generated files in an ignored build directory, an agent-created temporary worktree, or current-task scratch files may be removed after confirming ownership and the exact target.
-
-Do not classify an untracked file as disposable merely because Git does not track it.
+Reproducible task-owned output (ignored build output, an agent-created temporary worktree, current-task scratch files) may be removed after confirming ownership and the exact target. Untracked does not mean disposable.
 
 ## Commit intentionally
 
-Before committing:
-
 1. List the exact intended paths.
 2. Stage those paths or hunks only.
-3. Inspect the staged diff.
-4. Confirm that every staged change belongs to the task.
-5. Keep unrelated staged changes staged and outside the task commit.
+3. Inspect the staged diff and confirm every change belongs to the task.
+4. Leave unrelated staged changes staged and outside the task commit.
 
-When Git cannot create the intended commit without including unrelated staged state, use a temporary index through `GIT_INDEX_FILE` or a separate worktree. Do not silently unstage or recommit someone else's work.
+When Git cannot create the intended commit without including unrelated staged state, build the commit from a temporary index (`GIT_INDEX_FILE`) or a separate worktree. Do not unstage and recommit someone else's work.
 
 ## Verify preservation
 
-At completion, compare the current state with the initial inventory. Report only the lines that apply:
+Compare the final state with the inventory. Every pre-existing staged, unstaged, untracked, stashed, and unpushed item must still be present unless the user explicitly authorized moving or transforming it.
 
-- task-owned files changed and committed;
-- pre-existing staged, unstaged, untracked, stashed, and unpushed state left intact;
-- any state moved or transformed with explicit user authority;
-- the final branch, `HEAD`, and upstream relationship when Git history changed.
+## Stop signals
 
-Do not call the tree clean when preserved user work intentionally remains.
+- You are about to type `git add .` or `-A` in a tree with pre-existing changes: list the paths instead.
+- A stash would make the next step easier: the next step is not worth losing user work; use a worktree.
+- A file in your diff has hunks you did not write: stage by hunk.
+- "Get to a clean state" appears in the request: that authorizes nothing destructive; ask what to do with the existing work.
+
+## Shortcuts that fail
+
+- "Stash it, do the work, pop it": the pop conflicts or is forgotten, and the user's work is buried in a stash they do not know about.
+- "Commit everything, they can sort it out": mixing user hunks into a task commit makes both unrevertable on their own.
+- "It's untracked, so nobody wants it": untracked is where notes, local configs, and half-written work live.
+- "Reset to make the tests run clean": the reset discards the user's uncommitted change that the tests were about to exercise.
+
+## Report
+
+List task-owned files changed and committed; pre-existing staged, unstaged, untracked, stashed, and unpushed state confirmed intact (by comparison with the inventory); any state moved or transformed with the user's explicit authority; and the final branch, `HEAD`, and upstream relationship when history changed. Do not call the tree clean when preserved user work remains; say "User work preserved: <paths>".
+
+## Critical failures
+
+- A pre-existing change staged, committed, stashed, restored, or deleted without explicit authority.
+- `git add -A`, `git add .`, or `git commit -a` used in a tree with pre-existing changes.
+- User work stashed to simplify the task.
+- Final state not compared with the initial inventory.
+- Tree reported clean while user work remains.

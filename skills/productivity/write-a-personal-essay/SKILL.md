@@ -1,81 +1,84 @@
 ---
 name: write-a-personal-essay
-description: Assemble, revise, or publish a first-person essay from narration, notes, transcripts, corrections, and research while preserving the author's recognizable voice and lived details. Use when an author provides material in fragments, says a draft sounds AI-generated, wants another writer's intellectual influence without imitation, or needs an essay prepared for a publishing repository. Do not use for generic marketing copy, technical documentation, fiction, or ghostwriting that lacks source material from the named author.
+description: Assemble, revise, or publish a first-person essay from an author's fragments (narration, notes, transcripts, corrections) while preserving their voice and every lived detail. Use when an author narrates in parts, says a draft sounds AI-generated, wants a writer's influence without imitation, or needs an essay prepared for publishing. Do not use for marketing, documentation, or fiction; use say-it-clearly for technical prose. Do not ghostwrite without the author's source material.
 ---
 
 # Write a personal essay
 
-Treat narration as source material. Preserve what happened before trying to make it elegant.
+Treat the author's narration as source material. Preserve what happened before making it elegant, revise no wider than the complaint, invent nothing, and prove before publishing that every approved detail survived.
 
-Read `references/voice-fidelity.md` before drafting or revising prose.
+Read `references/voice-fidelity.md` before drafting or revising. When the author is Chaitanya Mishra or the destination is `essays.chaitanya.science`, also read `references/chaitanya-voice.md`; that profile and the author's newest corrections outrank the general guidance.
 
-When the author is Chaitanya Mishra or the destination is `essays.chaitanya.science`,
-also read `references/chaitanya-voice.md`. Treat that profile and the author's newest
-corrections as more authoritative than the general guidance.
+## Route first
+
+- The text is documentation, a report, or UI copy: `say-it-clearly`.
+- The essay needs an illustration or OG image for chaitanya.gg: `generate-chaitanya-essay-images`.
+- Publishing is the next step: `check-release-safety` for the deploy; this skill ends at the author's authorization.
 
 ## Accumulate fragments
 
 When the author narrates in parts:
 
 1. Store each fragment in a non-public working draft.
-2. Track chronology, exact language, uncertain memories, claims requiring verification, and facts requiring publication approval.
-3. Preserve contradictions as open questions. Do not silently choose one version.
+2. Track chronology, exact language, uncertain memories, claims needing verification, and facts needing publication approval.
+3. Keep contradictions as open questions; do not choose a version silently.
 4. Keep exact dialogue separate from paraphrase.
 5. Add new material without shortening earlier material.
 6. Delay the opening, thesis, and ending until the source supports them.
 
-Do not publish the source ledger. Use it to prove that the final essay retains every approved event and detail.
+The source ledger is never published; it exists to prove the final essay retains every approved event and detail.
 
 ## Compose from the source
 
-Find the material's actual engine: an event sequence, obsession, decision, technical argument, or change in belief.
+Find the material's engine: an event sequence, an obsession, a decision, a technical argument, or a change in belief. Use chronology when the experience matters; reorder only when the new order clarifies what happened. Keep each detail next to the event that gives it meaning.
 
-Use chronology when the experience matters. Reorder only when the new order clarifies what happened. Keep a detail next to the event that gives it meaning.
+Write concrete paragraphs before interpretation: the exact time, meal, place, mistake, quotation, or physical inconvenience, not a sentence about the mood. Use a heading only for a real turn, never to summarize the paragraph below.
 
-Write concrete paragraphs before interpretation. Prefer the exact time, meal, place, mistake, quotation, or physical inconvenience over a sentence describing the mood.
-
-Use headings only for a real turn. Do not add headings that summarize the paragraph below them.
-
-For technical material, explain the mechanism in ordinary language, give one concrete example, and state benefits and failure modes directly. Verify unstable claims with primary sources. Do not imply that the author read or endorses a source merely because the user requested its intellectual influence.
+For technical material, explain the mechanism in ordinary language, give one concrete example, and state benefits and failure modes directly. Verify unstable claims against primary sources. Do not imply the author read or endorses a source because the user asked for its intellectual influence.
 
 ## Revise narrowly
 
-Apply the smallest change that resolves the author's complaint. If one phrase is wrong, do not rewrite the page.
+Make the smallest change that resolves the complaint; one wrong phrase does not authorize a rewritten page.
 
-When the prose sounds generated, inspect structure before replacing adjectives. Remove:
+When prose sounds generated, fix structure before adjectives. Remove: invented transition paragraphs; qualification bridges ("This does not mean", "Obviously", "That said"); false contrasts ("not A, but B"); repeated thesis statements; stacked aphorisms and three-part crescendos; lessons the source did not earn; polished abstractions standing in for lived detail.
 
-- invented transition paragraphs;
-- qualification bridges such as "This does not mean," "Obviously," "I only mean," and "That said";
-- false contrasts such as "not A, but B";
-- repeated thesis statements;
-- stacks of aphorisms or three-part crescendos;
-- lessons the source did not earn;
-- polished abstractions that replace lived detail.
-
-Preserve profanity, confidence, affection, embarrassment, uncertainty, repetition, and rough simplicity when they belong to the author. Do not manufacture those traits.
-
-When asked to sound like a living writer, borrow questions, argument pressure, or structural traits. Keep the author's diction. Do not imitate the writer's phrasing or claim that the author read the writer.
+Preserve profanity, confidence, affection, embarrassment, uncertainty, repetition, and rough simplicity when they are the author's. Do not manufacture them. When asked to sound like a living writer, borrow their questions, argument pressure, or structural moves; keep the author's diction; never imitate phrasing or claim the author read them.
 
 ## Protect facts and permission
 
-Never invent names, roles, dates, numbers, locations, quotations, product claims, or chronology.
+Never invent names, roles, dates, numbers, locations, quotations, product claims, or chronology. Apply corrections everywhere; search the repository for stale versions. A fact mentioned in chat is source material, not publication permission: get explicit approval before publishing private conversations, legal details, investment terms, medical facts, or other sensitive information. Respect quotation and copyright limits; keep a short compliant excerpt and link the source when a passage cannot be reproduced.
 
-Apply corrections everywhere relevant. Search the repository for stale versions.
+## Verify before publishing
 
-Treat a fact mentioned in chat as source material, not automatic publication permission. Get explicit approval before publishing private conversations, legal details, investment terms, medical facts, or other sensitive information.
+1. Compare the essay with every source fragment; confirm no distinctive detail disappeared.
+2. Search for em dashes, false-contrast bridges, stale facts, and unapproved sensitive details.
+3. Investigate any unexpected word-count reduction.
+4. Read the opening, transitions, and ending aloud.
+5. Build the destination project and inspect the rendered essay.
+6. Publish only when the author authorizes.
 
-Follow quotation and copyright limits. Keep a short compliant excerpt and link the source when a requested passage cannot be reproduced in full.
+## Stop signals
 
-## Verify the artifact
+- You are writing a sentence that describes a feeling the source never stated: replace it with the detail that produced it.
+- Two fragments conflict and you picked one: reopen it as a question for the author.
+- The revision touches paragraphs the complaint did not name: narrow it.
+- A fact appears in the essay that appears nowhere in the ledger: remove it or ask.
 
-Before publishing:
+## Shortcuts that fail
 
-1. Compare the essay with every source fragment.
-2. Confirm that no distinctive detail disappeared.
-3. Search for em dashes, false contrast bridges, stale facts, and unapproved sensitive details.
-4. Investigate any unexpected word-count reduction.
-5. Read the opening, transitions, and ending aloud.
-6. Build the destination project and inspect the rendered essay.
-7. Publish only when the user authorizes publication.
+- "Smooth the transitions": the invented bridge paragraphs are what make it sound generated.
+- "Tighten it": the cut lands on the physical detail that carried the meaning, and the word count drop goes unexplained.
+- "Sound like that writer": imitated phrasing replaces the author's diction, and the essay stops being theirs.
+- "It's in the chat, so it's approved": the author mentioned it; they did not agree to publish it.
 
-See this workflow in use at [Chaitanya Mishra's Essays](https://essays.chaitanya.science).
+## Report
+
+State the fragments incorporated, open questions for the author (contradictions, uncertain memories, facts needing approval), the verification results (fragment comparison, searches, word count, build and render), and what awaits the author's authorization. For a revision, state the complaint addressed and the paragraphs touched. Never present a draft as publishable without the verification list.
+
+## Critical failures
+
+- An invented name, date, number, quotation, or event.
+- A distinctive source detail lost without the author's approval.
+- Sensitive information published without explicit approval.
+- A revision wider than the complaint without the author asking.
+- Publication without the author's authorization or without the build and render check.

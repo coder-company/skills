@@ -1,0 +1,4 @@
+interface:
+  display_name: "Capture the Lesson"
+  short_description: "One structural change per observed failure"
+  default_prompt: "Use $capture-the-lesson to turn what went wrong in this task into a durable check, script, or skill fix."

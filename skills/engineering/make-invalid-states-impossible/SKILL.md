@@ -1,22 +1,83 @@
 ---
 name: make-invalid-states-impossible
-description: Redesign types and constructors so invalid combinations cannot enter trusted application code. Use when primitives, nullable fields, boolean combinations, unchecked casts, or partial objects permit states the domain rejects. Do not use for style-only type annotation cleanup.
+description: Redesign types, constructors, and parsers so combinations the domain rejects cannot be constructed in trusted code, with validation once at the boundary that receives untrusted data. Use when a struct has nullable fields valid only together, booleans that must stay in sync, status strings compared everywhere, unchecked casts, or repeated validation at call sites. Do not use for annotation cleanup with no invalid state. Do not use when concepts are unsettled; use model-the-domain.
 ---
 
 # Make invalid states impossible
 
-## Enumerate valid states
+Find the combinations the domain forbids, replace the representation that allows them with one that cannot express them, and move validation to the single boundary where untrusted data enters. Inside that boundary, code trusts the types and stops re-checking.
 
-Write the actual variants, required data for each variant, transitions, and invariants. Find where untrusted input becomes trusted and where invalid combinations are currently constructed.
+## Route first
 
-## Encode the distinctions
+- The concepts themselves are unclear or overloaded: `model-the-domain` first.
+- The change alters a public contract or persisted format: `replace-an-api` for the migration; this skill designs the target type.
+- The invalid state is a concurrency interleaving rather than a data shape: `untangle-shared-state`.
 
-Use discriminated unions, enums with payloads, branded or refined values, opaque constructors, exhaustive matching, and separate input and trusted types as supported by the language. Parse and validate at external boundaries, then let internal code rely on the stronger type.
+## Enumerate the illegal combinations
 
-Do not lie through casts, non-null assertions, overly broad optionals, stringly typed tags, or a boolean for each state. Do not add wrapper types that express no invariant.
+For the type in question, list its fields and the combinations that are valid. Then list the combinations the current representation allows but the domain rejects. Common shapes:
 
-## Migrate construction sites
+- Two optional fields where exactly one must be present (`error` and `value`).
+- A status field plus fields that only mean something in some statuses (`shippedAt` when `status != shipped`).
+- A boolean pair with a forbidden combination (`isDeleted` and `isActive` both true).
+- A collection that must be non-empty, sorted, or unique, held as a plain list.
+- A string that must match a format (email, ID, path) held as a plain string and re-validated at each use.
+- A range held as start and end, allowing end before start.
+- A partially constructed object whose required fields are filled in later.
+- A cast from external data to an internal type with no check.
 
-Update every constructor, serializer, deserializer, fixture, and public consumer affected by the new representation. Preserve wire formats unless a contract change is authorized. Add compile-time and runtime tests at the appropriate boundaries.
+Count the invalid combinations. That number is what the redesign should reduce to zero. If it is already zero, stop; there is nothing to make impossible.
 
-Finish when invalid internal construction fails at compile time where possible and malformed external data fails explicitly at parsing.
+## Choose the representation
+
+Apply the first that fits:
+
+1. **Sum type or tagged union** for "one of these shapes": `Loading | Loaded(data) | Failed(error)` instead of three optionals. Each variant carries only the fields valid for it.
+2. **State-specific types** for lifecycle: `Draft`, `Submitted`, `Shipped` as separate types, with transition functions that take one and return the next.
+3. **Construction over restriction** for structural invariants: a non-empty list is `head + rest`; a range is `start + duration`; a sorted collection is built only through an inserting constructor.
+4. **Branded or newtype wrappers** for validated primitives: `Email`, `UserId`, `AbsolutePath` produced only by a parser that checks the format.
+5. **Derive, do not duplicate** for sync fields: compute `isActive` from `deletedAt`; store one.
+6. **Exhaustive matching**: switch on the variant with the compiler or a runtime check that fails on an unknown variant, so adding a state forces every handler to decide.
+
+Prefer the smallest change that removes the counted combinations. Strengthen a type only where the invalid state actually appears; do not brand every string in the codebase.
+
+## Move validation to the boundary
+
+Identify where untrusted data enters: request bodies, CLI arguments, environment variables, files, database rows, messages, third-party responses. At each entry, parse into the internal type once, with a function that returns either the valid value or a described error. Everything past that function takes the typed value and does not re-validate.
+
+Delete the downstream checks that the type now makes unnecessary, and delete their tests only if the parser's tests cover the same cases. Keep defensive checks at the boundary between two independently deployed systems.
+
+## Migrate the callers
+
+- Update constructors first, so the compiler or test suite lists every site that built the old shape.
+- At each site, decide which variant the old data represented. A site that cannot decide has found a real ambiguity; record it rather than defaulting.
+- For persisted data in the old shape, write the parser to accept it and map it to a variant, and note whether a data migration is needed (see `sequence-migrations`).
+- Run the full type check and the tests for every touched module.
+
+## Stop signals
+
+- You are adding a runtime check inside trusted code for a state the type already excludes: delete the check or fix the type.
+- The new type has an `unknown`, `any`, or `default` branch that silently accepts a bad value: the boundary is leaking.
+- You are branding a primitive that has no invariant: revert; it adds noise without removing a state.
+- A caller needs to construct a "temporary invalid" value: the lifecycle has a missing state; add it.
+- The invalid-combination count did not go down: the representation changed shape without removing states.
+
+## Shortcuts that fail
+
+- "Add a validate() method callers must call": a method that callers must remember is a convention, not a guarantee; the combination still exists between construction and validation.
+- "Make the field required and default it": a default hides the case where the data was missing and turns a construction error into a silent wrong value.
+- "Check it everywhere to be safe": repeated checks disagree over time and mark that nobody trusts the type; validate once at the boundary.
+- "Keep the boolean, add a comment": comments do not stop the fourth combination from being constructed.
+- "Cast the external payload, the schema is stable": schemas drift and the cast is where the drift becomes a corrupted state deep inside the system.
+
+## Report
+
+State the type or types changed, the invalid combinations before and after (with counts), the representation chosen and why, the boundary parsers added with the errors they return, the downstream checks removed, callers migrated with any ambiguity found, and the type check and test commands run with results. If no invalid state existed, say "No invalid combinations found" and stop.
+
+## Critical failures
+
+- The redesigned type still allows a combination the domain rejects.
+- Validation left duplicated inside trusted code after the boundary parser exists.
+- A default or catch-all branch that turns invalid input into a valid-looking value.
+- A public contract or persisted format changed without a migration path.
+- Types strengthened where no invalid state appeared, adding wrappers with no invariant.

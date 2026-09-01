@@ -1,0 +1,4 @@
+interface:
+  display_name: "Run Parallel Candidates"
+  short_description: "Independent attempts, fixed rubric, base plus grafts"
+  default_prompt: "Use $run-parallel-candidates to compare independent designs for this and graft the best parts into one."

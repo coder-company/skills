@@ -1,13 +1,21 @@
 ---
 name: keep-code-boring
-description: Implement, fix, or refactor code for clarity, simplicity, correctness, maintainability, and focused scope. Use for coding tasks, bug fixes after the cause is known, architecture choices, dependency decisions, and requests for the simplest solution, smaller diffs, less boilerplate, fewer abstractions, or less over-engineering. Use find-the-bug for diagnosis and review-the-diff for review-only requests. Follow the repository's conventions first, then apply language-specific style guidance and code-health practices. Preserve security, validation, accessibility, reliability, and required behavior; simplicity never justifies removing them.
+description: Implement, fix, or refactor code so the result is correct, readable, scoped to the request, and free of speculative structure, following repository conventions first. Use when writing or changing code, applying a known fix, choosing between designs or dependencies, or the user asks for the simplest solution, smaller diff, or fewer abstractions. Do not use for diagnosis; use find-the-bug. Do not use for review-only requests; use review-the-diff.
 ---
 
-# Build code
+# Keep code boring
 
-## Improve code health
+Understand the code that owns the behavior, choose the least design that fully meets the requirement, implement one concern per change with tests that would fail if the behavior regressed, and verify at the real boundary. Report exactly what was run.
 
-Leave the codebase easier to understand and maintain while fully solving the task. Optimize in this order:
+## Route first
+
+- The cause of a failure is unknown: `find-the-bug`.
+- The request is to review, not change: `review-the-diff`.
+- The change removes generated excess without altering behavior: `remove-code-slop`.
+- The change crosses several layers: `build-in-slices` decides the increments; this skill implements each.
+- A cheap test boundary exists and the user wants test-first: `watch-the-test-fail`.
+
+## Optimize in this order
 
 1. Correctness
 2. Clarity
@@ -16,130 +24,119 @@ Leave the codebase easier to understand and maintain while fully solving the tas
 5. Maintainability
 6. Consistency
 
-Do not minimize line count at the expense of any earlier goal.
+Never trade an earlier goal for a later one. Line count is not a goal.
 
 ## Follow the right authority
 
-Use the following order:
+1. The user's explicit requirements.
+2. Safety, security, privacy, accessibility, data integrity, and externally observable behavior.
+3. Repository instructions, architecture decisions, tests, and established patterns.
+4. The formatter, linter, and language version the repository configures.
+5. The language's style conventions (see `references/language-guides.md`, selecting only the task's language).
+6. The practices in this skill and `references/engineering-practices.md`.
 
-1. Follow the user's explicit requirements.
-2. Preserve safety, security, privacy, accessibility, data integrity, and externally observable behavior.
-3. Follow repository instructions, architecture decisions, tests, and established patterns.
-4. Follow the formatter, linter, and language version configured by the repository.
-5. Apply the relevant language-specific style guide.
-6. Apply the general practices in this skill.
-
-Do not mention the source style guides in code comments, review comments, commit messages, or status updates unless the user asks for attribution.
+Do not cite style guides or their sources in comments, commit messages, or status updates.
 
 ## Understand before changing
 
 1. Read the task and the code that owns the behavior.
 2. Trace callers, data flow, error flow, and tests far enough to find the real change boundary.
-3. Reproduce a reported bug or establish a failing check when practical.
-4. Identify existing helpers, types, dependencies, and patterns before adding new ones.
-5. State an assumption only when it affects the implementation and cannot be verified.
+3. Establish a failing check when practical.
+4. Find existing helpers, types, dependencies, and patterns before adding new ones.
+5. State an assumption only when it changes the implementation and cannot be verified.
 
-Do not use a small diff as an excuse to patch a symptom. Fix the cause at the narrowest shared boundary that owns it.
+Fix the cause at the narrowest shared boundary that owns it; a small diff at the symptom is not a small fix. Before changing a shared signature, serialized value, public export, or externally visible contract, identify its consumers (see `prove-the-blast-radius`). If the owning fix expands beyond the request or can break another consumer, choose a contract-preserving fix unless the user authorizes the broader change.
 
-Before changing a shared signature, serialized value, public export, or externally visible contract, identify its consumers. If the owning fix expands beyond the requested scope or can break another consumer, choose a contract-preserving fix unless the user authorizes the broader change.
+## Choose the least complete design
 
-## Choose the simplest complete design
+Evaluate in order and stop at the first option that fully meets the task:
 
-Evaluate options in this order:
-
-1. Remove work that the requirement does not need.
+1. Remove work the requirement does not need.
 2. Reuse a clear repository pattern or helper.
 3. Use the language standard library.
 4. Use a native platform or framework capability.
 5. Use an already-installed dependency when it is the established solution.
-6. Add the smallest clear implementation that satisfies the requirement.
-7. Add a dependency only when it materially improves correctness, security, interoperability, or maintenance.
+6. Add the smallest clear implementation.
+7. Add a dependency only when it materially improves correctness, security, interoperability, or maintenance, and record why.
 
-Stop when one option fully meets the task. Do not turn this evaluation into a research project for routine changes.
+Do not turn this into research for a routine change.
 
-## Avoid speculative complexity
+## Refuse speculative structure
 
-- Do not add an interface for one implementation without a concrete seam that requires it.
-- Do not add a factory for one construction path.
-- Do not add configuration for a value that has no current variation.
-- Do not add extension points, plugin systems, generic frameworks, fallback paths, or compatibility layers for hypothetical needs.
-- Do not create a helper that hides a single obvious expression or merely renames a standard operation.
-- Do not combine unrelated cleanup with the requested change.
-- Remove dead code, commented-out code, or stale documentation only when it is inside the change boundary and evidence shows it is unused. Repository search alone does not prove that a public export, reflective target, dynamically loaded component, or external API is dead. Report uncertain candidates instead of deleting them.
-- Do not compress readable logic into clever expressions.
+Do not add:
 
-Add abstraction when it makes a real concept clearer, removes meaningful duplication, enforces an invariant, isolates volatility, or creates a testable boundary. Explain non-obvious complexity in the code or change description.
+- an interface for one implementation without a concrete seam that needs it;
+- a factory for one construction path;
+- configuration for a value with no current variation;
+- extension points, plugin systems, generic frameworks, fallback paths, or compatibility layers for hypothetical needs;
+- a helper that hides a single expression or renames a standard operation;
+- clever expressions in place of readable control flow;
+- unrelated cleanup inside the requested change.
 
-## Implement a focused change
+Add abstraction only when it names a real concept, removes meaningful duplication, enforces an invariant, isolates volatility, or creates a testable boundary. Where the design is not self-evident, explain it in the code or the change description.
 
-- Organize the work into self-contained changes, each addressing one concern. Complete all coupled changes required by the task.
-- Keep related production code, tests, and documentation together.
-- Separate a substantial refactor from a behavior change when combining them would make review harder.
-- Use names that communicate purpose without requiring comments.
-- Make values, decisions, ownership, and error propagation easy to follow.
-- Prefer ordinary control flow over cleverness.
-- Handle errors at the layer that can add context or recover. Do not silently discard errors.
-- Keep trust-boundary validation, authorization, durability, concurrency safety, accessibility, and observability required by the system.
+Remove dead code, commented-out code, or stale documentation only inside the change boundary and only with evidence it is unused. A repository search does not prove a public export, reflective target, dynamically loaded component, or external API is dead; report those candidates instead of deleting them.
+
+## Implement one concern per change
+
+- Complete every coupled change the task requires; do not leave the repository half-migrated.
+- Keep production code, tests, and documentation for one behavior together.
+- Separate a substantial refactor from a behavior change (see `refactor-without-regressions`).
+- Choose names that carry purpose without a comment.
+- Make values, decisions, ownership, and error propagation followable in one read.
+- Handle errors at the layer that can add context or recover; never discard an error silently.
+- Keep trust-boundary validation, authorization, durability, concurrency safety, accessibility, and required observability.
 - Update documentation in the same change when behavior or usage changes.
 
-## Comment and document purpose
-
-- Let clear code explain what happens.
-- Use comments for rationale, constraints, invariants, surprising behavior, and decisions that future maintainers might otherwise undo.
-- Remove comments that restate the code or no longer match it.
-- Document public APIs with their purpose, usage, inputs, outputs, errors, restrictions, and important side effects.
-- Put the simplest supported usage first.
+Comments state rationale, constraints, invariants, surprising behavior, and decisions a maintainer might otherwise undo. Delete comments that restate the code or have drifted from it. Document public APIs with purpose, usage, inputs, outputs, errors, and side effects, simplest usage first.
 
 ## Test behavior
 
-Use the repository's existing test tools and conventions.
-
-- Add or update tests for changed logic and fixed bugs.
-- Choose the smallest test level that proves the behavior at its real boundary.
-- Make the test fail for the bug or missing behavior before relying on it.
-- Test externally visible behavior, edge cases, and failure paths that matter.
-- Keep tests deterministic, focused, readable, and independent.
-- Avoid mocks when a stable in-process dependency or real boundary is practical.
-- Do not add tests for trivial declarations or framework behavior already covered elsewhere.
-- Run the relevant formatter, static checks, tests, and a boundary-level smoke test when practical.
-- Never delete, skip, broaden, or weaken a valid test merely to make the suite pass. Change a test only when the intended contract changed, and state that contract change.
-
-## Review code comprehensively
-
-When the user requests a review, inspect:
-
-- design and ownership;
-- user-visible behavior and correctness;
-- unnecessary complexity and speculative features;
-- tests and failure behavior;
-- names and comments;
-- repository and language style;
-- documentation and migration impact.
-
-Prioritize findings that can cause bugs, security problems, data loss, broken contracts, or sustained maintenance cost. Give each finding a location, consequence, and concrete correction. Do not reduce a correctness review to line-count reduction.
-
-After covering correctness and safety, make one explicit pass for high-confidence deletion, reuse, unnecessary dependencies, and abstractions with no current second use. Include those findings when they materially reduce maintenance cost; do not omit them merely because higher-severity issues exist.
-
-Keep that pass inside the reviewed change boundary. Treat deletion as high-confidence only after checking references, public contracts, dynamic use, and configured entry points.
-
-## Load detailed guidance when needed
-
-Read `references/engineering-practices.md` for architecture choices, code review, change sizing, tests, comments, documentation, or complexity tradeoffs.
-
-Read `references/language-guides.md` before applying language-specific conventions. Select only the language used by the task. If the repository already specifies a different formatter or style, follow the repository.
+- Use the repository's test tools and conventions.
+- Add or update tests for changed logic and fixed bugs, at the smallest level that proves the behavior at its real boundary.
+- Make each test fail for the bug or missing behavior before relying on it.
+- Test externally visible behavior, edge cases, and failure paths that matter; skip trivial declarations and framework behavior.
+- Prefer a stable in-process dependency or the real boundary over a mock.
+- Never delete, skip, broaden, or weaken a valid test to make the suite pass. Change a test only when the intended contract changed, and say so.
 
 ## Finish at the real boundary
 
-Before reporting completion, verify that:
+Before reporting, confirm:
 
-- the implementation satisfies every explicit requirement;
-- the fix addresses the cause rather than one named symptom;
-- the change introduces no speculative API or dependency;
-- names and control flow are clear to a maintainer without hidden context;
+- every explicit requirement is met;
+- the fix addresses the cause, not one named symptom;
+- no speculative API or dependency was introduced;
+- names and control flow are clear without hidden context;
 - errors and important edge cases remain handled;
 - tests would fail if the changed behavior regressed;
 - documentation matches the implementation;
-- relevant checks pass;
+- the formatter, static checks, relevant tests, and a boundary-level smoke check (see `verify-real-behavior`) were run;
 - the diff contains only related changes.
 
-Report what changed and list the exact checks you ran. Separately state relevant checks you could not run and why. Never imply that an unrun check passed. Mention a deliberately deferred design only when the current requirement does not justify it and the omission matters to the user.
+## Stop signals
+
+- You are writing an interface, factory, or options object with one use: delete it.
+- The diff includes a change the request did not need: move it out.
+- A test had to be weakened to pass: the code or the contract is wrong; stop.
+- You are patching where the error appears rather than where the bad value is produced: move the fix.
+- You are about to write "should work" for a check you did not run: run it or report it as not run.
+
+## Shortcuts that fail
+
+- "Add a small wrapper to keep it flexible": the wrapper has one caller, hides the operation, and becomes the second surface that diverges.
+- "Fix it at the call site, it's a one-liner": the sibling call sites keep the bug; the shared function was wrong.
+- "Clean up these other things while I'm here": the reviewer cannot separate the requested change from the drive-by, and neither can a revert.
+- "Skip the boundary check, the unit tests pass": unit tests pass with the wiring wrong; the user's boundary is where the change is observed.
+- "Delete it, grep found nothing": grep does not see dynamic loading, reflection, configuration, or external callers.
+
+## Report
+
+State what changed and where; the design option chosen from the ladder and why earlier options did not meet the task (one line); the checks run with exact commands and results; checks you could not run and why; and any deliberately deferred design that matters to the user. Never imply an unrun check passed.
+
+## Critical failures
+
+- Speculative structure (interface, factory, config, extension point) shipped for a hypothetical need.
+- Symptom patched at a consumer while the owning boundary stays wrong.
+- A valid test weakened, skipped, or deleted to reach green.
+- A check reported as run or passing that was not run.
+- Unrelated changes bundled into the requested change.

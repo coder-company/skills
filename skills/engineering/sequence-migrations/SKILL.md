@@ -1,68 +1,70 @@
 ---
 name: sequence-migrations
-description: Order a multi-step code, data, API, or dependency migration into verifiable states that preserve compatibility and recovery. Use when intermediate deployment order matters, several callers or layers must move, or a batch change would hide the step that introduced a failure.
+description: Order a multi-step code, data, API, or dependency migration into units that each end in a deployable, checkable state, with compatibility windows and the point of no return named. Use when deployment order matters, several callers or layers must move, readers and writers change at different times, or a batch change would hide which step broke. Do not use for a small atomic fix; one change and its check suffice. Do not use to gate a single release action; use check-release-safety.
 ---
 
 # Sequence migrations
 
+Name the contract that is moving and every party that depends on it, cut the work into units that each end in a known verifiable state, put the riskiest unknown first, and execute one unit at a time from a recorded baseline.
+
+## Route first
+
+- The change is one atomic fix with a focused check: apply it; do not build a migration plan.
+- The change is an API replacement whose consumers all live in this repository: `replace-an-api` in one wave.
+- Each unit's remote action (merge, deploy, migration apply): `check-release-safety` gates it.
+- Each unit must be safe to rerun: `make-side-effects-idempotent`.
+
 ## Identify the moving contract
 
-Name the old contract, target contract, consumers, writers, readers, stored data, generated artifacts, and deployment environments involved.
+Name the old contract, the target contract, and every party: consumers, writers, readers, stored data, generated artifacts, deployment environments, and the previous version of this service during a rolling deploy.
 
-Find ordering constraints such as:
+Find the ordering constraints: a reader cannot use a field before the schema exists; a writer must produce both forms during the window; a backfill must finish before reads switch; callers must move before the old path is deleted; a package consumer must accept both versions during rollout; rollback cannot cross an irreversible data transformation.
 
-- a reader cannot use a field before the schema exists;
-- a writer must produce both old and new forms during a compatibility window;
-- a backfill must complete before reads switch;
-- callers must migrate before the old API is deleted;
-- a package consumer must accept both versions during rollout;
-- a rollback cannot cross an irreversible data transformation.
+Decompose by contract transition, never by directory or role. "Database, backend, frontend, tests" hides the contract between steps.
 
-Do not decompose work by directory or job title. A list of "database, backend, frontend, tests" hides the contract between steps.
+## Cut units that end in a known state
 
-This skill orders the steps. It does not replace the pre-mutation checks for any single remote release action.
+Each unit has: one coherent contract change; a precondition established by earlier units; a check that can fail at the unit boundary; a deployable or intentionally isolated end state; a recovery or forward-fix path; and no dependency on an uncommitted later unit.
 
-## Choose units that end in a known state
+Use expand, migrate, verify, contract when independent deployment or external consumers require compatibility. Use direct migration and deletion in one bounded wave when the repository updates atomically and no external consumer needs a window. Confirm which case applies from evidence (deployment topology, consumer inventory); do not build compatibility layers for imaginary users.
 
-Each unit must have:
-
-- one coherent contract change;
-- a precondition established by earlier units;
-- a check that can fail at the unit boundary;
-- a deployable or intentionally isolated end state;
-- a recovery or forward-fix path;
-- no dependency on an uncommitted later unit for correctness.
-
-Prefer expand, migrate, verify, and contract when compatibility across deployments is required. Prefer direct caller migration and legacy deletion in one bounded wave when the repository can update atomically and no external consumers require a compatibility window.
-
-Do not create compatibility layers for imaginary users. Determine whether independent deployment or external consumption actually exists.
+Feature flags can make ordering safe only when the flag state and its removal unit are explicit. A disabled path still changes schemas, initialization, or public contracts.
 
 ## Put risk and proof in the order
 
-Resolve high-impact unknowns before building dependent units. Capture the baseline and verification mechanism before the change whose success they must measure.
+Resolve high-impact unknowns before building dependent units (see `check-the-premise`). Capture the baseline and the verification mechanism before the change they must measure.
 
-For every transition, state:
+For every transition state: what becomes newly possible; what old behavior still works; what check proves the state; what must be true before the next unit; whether rollback remains possible. Name the point of no return as its own line; do not bury it in a routine step.
 
-1. What becomes newly possible.
-2. What old behavior still works.
-3. What check proves the state.
-4. What must be true before the next unit starts.
-5. Whether rollback remains possible after this point.
+## Execute one unit at a time
 
-Name the point of no return when one exists. Do not hide it inside a routine step.
+Start from a recorded baseline. Apply one unit, run its declared check, inspect the diff, record the result, then advance. If a check fails, stop at that unit and diagnose (`find-the-bug`); do not batch the remaining edits and hope the final suite localizes the failure.
 
-## Recognize the near miss
+Re-run the whole path from the original supported state when fixtures or a disposable environment allow. Test rollback or the declared forward-fix at the last reversible boundary in a non-production target when possible; otherwise state that the path is declared but untested.
 
-Do not split a small atomic bug fix into a migration plan. Say that one atomic change and its focused check are sufficient, then proceed. Do not wrap the change in migration-unit fields, compatibility tables, hypothetical phases, rollback sections, or post-deploy ceremony that the task does not need.
+## Stop signals
 
-Do not force user-visible vertical slices onto a mechanical rename, codemod, or behavior-preserving refactor when one atomic change and check is safer.
+- Your unit list reads like a directory list: re-cut by contract transition.
+- A unit's correctness depends on a later unit: merge them or reorder.
+- You cannot name the check that fails at a unit boundary: the unit is not a unit.
+- You are about to apply two units before running the first check: stop and run it.
+- The point of no return is not written down: write it before the unit that crosses it.
 
-Feature flags can make horizontal ordering safe, but the flag state and removal path must be explicit. A disabled path is not automatically harmless if it changes schemas, initialization, or public contracts.
+## Shortcuts that fail
 
-## Execute and verify one unit at a time
+- "Deploy everything together, it's all one feature": the rolling deploy runs old and new code side by side, and the batch hides which change broke.
+- "Add the compatibility shim to be safe": a shim with no consumer is dual behavior that must itself be migrated out.
+- "Run all the migrations then the suite": a failure at the end points at nothing; the unit that broke is unknown.
+- "Rollback is just the reverse": the backfill already rewrote the rows; the reverse recreates nothing.
 
-Start from a known baseline. Apply one unit, run its declared check, inspect the diff, and record the result before advancing. If the check fails, stop at that unit and diagnose it. Do not batch the remaining edits and hope the final suite localizes the problem.
+## Report
 
-Re-run the full migration path from the original supported state when fixtures or a disposable environment make that practical. Test rollback or the declared forward-fix at the last reversible boundary when a disposable or non-production target allows it. Otherwise, state that the path is declared but untested.
+List the ordered units, each with its contract change, check, and end state; compatibility windows with their closing condition; the point of no return; units executed with check results; rollback or forward-fix tested or declared untested; and legacy paths that remain, each with the condition allowing removal. The migration is not finished while a removal condition is unrecorded. If one atomic change sufficed, say so in one line.
 
-Report the ordered units and their checks, plus compatibility windows, point of no return, and legacy cleanup where they exist. If obsolete contracts or temporary dual-write paths remain, name each one and the condition that allows its removal. Do not report the migration as finished while that condition is unrecorded.
+## Critical failures
+
+- Units cut by directory or role rather than contract transition.
+- A unit applied without running the previous unit's check.
+- Compatibility layer added without evidence of an independent deployment or external consumer.
+- Point of no return unnamed or hidden in a routine step.
+- Migration reported finished with a dual path or legacy contract lacking a removal condition.

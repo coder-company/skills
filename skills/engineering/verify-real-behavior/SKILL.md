@@ -1,73 +1,84 @@
 ---
 name: verify-real-behavior
-description: Verify changed behavior at the nearest real user or system boundary. Use before claiming that a feature, fix, integration, deployment, or interactive flow works when lower-level tests, mocks, build output, or static inspection could pass without exercising the changed path.
+description: Verify a changed behavior at the nearest real user or system boundary, proving the changed path actually ran, before claiming it works. Use when about to say a feature, fix, integration, deployment, or flow works and only unit tests, mocks, build output, or reading the code have passed. Do not use to define what done means; use define-done. Do not use for visual parity; use match-the-reference.
 ---
 
 # Verify real behavior
 
+Name the boundary where the user or system observes the change, run the check there, prove that the check exercised the changed path, and report the observation. A green proxy is a claim about the proxy.
+
+## Route first
+
+- No completion condition exists yet: `define-done`.
+- The check is visual parity with a reference: `match-the-reference`.
+- The change is a release action: `check-release-safety` after this skill passes.
+
 ## Name the boundary
 
-Identify who or what consumes the changed behavior. Name the observable result at that boundary before choosing a verification command.
+Identify who or what consumes the changed behavior and the observable result there:
 
-Examples include:
+- CLI: exit code, stdout, stderr, and file side effects.
+- HTTP: response plus the persisted record or emitted event it promises.
+- Browser: the interaction plus visible state after reload.
+- Migration: the applied schema plus reads from the version that follows.
+- Worker: the acknowledgment plus the durable effect.
+- Package: the export as observed by a real consumer import from the built artifact.
+- Terminal UI: an actual PTY, including resize and interruption.
 
-- a CLI exit code, stdout, stderr, and file side effect;
-- an HTTP response plus the persisted record or emitted event it promises;
-- a browser interaction plus visible state after reload;
-- a database migration plus reads from the schema version that follows it;
-- a background worker plus the queue acknowledgment and durable effect;
-- a package export as observed by a real consumer import;
-- a terminal workflow through an actual PTY, including resize and interruption.
+A function return, a mocked call, a snapshot, a type check, or a green build supports verification without proving the boundary.
 
-Do not substitute an implementation detail for the boundary. A function return, mocked call, snapshot, type check, or green build can support verification without proving the user-facing path.
+## Prove the changed path ran
 
-## Prove that the changed path ran
+Apply the items the current change could fool:
 
-Guard against false green results, applying only the items that the current change could actually fool:
-
-1. Confirm the command includes the changed test or code path. Inspect filters, test discovery, workspace selection, and ignored files.
-2. Remove or invalidate stale build artifacts when they can bypass the changed source.
-3. Make the check fail for the old behavior or otherwise show that it distinguishes the change.
+1. Confirm the command includes the changed test or code path: inspect filters, test discovery, workspace selection, and ignore rules.
+2. Invalidate stale build artifacts that could bypass the changed source.
+3. Show the check distinguishes the change: make it fail for the old behavior, or run it against the old revision.
 4. Observe both the immediate response and the promised durable effect when the contract includes both.
 5. Exercise the failure state that motivated the change, not only the happy path.
 
-If the repository's normal smoke command can keep passing against stale state, report that gap and fix the command only when the task already covers it. A one-time direct invocation proves the current result but does not close a repeatable false-green path.
+If the repository's normal smoke command can keep passing against stale state, report that gap; fix the command only when the task covers it.
 
-Assertions about a mock that the agent authored prove the mock contract. They do not prove the external seam. Prefer a stable in-process dependency, disposable local service, protocol-level fake owned by the repository, or the nearest accessible real integration.
+An assertion about a mock you authored proves the mock. Prefer a stable in-process dependency, a disposable local service, a protocol-level fake the repository owns, or the nearest accessible real integration.
 
 ## Use the nearest accessible real seam
 
-The real boundary does not always mean production or a paid third-party call. Use the closest seam that preserves the behavior under test without unsafe access.
+The boundary is not always production or a paid third-party call; it is the closest seam that preserves the behavior without unsafe access. When the final boundary is unavailable, verify the nearest accessible seam, state which boundary was not exercised and why, and name the remaining check with the environment or authority it needs. Do not request production credentials to satisfy this skill, and never mutate production without explicit authorization.
 
-When the final boundary is unavailable:
+## Match depth to risk
 
-- state exactly which boundary was not exercised and why;
-- verify the nearest accessible seam;
-- avoid claims that extend beyond that evidence;
-- name the remaining check and the environment or authority it requires.
+Use the smallest check that can disprove the completion claim:
 
-Do not request production credentials merely to satisfy this skill. Do not mutate production unless the user explicitly authorized that operation.
+- Deterministic helper with an existing focused test: that test is the boundary. Show it failing before and passing after, then stop.
+- Rendering or interaction: inspect the rendered state and exercise the control.
+- Persistence: restart or reload before checking, so an in-memory value cannot hide a failure.
+- Concurrency: repeat the contested path enough times to make the prior failure observable.
+- Deployment: verify the running revision and its health path, not the build artifact.
 
-## Match verification to the risk
+Do not turn a routine change into a test campaign; add depth only where another layer can produce a false green.
 
-Use the smallest check that can disprove the completion claim.
+## Stop signals
 
-- For a deterministic helper whose existing focused test calls it directly, that test is the boundary. Show it failing before the change and passing after, then stop.
-- For a rendering or interaction change, inspect the rendered state and exercise the control.
-- For persistence, restart or reload before checking the result when an in-memory value could hide a failure.
-- For concurrency, repeat the contested path enough times to make the prior failure observable.
-- For deployment, verify the running revision and external health path rather than the build artifact alone.
+- You are about to write "works" or "fixed" with only unit tests or a build as evidence: run the boundary check.
+- The check passed on the first run and you did not see it fail for the old behavior: you have not shown it tests the change.
+- The test command has a filter, workspace, or ignore rule you have not read: read it.
+- The evidence is an assertion about a mock you wrote: find a real seam.
 
-Do not turn routine changes into an exhaustive test campaign. Add depth only where another layer can produce a false green result.
+## Shortcuts that fail
 
-## Report evidence, not confidence
+- "Unit tests pass, so the feature works": the wiring between units is where changes fail, and no unit test crosses it.
+- "The build is green": the build compiles the old artifact when the cache is stale or the changed file is excluded.
+- "The response was 200": the contract promised a persisted record or an event; the response alone does not show it.
+- "It's a small change, skip the smoke test": small changes to shared paths are the ones whose false greens reach users.
 
-Before saying the work is fixed or complete, report:
+## Report
 
-- the boundary exercised;
-- the exact command or interaction;
-- the observed result;
-- the failure or stale-state check used to prove the new path ran;
-- any boundary not exercised.
+State the boundary exercised, the exact command or interaction, the observed result, the check used to prove the changed path ran (old-behavior failure or stale-state invalidation), and any boundary not exercised with the reason and remaining check. If only a proxy passed, write "Verified at proxy only: <proxy>. Not verified at <boundary>."
 
-If only a proxy passed, name it as a proxy. Do not convert "unit tests pass" into "the feature works" when the integration or user path remains untested.
+## Critical failures
+
+- "Works" or "fixed" claimed with only a proxy (unit test, mock, build, static read) as evidence, without naming it as a proxy.
+- A check reported that did not include the changed path.
+- Production mutated without explicit authorization.
+- The failure state that motivated the change left unexercised.
+- Stale artifacts or caches not ruled out when they could bypass the change.
