@@ -31,13 +31,31 @@ Then describe the one scene and name the deep message inside the prompt so the c
 
 Sources stay in the agent assets folder. Processed files live in the Essays repo:
 
-- `public/images/art/{slug}-wide.webp` — 1360×640 center crop, essay page hero.
-- `public/images/art/{slug}.webp` — 352×352 center crop, homepage thumbnail.
-- OG cards via `scripts/render-og.sh <art.png> <out.jpg> "Title"` — the sketch as the field, Switzer Semibold title top-left in ink `#1c1b18`, `chaitanya.gg` small bottom-left in `#71706a`, 1200×630 sRGB JPEG, cache-busted filename (`og-{slug}-YYYYMMDD.jpg`).
+- `public/images/art/{slug}-wide.webp` — essay page hero at 1360×640. Trim the sketch to its ink bounds first, then resize to fit and pad with the paper color to the full canvas. Never center-crop the hero; cropping cuts the drawing off on the page.
+- `public/images/art/{slug}.webp` — 352×352 homepage thumbnail (center crop is fine at this size).
+- OG cards via `scripts/render-og-v3.sh <art.png> <out.jpg> "Title"` — the sketch as the field, Switzer Semibold title top-left in ink `#1c1b18`, `chaitanya.gg` small bottom-left in `#71706a`, 1200×630 sRGB JPEG, cache-busted filename (`og-{slug}-YYYYMMDD.jpg`).
 
 Titles sit top-left, so compositions must keep the upper-left quadrant quiet.
 
 The site icon is a single hand-drawn ink open circle (an unfinished loop) on paper. All favicon sizes (16, 32, 48, 180, 192, 512) derive from the same mark. Do not replace it with a letter or a new symbol.
+
+## Technical diagrams (SVG, not sketches)
+
+Architecture and system diagrams inside essays or thesis documents are hand-written inline SVG, never generated raster images. Wrap each one as:
+
+```html
+<figure class="essay-diagram">
+  <div class="diagram-scroll"><svg viewBox="..." role="img" aria-label="...">...</svg></div>
+  <figcaption>One sentence stating what the diagram argues.</figcaption>
+</figure>
+```
+
+Rules that make them render correctly on chaitanya.gg:
+
+- Color only with the site's CSS variables (`var(--ink)`, `var(--muted)`, `var(--border)`, `var(--border-strong)`, `var(--surface)`) or `currentColor` so all three themes (light, dark, OLED) work. Never hard-code hex fills.
+- The site CSS breaks `.essay-diagram` out of the reading column to `min(94vw, 64rem)` and gives the inner SVG `min-width: 56rem` with horizontal scroll on small screens. Design at that width; do not squeeze a wide system into the text column.
+- Typography inside SVGs: Switzer (`var(--font)`) for labels, Geist Mono (`var(--mono)`) for identifiers and states, generous spacing. Diagrams need breathing room; when in doubt, make it bigger and emptier.
+- Each diagram must argue one thing (a lifecycle, a layering, a contrast), not decorate.
 
 ## Typography
 
