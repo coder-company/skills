@@ -1,6 +1,6 @@
 # Chaitanya Mishra voice profile
 
-Use this profile only for Chaitanya Mishra and [essays.chaitanya.science](https://essays.chaitanya.science).
+Use this profile only for Chaitanya Mishra and [chaitanya.gg](https://chaitanya.gg).
 
 ## Keep the narration alive
 
@@ -30,9 +30,9 @@ Another writer's influence may shape the questions or argument. It must never re
 
 ## Live references
 
-- [Pre-Seed](https://essays.chaitanya.science/pre-seed/) for chronology, dialogue, people, and physical details.
-- [Why I Will Win](https://essays.chaitanya.science/why-i-will-win/) for confidence, affection, profanity, and direct claims.
-- [Prime Intellect](https://essays.chaitanya.science/prime-intellect/) for technical explanation in ordinary language.
-- [Looking for an Idea](https://essays.chaitanya.science/looking-for-an-idea/) for incremental narration and preserving unresolved thought.
+- [Pre-Seed](https://chaitanya.gg/pre-seed/) for chronology, dialogue, people, and physical details.
+- [Why I Will Win](https://chaitanya.gg/why-i-will-win/) for confidence, affection, profanity, and direct claims.
+- [Prime Intellect](https://chaitanya.gg/prime-intellect/) for technical explanation in ordinary language.
+- [Looking for an Idea](https://chaitanya.gg/looking-for-an-idea/) for incremental narration and preserving unresolved thought.
 
 Use the newest user correction over every published example.

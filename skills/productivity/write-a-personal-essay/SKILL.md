@@ -7,7 +7,7 @@ description: Assemble, revise, or publish a first-person essay from an author's 
 
 Treat the author's narration as source material. Preserve what happened before making it elegant, revise no wider than the complaint, invent nothing, and prove before publishing that every approved detail survived.
 
-Read `references/voice-fidelity.md` before drafting or revising. When the author is Chaitanya Mishra or the destination is `essays.chaitanya.science`, also read `references/chaitanya-voice.md`; that profile and the author's newest corrections outrank the general guidance.
+Read `references/voice-fidelity.md` before drafting or revising. When the author is Chaitanya Mishra or the destination is `chaitanya.gg`, also read `references/chaitanya-voice.md`; that profile and the author's newest corrections outrank the general guidance.
 
 ## Route first
 
