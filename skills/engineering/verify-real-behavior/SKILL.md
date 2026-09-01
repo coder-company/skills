@@ -63,6 +63,7 @@ Do not turn a routine change into a test campaign; add depth only where another 
 - The check passed on the first run and you did not see it fail for the old behavior: you have not shown it tests the change.
 - The test command has a filter, workspace, or ignore rule you have not read: read it.
 - The evidence is an assertion about a mock you wrote: find a real seam.
+- Your reply is a checklist with blanks to fill: replace it with the runnable commands or test code.
 
 ## Shortcuts that fail
 
@@ -73,7 +74,7 @@ Do not turn a routine change into a test campaign; add depth only where another 
 
 ## Report
 
-State the boundary exercised, the exact command or interaction, the observed result, the check used to prove the changed path ran (old-behavior failure or stale-state invalidation), and any boundary not exercised with the reason and remaining check. If only a proxy passed, write "Verified at proxy only: <proxy>. Not verified at <boundary>."
+State the boundary exercised, the exact command or interaction, the observed result, the check used to prove the changed path ran (old-behavior failure or stale-state invalidation), and any boundary not exercised with the reason and remaining check. When you cannot run the check yourself, give the exact commands or test code the user runs, not a template. If only a proxy passed, write "Verified at proxy only: <proxy>. Not verified at <boundary>."
 
 ## Critical failures
 

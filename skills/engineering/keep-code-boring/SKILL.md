@@ -45,9 +45,11 @@ Do not cite style guides or their sources in comments, commit messages, or statu
 4. Find existing helpers, types, dependencies, and patterns before adding new ones.
 5. State an assumption only when it changes the implementation and cannot be verified.
 
+When the request arrives without repository access, implement it from the request with reasonable defaults, state each assumption in one line, and do not ask questions the user can answer after seeing the code.
+
 Fix the cause at the narrowest shared boundary that owns it; a small diff at the symptom is not a small fix. Before changing a shared signature, serialized value, public export, or externally visible contract, identify its consumers (see `prove-the-blast-radius`). If the owning fix expands beyond the request or can break another consumer, choose a contract-preserving fix unless the user authorizes the broader change.
 
-## Choose the least complete design
+## Choose the smallest complete design
 
 Evaluate in order and stop at the first option that fully meets the task:
 
@@ -59,7 +61,7 @@ Evaluate in order and stop at the first option that fully meets the task:
 6. Add the smallest clear implementation.
 7. Add a dependency only when it materially improves correctness, security, interoperability, or maintenance, and record why.
 
-Do not turn this into research for a routine change.
+Do not turn this into research for a routine change, and do not explain the rungs you passed.
 
 ## Refuse speculative structure
 
@@ -97,6 +99,7 @@ Comments state rationale, constraints, invariants, surprising behavior, and deci
 - Make each test fail for the bug or missing behavior before relying on it.
 - Test externally visible behavior, edge cases, and failure paths that matter; skip trivial declarations and framework behavior.
 - Prefer a stable in-process dependency or the real boundary over a mock.
+- With no repository test setup, leave one runnable check (asserts under `__main__` or one small test file) covering the specified cases; do not add a test framework, fixtures, or a per-function suite for a snippet.
 - Never delete, skip, broaden, or weaken a valid test to make the suite pass. Change a test only when the intended contract changed, and say so.
 
 ## Finish at the real boundary
@@ -119,7 +122,7 @@ Before reporting, confirm:
 - The diff includes a change the request did not need: move it out.
 - A test had to be weakened to pass: the code or the contract is wrong; stop.
 - You are patching where the error appears rather than where the bad value is produced: move the fix.
-- You are about to write "should work" for a check you did not run: run it or report it as not run.
+- You are about to write "should work", "tests pass", or "ran it" for a check you did not or could not run: report it as not run.
 
 ## Shortcuts that fail
 
@@ -131,7 +134,7 @@ Before reporting, confirm:
 
 ## Report
 
-State what changed and where; the design option chosen from the ladder and why earlier options did not meet the task (one line); the checks run with exact commands and results; checks you could not run and why; and any deliberately deferred design that matters to the user. Never imply an unrun check passed.
+Code or diff first. Then, in a few lines: what changed and where, assumptions taken, checks run with exact commands and results, and checks not run. Name the ladder rung only when a lower rung was rejected for a reason the user needs. Never imply an unrun check passed.
 
 ## Critical failures
 

@@ -17,10 +17,8 @@ Reproduce the failure with a command whose output shows the user's exact symptom
 
 ## Match the depth to the failure
 
-- A local, deterministic failure with an existing test or command: keep the loop short. Reproduce, narrow, fix, verify.
+- A local, deterministic failure with an existing test or command: run the test, read the failing code, fix the owning expression, rerun the test, and report in a few lines. No ledger, hypothesis list, phases, or plan.
 - An intermittent, distributed, production-only, destructive, or security-sensitive failure: use every section below and keep the ledger from the first step.
-
-Do not skip reproduction because a theory sounds plausible. Do not turn a one-line fix into ceremony.
 
 ## Protect the system
 
@@ -42,7 +40,7 @@ If direct reproduction is unavailable (production-only data, hardware you lack),
 
 ## Keep the ledger
 
-From the first hypothesis, maintain a compact record and consult it before every test:
+On the long path, maintain a compact record from the first hypothesis and consult it before every test:
 
 ```
 observed:   <facts established, each with the command or file:line>
@@ -96,16 +94,17 @@ Search for your marker and remove every probe, fixture, flag, and debug path. Co
 - "The stack trace points here, so fix here": the frame where the error surfaces is usually the consumer of a bad value produced earlier; the fix there hides the producer.
 - "I'll try a change and see": an untested change with no predicted outcome produces no information when it fails and false confidence when it passes.
 - "It passed once after my change, so it's fixed": for an intermittent failure, one pass is within the original failure rate; rerun at scale.
-- "Reading the code is faster than reproducing": reading produces plausible theories; only the reproduction shows which one is true, and the ledger of what you ruled out is what saves time.
+- "Reading the code is faster than reproducing": reading produces plausible theories; only the reproduction shows which one is true.
 - "Add logging everywhere": untargeted logs bury the transition that matters; log at the boundaries that separate hypotheses.
 
 ## Report
 
-State: the reproduction command and its observed output; the cause with the evidence that distinguishes it from the alternatives; the ledger's `ruled_out` list; the change made, if any, with the regression check and the rerun of the original reproduction; sibling sites searched (scope, confirmed, similar-but-safe); cleanup confirmed by marker search; and remaining uncertainty. An inconclusive result is valid: report observed, ruled out, remaining (as inference), and the single next discriminator.
+For the short path: the test command, the one-line cause, the diff, and the rerun result. Otherwise state: the reproduction command and its observed output; the cause with the evidence that distinguishes it from the alternatives; the ledger's `ruled_out` list; the change made, if any, with the regression check and the rerun of the original reproduction; sibling sites searched (scope, confirmed, similar-but-safe); cleanup confirmed by marker search; and remaining uncertainty. An inconclusive result is valid: report observed, ruled out, remaining (as inference), and the single next discriminator.
 
 ## Critical failures
 
 - A cause named without a reproduction or an observation that distinguishes it from alternatives.
+- A ledger, hypothesis list, or investigation plan produced for a deterministic local failure that has a reproducing test.
 - A symptom patched at the consumer while the producing boundary stays wrong.
 - Continuing to attempt fixes after three failures without reassessing.
 - A test added that would pass with the bug present.

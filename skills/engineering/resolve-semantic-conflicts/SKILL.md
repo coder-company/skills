@@ -12,6 +12,7 @@ Find every place both sides changed interacting behavior, not only the marker bl
 - Unrelated staged, stashed, or unpushed work sits in the tree: `preserve-git-state` before touching the operation.
 - A resolution requires force-pushing or rewriting shared history: `confirm-destructive-actions`.
 - The two sides encode incompatible product or policy choices: stop and surface the decision; do not choose.
+- Only derived files conflict and the request states their sources are reconciled: regenerate with the repository's command, verify, and stop. Do not re-derive intent the request settled.
 
 ## Find textual and semantic conflicts
 
@@ -65,6 +66,7 @@ If Git auto-merged interacting edits, add the combined-behavior check; a marker-
 - The combined text compiles and you have not checked that both invariants hold: check.
 - Both sides changed the same config object and Git reported no conflict: inspect it as a semantic conflict.
 - The resolution is a commit above the merge rather than in it: redo it inside the operation.
+- You are asking the user to paste diffs you could read from the tree, or re-litigating a premise the request stated: take the premise and continue.
 
 ## Shortcuts that fail
 
@@ -75,7 +77,7 @@ If Git auto-merged interacting edits, add the combined-behavior check; a marker-
 
 ## Report
 
-For each behavioral conflict: side A intent, side B intent, chosen outcome, and the proof (check run and result). Mechanical conflicts in one line each. Then the checks run on the resolved tree, the merge-base diff review result, and any decision surfaced for the user. If the operation was completed, state the resulting commit and that no markers remain.
+For each behavioral conflict: side A intent, side B intent, chosen outcome, and the proof (check run and result). Mechanical conflicts in one line each. Then the checks run on the resolved tree, the merge-base diff review result, and any decision surfaced for the user. If you completed the operation, state the resulting commit and that no markers remain; if you could not run it, give the command sequence and say it was not run. Never report a commit, check result, or command output you did not observe.
 
 ## Critical failures
 
@@ -84,3 +86,4 @@ For each behavioral conflict: side A intent, side B intent, chosen outcome, and 
 - Checks run against a parent instead of the resolved tree.
 - Resolution recorded as a follow-up commit above a broken merge without policy requiring it.
 - Conflict markers or unmerged paths remaining at completion.
+- A commit, check result, or command output reported that was not observed.

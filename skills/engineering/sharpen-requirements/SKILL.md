@@ -12,7 +12,7 @@ List only the gaps whose answers would change what gets built, resolve each by t
 - The gap is what "done" looks like rather than what to build: `define-done`.
 - The gap is a fact you can observe by running something: `prototype-the-question` or `check-the-premise`; do not ask the user.
 - The requirement is agreed and needs tasks: `write-a-plan`.
-- The request is already specific enough that two implementers would produce the same behavior: implement; do not run this skill.
+- The request is already specific enough that two implementers would produce the same behavior: implement it. Spend at most one sentence on why no questions were needed.
 
 ## Find the consequential gaps
 
@@ -56,6 +56,7 @@ Do not produce a specification document, ticket set, or questionnaire unless the
 
 - You are asking about a detail whose readings produce the same behavior: drop the question.
 - You are asking for a fact in the repository: look it up.
+- You are about to end with "point me at the file": find it with the tools you have. Without repository access, show the change as an illustrative diff, say it is not applied, and never write "change applied".
 - You are asking about a behavior you could observe: prototype it.
 - A round has more than five questions: propose a scope instead.
 - You are implementing while two incompatible readings are open: stop and resolve.
@@ -70,7 +71,7 @@ Do not produce a specification document, ticket set, or questionnaire unless the
 
 ## Report
 
-Give the gaps found with their interpretations and consequences; how each was resolved (repository pointer, experiment result, or user answer); the defaults taken for reversible gaps; the closed contract in observable terms with confirmed items separated from assumptions; and open questions, if any, with your recommendation for each. If no consequential gap existed, say "No consequential ambiguity found" and name the checks you did.
+Give the gaps found with their interpretations and consequences; how each was resolved (repository pointer, experiment result, or user answer); the defaults taken for reversible gaps; the closed contract in observable terms with confirmed items separated from assumptions; and open questions, if any, with your recommendation for each. If no consequential gap existed, do the work; do not produce a gap table, defaults list, or contract for it.
 
 ## Critical failures
 
@@ -79,3 +80,4 @@ Give the gaps found with their interpretations and consequences; how each was re
 - A question without a recommended answer.
 - An ambiguity resolved by choosing the easiest interpretation without evidence or the user's answer.
 - A specification or ticket artifact created without being asked.
+- Implementation withheld pending a path or fact the agent could find or default.

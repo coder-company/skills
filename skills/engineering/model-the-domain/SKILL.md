@@ -11,22 +11,22 @@ Collect the real scenarios, define each concept by what it includes, excludes, a
 
 - The question is where a module lives or what its interface is: `design-module-boundaries`.
 - The concepts are settled and the problem is types allowing invalid combinations: `make-invalid-states-impossible`.
-- The task is a rename with no meaning change: `refactor-without-regressions`.
+- The task is a rename with no meaning change: make it, or `refactor-without-regressions` when it spans callers. Do not recite the domain checks you skipped. Without the code, show the rename as an illustrative diff and say it is not applied; never report an edit you did not make.
 
 ## Collect scenarios, not opinions
 
-Gather from the repository and the request:
+Gather:
 
-- representative operations (the normal path, one per user-facing action);
+- representative operations, one per user-facing action;
 - edge cases already handled in code (each `if` on a domain value is a scenario);
 - persisted values, enum members, status strings, and their producers;
 - public contract fields and their documented meaning;
-- the words the users and the domain owners use, from issues, docs, and UI copy;
-- tests, which state intended behavior directly.
+- the words domain owners use in issues, docs, and UI copy;
+- tests, which state intended behavior.
 
 ## Find the model defects
 
-Look for these signals; each is a concept problem, not a code-style problem:
+Each of these signals is a concept problem, not a style problem:
 
 - **Overloaded term:** one name with different rules in different places ("account" meaning customer in billing and login identity in auth).
 - **Synonyms:** several names for one concept across modules or between code and UI.
@@ -34,21 +34,21 @@ Look for these signals; each is a concept problem, not a code-style problem:
 - **Sync fields:** a boolean or status that must be kept consistent with another field by convention (`isActive` and `deletedAt`).
 - **Growing chain:** an `if/else` or `switch` on a domain value that gains a branch with each feature.
 
-For each defect, record where it lives and which scenarios exercise it.
+Record where each defect lives and which scenarios exercise it.
 
 ## Define each concept
 
 For every important term, write:
 
-- **Name:** the word the domain owners use. Do not invent an abstraction they would not recognize.
+- **Name:** the word the domain owners use.
 - **Includes / excludes:** what it is and the near neighbors it is not.
 - **Identity:** what makes two instances the same.
 - **Lifecycle:** the states it moves through and the transitions allowed.
 - **Invariants:** what must always hold, stated so a test could check it.
 
-Split an overloaded term when its meanings have different rules or lifecycles. Merge synonyms only when they have the same rules in every scenario; otherwise you have found a hidden distinction, so name it.
+Split an overloaded term when its meanings have different rules or lifecycles. Merge synonyms only when they share rules in every scenario; otherwise name the hidden distinction.
 
-Do not rename stable public language (API fields, persisted values, UI labels) for elegance. If the internal name must differ from the public one, record the mapping at the boundary that translates.
+Do not rename public language (API fields, persisted values, UI labels) for elegance; if the internal name must differ, record the mapping at the translating boundary.
 
 ## Test the model against the scenarios
 
@@ -59,11 +59,11 @@ Walk at least one normal scenario, one boundary case, one invalid input, and one
 - a conditional outside the concept that owns the rule;
 - a state that the lifecycle does not allow but the scenario produces.
 
-Fix the model, not the scenario. If a scenario cannot be expressed, either the model is wrong or the scenario is out of scope; decide which and record it.
+Fix the model, not the scenario. If a scenario cannot be expressed, decide whether the model is wrong or the scenario is out of scope, and record it.
 
 ## Choose the owning structure
 
-Encode each rule once, in the structure that makes the rule hard to bypass:
+Encode each rule once, where it is hard to bypass:
 
 - A set of states with allowed transitions: a state machine or a sum type with a transition function.
 - A rule that varies by kind: a table, registry, or polymorphic type keyed by the kind, not a chain of conditionals.
@@ -71,7 +71,7 @@ Encode each rule once, in the structure that makes the rule hard to bypass:
 - Fields that must stay in sync: one field that derives the other, or one state that replaces both.
 - A calculation repeated in several places: one function named after the domain rule.
 
-Put the invariant at the boundary that owns the value. Update the smallest durable place the repository already uses for definitions (existing glossary, ADR directory, schema comments, type definitions). Do not add a new documentation system.
+Record definitions in the smallest durable place the repository already uses (glossary, ADR directory, schema comments, type definitions); do not add a documentation system.
 
 ## Stop signals
 
@@ -89,7 +89,7 @@ Put the invariant at the boundary that owns the value. Update the smallest durab
 
 ## Report
 
-List the concepts defined (name, includes/excludes, invariants), the defects found with locations, the scenarios walked and whether each passed, the structure chosen for each rule and where it now lives, public names preserved and any boundary mapping, and unresolved language conflicts with the evidence needed to settle each. If the model was already sound, say so and list the scenarios that showed it.
+List the concepts defined (name, includes/excludes, invariants), the defects found with locations, the scenarios walked and whether each passed, the structure chosen for each rule and where it now lives, public names preserved and any boundary mapping, and unresolved language conflicts with the evidence needed to settle each. If the model was already sound, say so in one sentence and list the scenarios that showed it. For a request this skill does not own, do the work and skip this report.
 
 ## Critical failures
 

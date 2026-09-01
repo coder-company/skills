@@ -36,7 +36,7 @@ Depart from a guideline when doing so makes the content clearer for its actual r
 
 Identify the reader, their goal, and what they already know. Then:
 
-1. Put the key point, result, or task first.
+1. Put the key point, result, or task first, not an announcement ("You can now", "We are excited to").
 2. Use a conversational, respectful tone: a knowledgeable person helping a reader in a hurry.
 3. Address the reader as `you`; use `we` only for an organization with a clear antecedent; use `user` for a user of software the reader develops.
 4. Use imperative verbs for instructions.
@@ -49,7 +49,7 @@ Identify the reader, their goal, and what they already know. Then:
 
 ## Keep the meaning intact
 
-Do not add facts, certainty, praise, urgency, or product claims. Preserve `can`, `may`, `might`, `should`, `must`, and `will` distinctions. Preserve code, commands, flags, identifiers, filenames, paths, API and product names, versions, UI labels, quotations, and links unless asked to correct them. Keep an accepted technical term when it is more accurate than an everyday substitute. Flag source ambiguity you cannot resolve safely.
+Do not add facts, certainty, praise, urgency, or product claims. Preserve `can`, `may`, `might`, `should`, `must`, and `will` distinctions. Preserve code, commands, flags, identifiers, filenames, paths, API and product names, versions, limits, UI labels, error messages (verbatim), quotations, and links unless asked to correct them. Keep an accepted technical term when it is more accurate than an everyday substitute. Flag source ambiguity you cannot resolve safely.
 
 ## Remove what the style advises against
 
@@ -75,7 +75,7 @@ Sentence case for headings. Numbered lists for sequences, bullets for unordered 
 
 ## Report
 
-Return only the requested artifact, plus any required ambiguity or meaning-change warning. For an audit, return violations ordered by impact, each with location and correction; if none, write "No style issues found." Do not add commentary the user did not ask for.
+Return only the requested artifact. Put a required ambiguity or meaning-change warning after it, separated from the artifact, and only when it changes the meaning. For an audit, return violations ordered by impact, each with location and correction; if none, write "No style issues found." Do not add commentary the user did not ask for.
 
 ## Critical failures
 

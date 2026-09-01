@@ -12,27 +12,27 @@ Write the caller's usage first, name the one decision or invariant the module ow
 - The terms are contested or overloaded: `model-the-domain` first.
 - The boundary change requires callers to move to a new interface: `replace-an-api` for the migration.
 - The move is purely structural with the interface unchanged: `refactor-without-regressions`.
-- A one-file addition to an established module: implement it; no boundary decision is being made.
+- A one-file addition to an established module: mirror one existing sibling, wire the existing registry, add the sibling-style test, and stop. No base class, decorator, package, or registry the siblings do not already use. Without the code, show the addition as an illustrative diff and say it is not applied; do not claim it was made.
 
 ## Gather the evidence
 
 Inspect before proposing:
 
-- how each current caller uses the capability, by file:line, and what it needs to observe;
+- how each caller uses the capability, by file:line, and what it needs to observe;
 - which files change together in history (`git log --format=%h --name-only` over the relevant paths, then count co-occurrence), distinguishing product coupling from formatting or generated churn;
 - data and control flow across the proposed line;
-- current imports and their direction, and any cycles (`madge`, `go list -deps`, `cargo tree`, or reading the imports);
+- current imports and their direction, and any cycles (`madge`, `go list -deps`, `cargo tree`, or the imports);
 - vocabulary in requirements, issues, and the public API;
 - tests, for what consumers assert.
 
-Similar syntax is not shared responsibility; two functions that look alike but change for different reasons belong apart.
+Two functions that look alike but change for different reasons belong apart.
 
 ## Write the caller's view first
 
-Before choosing files or types, write the two or three call sites a realistic caller would have, as code. The interface should:
+Before choosing files or types, write two or three realistic call sites as code. The interface should:
 
 - expose the capability without exposing internal sequencing (no "call `init`, then `load`, then `apply`");
-- keep invariants inside (callers cannot produce an invalid state through the surface);
+- keep invariants inside (callers cannot produce an invalid state);
 - use domain types where primitives would allow invalid values;
 - make error and lifecycle behavior visible in the signature;
 - have no configuration for variation that does not exist yet.
@@ -41,9 +41,9 @@ If the caller's view needs internal knowledge to be correct, the boundary is in 
 
 ## Name one responsibility
 
-State, in one sentence, the decision or invariant the module owns ("decides which price applies to a cart line", "guarantees every outbound event has a version"). Derive the name from that sentence in the domain's vocabulary or the mechanism's (`http`, `postgres`, `codegen` are valid names for adapters that isolate an external mechanism behind a domain-facing interface).
+State, in one sentence, the decision or invariant the module owns ("decides which price applies to a cart line", "guarantees every outbound event has a version"). Derive the name from that sentence in the domain's vocabulary, or the mechanism's for an adapter (`http`, `postgres`, `codegen`).
 
-Reject the boundary if its only available name is `utils`, `helpers`, `common`, `shared`, `core`, `lib`, `manager`, or `handler`. Those words describe a location, not ownership.
+Reject the boundary if its only name is `utils`, `helpers`, `common`, `shared`, `core`, `lib`, `manager`, or `handler`. Those words describe a location, not ownership.
 
 ## Prefer depth
 
@@ -53,17 +53,17 @@ A deep module has a small stable surface hiding substantial decisions. Tests:
 - **Adapter count:** one adapter behind an interface is a hypothetical seam; two real adapters justify the interface. Do not introduce an interface for one implementation without a current test or volatility need.
 - **Leak test:** if a caller must change when the module's storage, transport, or algorithm changes, the module leaks that decision.
 
-Do not split code to produce more packages. Fewer, deeper modules beat many shallow ones.
+Fewer, deeper modules beat many shallow ones.
 
 ## Protect dependency direction
 
-The new module must not import from anything that already imports it. Write down the allowed dependencies. Keep policy (domain rules) independent of mechanism (frameworks, I/O) when that separation reduces the co-change you observed; do not add the separation to satisfy a diagram.
+The new module must not import from anything that already imports it. Write down the allowed dependencies. Separate policy (domain rules) from mechanism (frameworks, I/O) only when that reduces observed co-change, not to satisfy a diagram.
 
-Check for cycles after the move, with the tool or by reading imports, and confirm the build's module graph agrees.
+Check for cycles after the move and confirm the build's module graph agrees.
 
 ## Pressure the boundary
 
-Walk through whichever of these exist and record the result:
+Walk through those that exist and record the result:
 
 1. A current caller: does it get what it needs without reaching inside?
 2. The next known variation: does it fit behind the surface or force a change to every caller?
@@ -79,18 +79,18 @@ If callers still need internals, the boundary is shallow or misplaced. If unrela
 - The module's name is a location word: find the owned decision or drop the module.
 - The interface has an "options" bag with one used field: remove the variation.
 - A cycle appears after the move: the direction is wrong; do not break it with a lazy import.
-- Two modules changed together in every commit of the last quarter: they are one module.
+- Two modules changed together in every recent commit: they are one module.
 
 ## Shortcuts that fail
 
 - "These files look alike, group them": syntactic similarity groups code that changes for different reasons, so every change touches the group.
-- "Add an interface so it's testable later": one implementation behind an interface is indirection with no seam; add the interface when the second implementation or the test exists.
+- "Add an interface so it's testable later": one implementation behind an interface is indirection with no seam; add it when the second implementation or the test exists.
 - "Put it in shared for now": nothing leaves `shared`; it becomes the dependency of everything and the owner of nothing.
 - "Split it into small modules for clarity": each caller now assembles the pieces, and the assembly knowledge is duplicated.
 
 ## Report
 
-Give the evidence gathered (callers, co-change findings, dependency direction), the caller's view as code, the owned responsibility and name, allowed dependencies, the depth tests' results, the pressure walk results, alternatives seriously considered with the reason each lost, and the first check that would reveal the boundary is wrong. If the evidence shows no boundary change is warranted, say so.
+Give the evidence gathered (callers, co-change findings, dependency direction), the caller's view as code, the owned responsibility and name, allowed dependencies, the depth tests' results, the pressure walk results, alternatives considered and why each lost, and the first check that would reveal the boundary is wrong. If no boundary change is warranted, say so in one sentence and do the requested change; do not deliver evidence sections for a decision that was not made.
 
 ## Critical failures
 

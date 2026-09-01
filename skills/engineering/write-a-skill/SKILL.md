@@ -5,7 +5,7 @@ description: Create, revise, or evaluate an agent skill from an observed failure
 
 # Write a skill
 
-Start from a failure the skill must prevent, decide whether a skill is the right mechanism, write the contract (trigger, near misses, authority, scope, completion, critical failures), then the body as decisions, then cases that could falsify it. Test the description and the body separately; a good body that loads for the wrong tasks is a bad skill.
+Start from a failure the skill must prevent, decide whether a skill is the right mechanism, write the contract, then the body as decisions, then cases that could falsify it. Test the description and the body separately; a good body that loads for the wrong tasks is a bad skill.
 
 ## Route first
 
@@ -23,7 +23,7 @@ Write, before any instruction:
 4. The observable result that would have been better.
 5. What evidence would show the proposed skill does not help.
 
-Use a real failure when one exists, preserving the prompt, relevant context, output, and result with secrets and personal data removed. Label an invented case as authored. Never invent a baseline transcript, incident, fixture value, test result, or adoption claim; when evidence is missing, write the proposed case and mark it unrun.
+Use a real failure when one exists, preserving the prompt, context, output, and result with secrets removed. Label an invented case as authored. Never invent a baseline transcript, incident, fixture value, test result, or adoption claim; mark missing evidence unrun.
 
 ## Decide whether a skill is warranted
 
@@ -36,6 +36,8 @@ Write a skill only when the behavior recurs and needs task-specific judgment, pr
 - the scope bundles unrelated jobs that should trigger independently.
 
 For deterministic rules, build the tool and let the skill say when to run it and how to read its result.
+
+When a skill is not warranted, say so in one or two sentences, do the direct work if it is small, and stop. Do not propose lint rules, conventions, or workflows the user did not ask for.
 
 ## Define the contract
 
@@ -60,7 +62,7 @@ description: What the skill does. Use when [concrete triggers, including literal
 ---
 ```
 
-The name is a short specific action; avoid organization prefixes, vague nouns, and collisions with common tools. The description states what the skill does, then "Use when" with the triggers, then "Do not use" with the near misses. Keep it under 1024 characters, with no angle brackets and no unquoted colon-space. No praise, history, or effectiveness claims.
+The name is a short specific action without organization prefixes or vague nouns. The description states what the skill does, then "Use when" triggers, then "Do not use" near misses: under 500 characters, no angle brackets, no unquoted colon-space, no praise or effectiveness claims.
 
 Test the description on its own with at least three positive prompts, two hard negatives, and two near misses. Fix the description, not the body, when selection is wrong.
 
@@ -79,7 +81,7 @@ Use exact commands, paths, schemas, or templates where precision matters, and ju
 
 Voice: imperative, present tense, plain US English. No persona, slogans, all-caps rules, fake quotations, moralizing, or effectiveness claims. No em or en dashes. Do not let a quality adjective (the collection's validator lists them) carry an instruction; write the observable behavior. Preserve binding words (only, except, unless, not, never, must, may). State each rule once, where the decision happens.
 
-Token budget: the description loads into every session, so keep it under 500 characters; the body loads only on trigger, so keep it between 350 and 1000 words (1350 for a broad skill). Move optional detail into a references file linked by its exact relative path. Add a script only when deterministic code beats prose. Do not add setup, configuration, telemetry, or persistent state the present behavior does not need.
+The body loads only on trigger; keep it between 350 and 1000 words (1350 for a broad skill). Move optional detail into a references file linked by its exact relative path. Add a script only when deterministic code beats prose. Do not add setup, configuration, telemetry, or persistent state the present behavior does not need.
 
 ## Test behavior before polishing prose
 
@@ -110,7 +112,7 @@ For each failed case: find the exact instruction the agent missed or worked arou
 
 ## Report
 
-State the failure the skill addresses (real or authored); the contract; the description with trigger test results; body word count; cases written with their types; evaluation results with model, harness, repetitions, and verifier outcomes, or "unrun" per case; and missing evidence and untested boundaries. Do not call a skill proven or portable from a small authored set. If a skill is not warranted, say so and name the mechanism to use instead.
+State the failure the skill addresses (real or authored); the contract; the description with trigger test results; body word count; cases written with their types; evaluation results with model, harness, repetitions, and verifier outcomes, or "unrun" per case; and missing evidence. Do not call a skill proven from a small authored set. If a skill is not warranted, say so in one or two sentences and name the mechanism to use instead; no contract, word count, or evaluation sections.
 
 ## Critical failures
 

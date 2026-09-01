@@ -36,7 +36,7 @@ Trace the conditions under which the claimed consequence occurs. Do not change c
 
 - **Confirmed fact:** fix the owning cause, add or keep a regression check, cite the evidence in one line.
 - **Incorrect fact:** leave the code unchanged; reply with the check or source that disproves the claim.
-- **Convention:** apply it when binding and in scope; do not litigate established style.
+- **Convention:** apply it when binding and in scope, citing the evidence in a few words (the sibling names, lint rule, or instructions file); do not litigate established style.
 - **Preference:** apply when harmless, or state the tradeoff without manufacturing a correctness argument.
 - **Scope request:** separate it from the defect; obtain authority when it materially expands the task.
 - **Question:** answer it; edit code only if the answer exposes a defect.
@@ -63,7 +63,7 @@ Group comments by owning boundary before editing. A fix for one can invalidate a
 
 ## Report
 
-For each comment, one line: confirmed and fixed (with the proving check and its output); disproved (with the evidence); applied convention or preference; separated scope request; or unresolved (with the missing observation). For factual claims, include the concrete observation (failing assertion, query count, type error, versioned source line), not "checked". If no comment required a change, say so with the evidence per comment.
+For each comment, one line: confirmed and fixed (with the proving check and its output); disproved (with the evidence); applied convention or preference; separated scope request; or unresolved (with the missing observation). For factual claims, include the concrete observation (failing assertion, query count, type error, versioned source line), not "checked". Do not restate the classification vocabulary or list what you did not need to investigate. If no comment required a change, say so with the evidence per comment.
 
 ## Critical failures
 

@@ -9,7 +9,7 @@ Resolve the exact change under review, read it against its intent and its surrou
 
 ## Route first
 
-- No diff or repository is available: state that no review was executed and give the commands to collect it. Do not review a described scenario.
+- The change arrives as pasted code or a description with no repository: review what was given. Mark each finding as inferred from the text, name the check that would confirm it, and withhold the merge verdict. Do not answer with an intake checklist or commands to collect the diff.
 - The change is a design or plan, not code: `stress-test-the-design`.
 - A shared contract changed and its safety hinges on facts outside the diff: run `prove-the-blast-radius` for that contract inside this review.
 - A review comment from someone else needs checking: `validate-review-feedback`.
@@ -90,6 +90,7 @@ Remove any finding whose only consequence is preference or marginal clarity befo
 - You are reviewing the working tree only while `git log` shows commits on the branch: fix the boundary.
 - You feel the urge to run `git stash` or `checkout` in the reviewed repository: use `git show` or a temporary worktree.
 - The findings list has more than three `P3` items and no `P0` to `P2`: re-check whether they are preferences.
+- A security defect is phrased as a simplification or deletion: restate it as a `P0` or `P1` with the attack path, and make the correction preserve the boundary.
 
 ## Shortcuts that fail
 
@@ -97,16 +98,16 @@ Remove any finding whose only consequence is preference or marginal clarity befo
 - "This pattern is unusual, flag it": unusual is not wrong; a finding needs a trigger and a consequence.
 - "Report everything so nothing is missed": an unranked list of forty items transfers the judgment to the reader and hides the two that block the merge.
 - "Skim the big files, they're mechanical": the decision hides in the large file; read the decision files in full and say which they were.
-- "Review from the description": the description states intent; the diff states behavior. Review the diff.
+- "No repository, so no review": the user supplied the code or its behavior; findings from that text, labeled inferred, are the deliverable. Only the merge verdict waits for the real diff.
 
 ## Report
 
-Deliver: the ranked findings with severity, location, trigger, consequence, correction, and introduced/newly reachable/pre-existing marker; open questions affecting the verdict; the verdict; the boundary (base, head, local state included) and files read in full; the commands executed. If no finding survives verification, write "No actionable findings" and name any material test gap or unverified boundary.
+Deliver: the ranked findings with severity, location, trigger, consequence, correction, and introduced/newly reachable/pre-existing marker; open questions affecting the verdict; the verdict; the boundary (base, head, local state included) and files read in full; the commands executed. Omit any element with nothing to report; no empty headings or unrun command lists. If no finding survives verification, write "No actionable findings" and name any material test gap or unverified boundary.
 
 ## Critical failures
 
 - A finding without location, trigger, or consequence.
 - A `P0` or `P1` without evidence of the triggering path and not labeled unverified.
 - The reviewed repository modified during the review.
-- A verdict issued without the diff or from a described scenario.
+- A merge verdict issued on a described or pasted change without the real diff, or findings withheld because the diff was described rather than attached.
 - The review boundary silently narrowed to the working tree or to a subset of files without saying so.

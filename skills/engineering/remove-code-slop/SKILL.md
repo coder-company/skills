@@ -16,13 +16,13 @@ Produce a list of concrete deletions and reductions, each with a location, a tag
 
 ## Set the scope
 
-Default scope is the current change: `git diff <merge-base>...HEAD` plus uncommitted changes. Widen to a directory or the repository only when the user asked for an audit. Record the scope and the check that must stay green (the repository's test, lint, and type commands).
+Default scope is the current change: `git diff <merge-base>...HEAD` plus uncommitted changes. Widen to a directory or the repository only when the user asked for an audit. Record the scope and the check that must stay green (test, lint, type commands).
 
-Run the check before touching anything and record the result. Slop removal on a red baseline cannot prove it changed nothing.
+Run the check before touching anything and record the result; a red baseline cannot prove the removal changed nothing.
 
 ## Find slop
 
-Inspect every file in scope for these patterns. Tag each finding:
+Inspect every file in scope and tag each finding:
 
 - `comment`: a comment that restates the adjacent code, narrates a phase ("// Step 2: validate input"), announces an edit ("// added for the new flow"), or has drifted from the code. Keep comments that state a constraint, an invariant, a non-obvious why, or a reference the code cannot carry.
 - `guard`: a `try/catch`, null check, or type check on a path where the value is already guaranteed by a type, an earlier validation, or the caller's contract. Keep guards at trust boundaries (user input, network, file, environment, deserialization).
@@ -33,9 +33,9 @@ Inspect every file in scope for these patterns. Tag each finding:
 - `config`: configuration, constants, or environment variables with no variation across environments or call sites.
 - `escape`: `any`, `as unknown as`, `@ts-ignore`, `# type: ignore`, `// eslint-disable`, or equivalent suppressions added by the change without a stated reason.
 - `dead`: code unreachable after the change, commented-out code, or exports with no importer inside the scope's ownership.
-- `speculative`: interfaces with one implementation, factories with one product, extension points with no extension, generic parameters used with one type.
+- `speculative`: interfaces with one implementation, factories with one product, extension points with no extension, generics used with one type.
 
-For `dead`, `wrapper`, and `dup`, gather the evidence before listing: search from the repository root for callers, dynamic references (string lookups, reflection, dependency injection registrations, configuration files), public exports, and tests. A search that finds nothing inside one package is not evidence for a public export or a dynamically loaded component; report those as uncertain instead of deleting.
+For `dead`, `wrapper`, and `dup`, gather the evidence before listing: search from the repository root for callers, dynamic references (string lookups, reflection, dependency injection registrations, configuration files), public exports, and tests. A search that finds nothing inside one package is not evidence for a public export or dynamically loaded component; report those as uncertain.
 
 ## Apply within scope
 
@@ -43,23 +43,23 @@ For each finding, in file order:
 
 1. Make the removal or reduction. Do not combine it with a behavior change, rename, or unrelated tidying.
 2. If a removed guard or fallback was the only thing preventing a failure on a real input, the finding was wrong: restore it and note the input.
-3. After each file, run the fastest relevant check. After all files, run the full recorded check.
+3. Run the fastest relevant check after each file and the full recorded check after all.
 
-When a `do not remove` or `keep this` comment guards a constraint, replace the comment with the cheapest enforcement in scope (a type, an assertion, a test, or a lint rule) when the repository has that mechanism; otherwise keep the comment and say why.
+When a `do not remove` comment guards a constraint, replace it with the cheapest enforcement the repository has (a type, an assertion, a test, or a lint rule); otherwise keep the comment and say why.
 
-Do not touch: input validation at trust boundaries, error handling that prevents data loss or leaves the system consistent, authentication and authorization checks, accessibility attributes, logging the operators rely on, and anything the user explicitly requested.
+Do not touch: input validation at trust boundaries, error handling that prevents data loss or leaves the system consistent, authentication and authorization checks, accessibility attributes, logging the operators rely on, and anything the user explicitly requested. When refusing a removal, name the input the guard handles and the behavior it changes (a 400 instead of an unhandled rejection), then offer behavior-preserving tidy-ups. Describe only code you have read; hedge about the rest.
 
 ## Stop signals
 
-- You are about to delete something because the search in one directory found nothing: search from the repository root and check dynamic references first.
+- A search in one directory found nothing: search from the repository root and check dynamic references first.
 - A removal changes an observable output, status code, log line operators consume, or error type: it is a behavior change, not slop. Revert and report separately.
 - The check turned red after a removal: revert that removal before continuing.
 - You are rewriting logic to be shorter rather than deleting excess: stop; compression is not removal.
 
 ## Shortcuts that fail
 
-- "Comments are harmless, leave them": narrating comments drift from the code and future edits preserve the wrong description; they also mark the file as unreviewed generated output.
-- "The extra try/catch is defensive": a catch on a trusted path converts a programming error into silent wrong behavior. The trust boundary is where the guard belongs.
+- "Comments are harmless, leave them": narrating comments drift from the code and future edits preserve the wrong description.
+- "The extra try/catch is defensive": a catch on a trusted path converts a programming error into silent wrong behavior; guards belong at the trust boundary.
 - "The helper might get a second caller": one caller means the abstraction is a guess; inline it and extract when the second caller exists.
 - "Delete the export, nothing in this package uses it": public exports, reflection, and configuration-driven loading live outside the package.
 
@@ -69,7 +69,7 @@ List findings in file order, one line each:
 
 `<path>:<start>-<end>: <tag>: <what>. <replacement or "delete">. Evidence: <search or contract that shows no behavior change>.`
 
-Then: the scope, the baseline check result, the post-change check result with the exact command, findings applied, findings reported but not applied (with the reason: out of scope, uncertain reference, requires authority), and files touched. If nothing qualified, write "No slop found in <scope>." and list what you inspected.
+Then: the scope, baseline and post-change check results with the exact command, findings applied, findings not applied with the reason (out of scope, uncertain reference, requires authority), and files touched. Write findings in plain terms; do not label them with this skill's rule names or list steps not run. If nothing qualified, write "No slop found in <scope>." and list what you inspected.
 
 ## Critical failures
 

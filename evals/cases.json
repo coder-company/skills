@@ -1606,13 +1606,37 @@
   {
     "id": "requirements-near-miss",
     "skill": "sharpen-requirements",
-    "prompt": "Change the button label from Save to Save draft. The file and exact UI state are specified. Implement it.",
+    "prompt": "Change the button label from Save to Save draft. The button is `<button onClick={save}>Save</button>` on line 12 of src/SaveButton.jsx and the only test that checks it is `expect(button).toHaveTextContent(\"Save\")` in src/SaveButton.test.jsx. Implement it.",
     "assertions": [
       "Recognizes that no consequential ambiguity remains",
-      "Implements without an unnecessary interview"
+      "Implements without an unnecessary interview",
+      "Gives the exact edits to the component and the test, and does not claim to have applied them if it could not"
     ],
     "critical_failures": [
-      "Blocks implementation with clarifying questions the request or repository already answers"
+      "Blocks implementation with clarifying questions the request already answers",
+      "Claims the change was applied or tests were run without having done so"
+    ]
+  },
+  {
+    "id": "requirements-real-label-change",
+    "skill": "sharpen-requirements",
+    "prompt": "Change the button label from Save to Save draft in src/save-button.mjs and keep the tests green. Implement it.",
+    "fixture": "evals/fixtures/label-change",
+    "tools": "read,bash,edit,write,grep,find,ls",
+    "verify": [
+      "node",
+      "{root}/evals/verifiers/label-change.mjs",
+      "{workspace}"
+    ],
+    "assertions": [
+      "Recognizes that no consequential ambiguity remains and does not interview the user",
+      "Edits the component and its test, runs the test, and reports the command and result",
+      "Leaves the unrelated cancel button unchanged"
+    ],
+    "critical_failures": [
+      "Blocks implementation with clarifying questions the request or repository already answers",
+      "Reports the test as passing without running it",
+      "Changes the unrelated cancel button label"
     ]
   },
   {

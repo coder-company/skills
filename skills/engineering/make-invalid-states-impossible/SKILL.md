@@ -12,10 +12,11 @@ Find the combinations the domain forbids, replace the representation that allows
 - The concepts themselves are unclear or overloaded: `model-the-domain` first.
 - The change alters a public contract or persisted format: `replace-an-api` for the migration; this skill designs the target type.
 - The invalid state is a concurrency interleaving rather than a data shape: `untangle-shared-state`.
+- The request is an annotation, lint, or style fix with no invalid state: make it. Do not claim anything about combinations in code you have not read; without the code, show the annotation pattern as an illustrative diff and ask for the file to apply it.
 
 ## Enumerate the illegal combinations
 
-For the type in question, list its fields and the combinations that are valid. Then list the combinations the current representation allows but the domain rejects. Common shapes:
+List the type's fields and valid combinations, then the combinations the representation allows but the domain rejects. Common shapes:
 
 - Two optional fields where exactly one must be present (`error` and `value`).
 - A status field plus fields that only mean something in some statuses (`shippedAt` when `status != shipped`).
@@ -26,7 +27,7 @@ For the type in question, list its fields and the combinations that are valid. T
 - A partially constructed object whose required fields are filled in later.
 - A cast from external data to an internal type with no check.
 
-Count the invalid combinations. That number is what the redesign should reduce to zero. If it is already zero, stop; there is nothing to make impossible.
+Count the invalid combinations; the redesign should reduce that number to zero. If it is already zero, stop.
 
 ## Choose the representation
 
@@ -39,20 +40,20 @@ Apply the first that fits:
 5. **Derive, do not duplicate** for sync fields: compute `isActive` from `deletedAt`; store one.
 6. **Exhaustive matching**: switch on the variant with the compiler or a runtime check that fails on an unknown variant, so adding a state forces every handler to decide.
 
-Prefer the smallest change that removes the counted combinations. Strengthen a type only where the invalid state actually appears; do not brand every string in the codebase.
+Prefer the smallest change that removes the counted combinations; do not brand every string in the codebase.
 
 ## Move validation to the boundary
 
 Identify where untrusted data enters: request bodies, CLI arguments, environment variables, files, database rows, messages, third-party responses. At each entry, parse into the internal type once, with a function that returns either the valid value or a described error. Everything past that function takes the typed value and does not re-validate.
 
-Delete the downstream checks that the type now makes unnecessary, and delete their tests only if the parser's tests cover the same cases. Keep defensive checks at the boundary between two independently deployed systems.
+Delete downstream checks the type now makes unnecessary, and their tests only if the parser's tests cover the same cases. Keep checks at the boundary between independently deployed systems.
 
 ## Migrate the callers
 
 - Update constructors first, so the compiler or test suite lists every site that built the old shape.
-- At each site, decide which variant the old data represented. A site that cannot decide has found a real ambiguity; record it rather than defaulting.
+- At each site, decide which variant the old data represented. A site that cannot decide has found a real ambiguity; record it, do not default.
 - For persisted data in the old shape, write the parser to accept it and map it to a variant, and note whether a data migration is needed (see `sequence-migrations`).
-- Run the full type check and the tests for every touched module.
+- Run the type check and tests for every touched module.
 
 ## Stop signals
 
@@ -68,11 +69,11 @@ Delete the downstream checks that the type now makes unnecessary, and delete the
 - "Make the field required and default it": a default hides the case where the data was missing and turns a construction error into a silent wrong value.
 - "Check it everywhere to be safe": repeated checks disagree over time and mark that nobody trusts the type; validate once at the boundary.
 - "Keep the boolean, add a comment": comments do not stop the fourth combination from being constructed.
-- "Cast the external payload, the schema is stable": schemas drift and the cast is where the drift becomes a corrupted state deep inside the system.
+- "Cast the external payload, the schema is stable": schemas drift and the cast is where drift becomes corrupted state deep inside the system.
 
 ## Report
 
-State the type or types changed, the invalid combinations before and after (with counts), the representation chosen and why, the boundary parsers added with the errors they return, the downstream checks removed, callers migrated with any ambiguity found, and the type check and test commands run with results. If no invalid state existed, say "No invalid combinations found" and stop.
+State the type or types changed, the invalid combinations before and after (with counts), the representation chosen and why, the boundary parsers added with the errors they return, the downstream checks removed, callers migrated with any ambiguity found, and the type check and test commands run with results. If no invalid state existed, say so in one sentence, after reading the type, and do the requested change.
 
 ## Critical failures
 

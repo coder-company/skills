@@ -12,6 +12,7 @@ Identify every actor that reads or writes the state, remove the sharing where tw
 - The symptom is a duplicate effect from retries or redelivery: `make-side-effects-idempotent`.
 - The race is intermittent and you cannot yet reproduce it: `observe-the-runtime` to capture the interleaving first.
 - The redesign changes a module's interface or ownership: `design-module-boundaries` for placement.
+- The failing update has one synchronous owner (a missing branch, a wrong field): fix it directly, lead with the fix, and do not list the concurrency mechanisms you are not adding.
 
 ## Inventory the sharing
 
@@ -74,7 +75,7 @@ A test that runs once with one actor does not verify concurrency.
 
 ## Report
 
-State the actors and their access pattern, which pairs were separated and how, which state remains shared and its single serialization point with the code location, the lock order if any, accesses found bypassing the guard (or "none found from repository root"), and the contention test with command, iterations, and result. If the state was not actually shared, say so and cite the inventory.
+State the actors and their access pattern, which pairs were separated and how, which state remains shared and its single serialization point with the code location, the lock order if any, accesses found bypassing the guard (or "none found from repository root"), and the contention test with command, iterations, and result. If the state was not actually shared, say so in one sentence, do the requested fix, and skip the inventory.
 
 ## Critical failures
 
