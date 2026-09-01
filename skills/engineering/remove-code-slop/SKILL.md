@@ -5,7 +5,7 @@ description: Find and remove machine-generated excess without changing behavior 
 
 # Remove code slop
 
-Produce a list of concrete deletions and reductions, each with a location, a tag, the replacement, and the evidence that the removal changes no behavior. Then apply them only within the requested scope and prove the checks still pass. Correctness, security, validation, and accessibility code is never slop.
+List concrete deletions and reductions, each with a location, a tag, the replacement, and the evidence that the removal changes no behavior. Then apply them only within the requested scope and prove the checks still pass. Correctness, security, validation, and accessibility code is never slop.
 
 ## Route first
 
@@ -28,7 +28,7 @@ Inspect every file in scope and tag each finding:
 - `guard`: a `try/catch`, null check, or type check on a path where the value is already guaranteed by a type, an earlier validation, or the caller's contract. Keep guards at trust boundaries (user input, network, file, environment, deserialization).
 - `fallback`: a default branch, `?? {}`, `|| []`, or retry that hides a condition the code should fail on. Keep fallbacks the requirement asks for.
 - `wrapper`: a function, class, or module with one caller that adds no name, invariant, or test seam. Inline it. Keep it when the name documents a concept the call site would otherwise need a comment for.
-- `param`: unused parameters, options objects with one used field, flags with one value at every call site.
+- `param`: unused parameters, options objects with one used field, flags with one value everywhere.
 - `dup`: a helper that reimplements something already in the repository or the standard library. Cite the existing location.
 - `config`: configuration, constants, or environment variables with no variation across environments or call sites.
 - `escape`: `any`, `as unknown as`, `@ts-ignore`, `# type: ignore`, `// eslint-disable`, or equivalent suppressions added by the change without a stated reason.
@@ -47,7 +47,7 @@ For each finding, in file order:
 
 When a `do not remove` comment guards a constraint, replace it with the cheapest enforcement the repository has (a type, an assertion, a test, or a lint rule); otherwise keep the comment and say why.
 
-Do not touch: input validation at trust boundaries, error handling that prevents data loss or leaves the system consistent, authentication and authorization checks, accessibility attributes, logging the operators rely on, and anything the user explicitly requested. When refusing a removal, name the input the guard handles and the behavior it changes (a 400 instead of an unhandled rejection), then offer behavior-preserving tidy-ups. Describe only code you have read; hedge about the rest.
+Do not touch: input validation at trust boundaries, error handling that prevents data loss or leaves the system consistent, authentication and authorization checks, accessibility attributes, logging the operators rely on, and anything the user explicitly requested. Refuse a removal in a few sentences: the input the guard handles, the behavior removal changes (a 400 becomes an unhandled rejection), and a replacement snippet or tidy-ups that keep behavior. No headings, report sections, or references to this skill's rules. Describe only code you have read.
 
 ## Stop signals
 
@@ -69,7 +69,7 @@ List findings in file order, one line each:
 
 `<path>:<start>-<end>: <tag>: <what>. <replacement or "delete">. Evidence: <search or contract that shows no behavior change>.`
 
-Then: the scope, baseline and post-change check results with the exact command, findings applied, findings not applied with the reason (out of scope, uncertain reference, requires authority), and files touched. Write findings in plain terms; do not label them with this skill's rule names or list steps not run. If nothing qualified, write "No slop found in <scope>." and list what you inspected.
+Then: the scope, baseline and post-change check results with the exact command, findings applied, findings not applied with the reason (out of scope, uncertain reference, requires authority), and files touched. Write findings in plain terms and omit sections with nothing to report. If nothing qualified, write "No slop found in <scope>." and list what you inspected.
 
 ## Critical failures
 

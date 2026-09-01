@@ -9,7 +9,7 @@ Name the contract that changed, find every consumer that depends on the old beha
 
 ## Route first
 
-- The user wants the whole change reviewed: `review-the-diff`; call this skill for the specific shared contract inside it.
+- The user wants the change reviewed, or the change is an isolated function with no shared contract: do the ordinary review (`review-the-diff`) without announcing the routing or running this skill's steps. Use this skill only for a shared contract inside that review.
 - A consumer must move to a new contract: `replace-an-api`.
 - A hinge fact turns out to be a plan assumption for future work: `check-the-premise`.
 
@@ -72,7 +72,7 @@ Keep the assessment read-only unless the user asked for fixes. Use disposable sc
 
 ## Report
 
-Return: the changed contract(s); consumers found by class, with the assumption each makes; the ranked breakage list with reach, consequence, likelihood, and observability; each hinge fact with the evidence level reached and the command, query, or artifact that established it; unresolved exposures with the smallest check that would settle each; and confirmed breakage, if any, with the failing consumer. If no consumer can be affected, say so and cite the search scope that establishes it. If no fact reached level 4, the first line says the change is not proven safe.
+Return: the changed contract(s); consumers found by class, with the assumption each makes; the ranked breakage list with reach, consequence, likelihood, and observability; each hinge fact with the evidence level reached and the command, query, or artifact that established it; unresolved exposures with the smallest check that would settle each; and confirmed breakage, if any, with the failing consumer. If no consumer can be affected, say so in one sentence with the search scope that establishes it. If no fact reached level 4, the first line says the change is not proven safe.
 
 ## Critical failures
 
