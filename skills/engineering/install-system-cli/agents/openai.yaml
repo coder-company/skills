@@ -1,0 +1,4 @@
+interface:
+  display_name: "Install System CLI"
+  short_description: "Install one verified system-wide CLI"
+  default_prompt: "Use $install-system-cli to install the authoritative current release as one system-wide command without duplicating config, credentials, or user-local payloads."

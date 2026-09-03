@@ -61,6 +61,7 @@ Use the one that matches the failure. There is no setup mode, router, or prescri
 - **[`remove-code-slop`](./skills/engineering/remove-code-slop/SKILL.md):** Delete generated excess (narrating comments, trusted-path guards, one-caller wrappers) without changing behavior.
 - **[`keep-execution-state`](./skills/engineering/keep-execution-state/SKILL.md):** Carry facts, ruled-out paths, and the next action as explicit state instead of transcript memory.
 - **[`dispatch-subagents`](./skills/engineering/dispatch-subagents/SKILL.md):** Delegate with standalone briefs, disjoint write scopes, and independent verification of every result.
+- **[`install-system-cli`](./skills/engineering/install-system-cli/SKILL.md):** Install one verified CLI release through the host's system profile without user-local duplicates.
 
 ### Before it calls the work done
 

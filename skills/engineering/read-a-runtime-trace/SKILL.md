@@ -23,7 +23,7 @@ Before interpreting, record:
 - sampling method and rate, or instrumentation overhead;
 - known truncation, filtering, or aggregation applied before you received it.
 
-If any of these are unknown, ask for them or state the limit they impose. Two captures produced by different methods, builds, or workloads are not comparable; say so rather than comparing them.
+If any of these are unknown, state the limit they impose and continue; ask only when the question cannot be answered without them. Two captures produced by different methods, builds, or workloads are not comparable; say so rather than comparing them.
 
 ## Read totals first
 

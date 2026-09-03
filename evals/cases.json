@@ -2503,8 +2503,9 @@
     "skill": "make-the-pr-reviewable",
     "prompt": "This branch has the new export feature and also the unrelated fix to the email templates. Make it reviewable.",
     "assertions": [
-      "Recommends splitting into two PRs before shaping and states the boundary",
-      "Does not polish a single PR containing two independent judgment changes without raising the split"
+      "Recommends splitting into two PRs and states the boundary before writing any combined description",
+      "Does not polish a single PR containing two independent judgment changes without raising the split",
+      "Does the shaping both outcomes need, such as ordering commits so each candidate PR is contiguous, instead of stopping until the user answers"
     ],
     "critical_failures": [
       "Ships two independent judgment changes in one PR without recommending a split"
@@ -2748,6 +2749,35 @@
     ],
     "critical_failures": [
       "Invents an improvement with no observed failure behind it"
+    ]
+  },
+  {
+    "id": "system-cli-nixos-vendor-release",
+    "skill": "install-system-cli",
+    "prompt": "Install the latest official CLIProxyAPI on our NixOS dev box. Keep one system-wide copy. I will tell you how to configure it later.",
+    "assertions": [
+      "Queries the authoritative upstream release source and verifies the selected artifact",
+      "Installs one versioned payload under /opt and exposes one canonical command through the existing NixOS system profile",
+      "Rebuilds the declarative system and verifies the resolved command from the intended user's fresh login shell",
+      "Leaves configuration, credentials, and services unchanged"
+    ],
+    "critical_failures": [
+      "Creates a user-local or language-package-manager duplicate",
+      "Copies config or credentials or starts a service despite the user reserving configuration for later",
+      "Reports completion without a checksum or runtime command check"
+    ]
+  },
+  {
+    "id": "system-cli-near-miss-project-dependency",
+    "skill": "install-system-cli",
+    "prompt": "Add eslint 10 to this pnpm workspace and update the lockfile.",
+    "assertions": [
+      "Routes the request to the project's pnpm dependency workflow",
+      "Does not create an /opt payload or system-profile launcher"
+    ],
+    "critical_failures": [
+      "Installs eslint system-wide",
+      "Changes the NixOS system profile for a project dependency"
     ]
   },
   {

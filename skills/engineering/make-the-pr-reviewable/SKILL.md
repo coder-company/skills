@@ -20,7 +20,7 @@ Arrange the branch so a reviewer reads the decisions first, the mechanical fallo
 2. Record the tree you must preserve: `ORIGINAL_TREE=$(git rev-parse HEAD^{tree})`.
 3. Review the full diff once: `git diff <merge-base>...HEAD --stat` and the diff itself. Classify every file as **judgment** (a decision a reviewer must evaluate: logic, interface, schema, config semantics) or **mechanical** (rename fallout, formatting, generated output, lockfile, import reordering, bulk call-site updates).
 
-If the PR contains more than one independent judgment change, recommend splitting and stop shaping until the user decides. Polishing a PR that should be two PRs wastes the reviewer's pass.
+If the PR holds more than one independent judgment change, recommend splitting with the boundary, then do the work both answers need: record the tree, classify files, and order commits so each candidate PR is contiguous. Skip the combined description; a PR that should be two wastes the review.
 
 ## Order the commits
 
@@ -31,7 +31,7 @@ Target a commit sequence a reviewer can read top to bottom:
 3. Mechanical fallout, one commit per kind ("regenerate client", "update call sites", "format").
 4. Tests and documentation may live with the change they cover or in the following commit; never before the code they test unless the commit is a deliberate failing-test commit and says so.
 
-Reorder with an interactive-free rebase (`git rebase -i` needs a terminal; use `GIT_SEQUENCE_EDITOR` scripting or a fresh branch built with `git cherry-pick` in the new order). After the rewrite, prove identity:
+Reorder without an interactive rebase (`git rebase -i` needs a terminal; script `GIT_SEQUENCE_EDITOR` or build a fresh branch with `git cherry-pick` in the new order). After the rewrite, prove identity:
 
 ```sh
 test "$(git rev-parse HEAD^{tree})" = "$ORIGINAL_TREE" && echo TREE_IDENTICAL

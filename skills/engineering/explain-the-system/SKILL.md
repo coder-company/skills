@@ -11,12 +11,12 @@ Trace the real code path from entry to exit, then explain it in the order a read
 
 - The question is "why was it built this way": `trace-code-history`.
 - The question is a factual claim about an external library or standard: `show-your-sources`.
-- The user wants the explanation as a teaching artifact for a third party: apply `say-it-clearly` to the final text.
+- The explanation is a teaching artifact for a third party: apply `say-it-clearly` to the text.
 - The user asked for a change and the explanation is your own preparation: read, then implement; do not deliver a walkthrough they did not ask for.
 
 ## Scope the question
 
-Restate the question as a concrete path: an entry point (HTTP route, CLI command, event, UI action, cron), a trigger input, and the observable outcome. If the user's phrasing covers several paths ("how does auth work"), pick the primary path, say which one you chose, and list the others you are not covering.
+Restate the question as a concrete path: an entry point (HTTP route, CLI command, event, UI action, cron), a trigger input, and the observable outcome. If the phrasing covers several paths ("how does auth work"), pick the primary one, say which, and list the others as not covered.
 
 Decide the depth by the code's size:
 
@@ -31,13 +31,13 @@ Decide the depth by the code's size:
 4. Note state that is read or written outside the call chain: configuration, environment variables, feature flags, caches, database tables, global singletons. These are where explanations go wrong.
 5. Find the tests that exercise the path; they are evidence of intended behavior and show how to run it.
 
-Run the path when it is safe and cheap (a test, a local command, a request against a dev server). Observed output beats inference; say which claims you observed and which you read.
+Run the path when it is safe and cheap (a test, a local command, a dev-server request). Say which claims you observed and which you read.
 
 Distinguish three evidence levels in your notes and preserve them in the explanation: **observed** (you ran it), **read** (you read the code that does it), **inferred** (you concluded it from names, comments, or patterns without reading the implementation). Do not upgrade inferred to read.
 
 ## Write the explanation
 
-Use this structure. Scale each section to the question; a single-module question may need two sentences per section.
+For a locating question ("where does Y happen", "which module owns Z"), answer with the file:line and one sentence on what it does, and stop. For a walkthrough, use this structure, scaled to the question; a single-module path may need two sentences per section.
 
 1. **Overview:** what the subsystem does and for whom, in two to four sentences. Name the entry and the observable outcome.
 2. **Key concepts:** the three to six terms the code uses that a reader must know, each defined in one sentence with the file that defines it. Use the code's own names; do not rename.
@@ -46,13 +46,13 @@ Use this structure. Scale each section to the question; a single-module question
 5. **Gotchas:** behavior a newcomer would not expect: hidden state, ordering constraints, implicit defaults, environment-dependent branches, known workarounds, places where the name and the behavior disagree. Each with a pointer. Write "No gotchas found on this path" if that is the case; do not invent them.
 6. **Not covered:** the branches and adjacent paths you excluded.
 
-Use the reader's vocabulary and the code's identifiers. Do not include a diagram unless it carries information the list cannot (concurrency or fan-out); if you include one, build it from the hops you recorded, not from an idealized architecture.
+Use the reader's vocabulary and the code's identifiers. Include a diagram only when it carries information the list cannot (concurrency, fan-out), built from the recorded hops.
 
 ## Stop signals
 
 - You are describing a hop you did not open: open it or mark it inferred.
 - The explanation has no `file:line` in a section about behavior: add the pointers.
-- The path you are tracing is not the one the user asked about: restate the scope and confirm.
+- The path you are tracing is not the one the user asked about: switch to the asked path and say so.
 - A concept definition contradicts how the code uses the term: report the discrepancy as a gotcha rather than choosing one.
 
 ## Shortcuts that fail
@@ -64,7 +64,7 @@ Use the reader's vocabulary and the code's identifiers. Do not include a diagram
 
 ## Report
 
-Deliver the six sections above. Every behavioral claim carries a `file:line` pointer and an evidence level where it is not "read". End with the commands you ran (or "No commands run; explanation is from reading") and the scope you excluded.
+Deliver the six sections above, or the pointer answer for a locating question. Every behavioral claim carries a `file:line` pointer and an evidence level where it is not "read". End with the commands you ran (or "No commands run; explanation is from reading") and the scope you excluded.
 
 ## Critical failures
 

@@ -56,7 +56,7 @@ Cap the output: at most three changes per task. More than three means either the
 - For a check or script, run it against the recorded failure and confirm it fails or fires, then confirm it passes on the corrected state.
 - For a repository instruction, confirm no existing instruction already covers it; if one does, the failure was a trigger or instruction failure, not a missing rule.
 
-Wait for the user's approval before committing changes to shared skills or repository instructions. Show each proposed change as a diff with the event it addresses.
+Show each proposed change as a diff with the event it addresses. Unless the user has already authorized the edit, wait for their approval before committing changes to shared skills or repository instructions, because those change every future session, not only this one.
 
 ## Stop signals
 

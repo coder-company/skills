@@ -64,6 +64,7 @@ Delegate bulk reading or independent sub-tasks (see `dispatch-subagents`) and ve
 - The action you are about to take is on the irreversible list: end the turn with the request for approval.
 - The decision log has no rows after a stretch of work that involved choices: log them before continuing.
 - A verification you called passing was a proxy: run the boundary check.
+- Your last paragraph is a plan, a question, or a promise ("I'll now run X") while the predicate is unobserved and you are neither stalled nor waiting on the irreversible list: do that action now instead of ending the turn.
 
 ## Shortcuts that fail
 

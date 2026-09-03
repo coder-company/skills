@@ -9,7 +9,7 @@ Read the essay, name the one deep message the sketch must carry, generate a sing
 
 ## Route first
 
-- The image is for any site other than [chaitanya.gg](https://chaitanya.gg): do not use this system; ask what visual language applies.
+- The image is for any site other than [chaitanya.gg](https://chaitanya.gg): do not use this system; follow that destination's own visual conventions.
 - The essay text is not final: wait for a stable title and central idea; the sketch encodes the message.
 - The request is an architecture or system diagram inside an essay: use the inline SVG rules below, never a raster.
 

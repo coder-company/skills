@@ -11,7 +11,7 @@ Reproduce the reference's rendering conditions before editing anything, capture 
 
 - The reference is a behavior, not a look (a flow, a response): `verify-real-behavior`.
 - The task is choosing between visual variants: `prototype-the-question` with the variants behind one switcher.
-- Matching requires changing the markup's semantics or accessibility: stop and report; the reference does not authorize that.
+- Matching requires changing the markup's semantics or accessibility: the reference does not authorize that. Finish the layers that do not need it and report the conflict first.
 
 ## Normalize the conditions
 
@@ -48,7 +48,7 @@ After each layer, recapture and re-measure. Change values with evidence (measure
 
 ## Protect what the reference does not show
 
-Keep semantics, accessibility attributes, focus order, keyboard behavior, and supported responsive ranges. Do not hide content, hardcode fixture text into production, rasterize live UI into an image, disable a state, or remove an element to make one screenshot match. If parity requires any of these, report the conflict and stop.
+Keep semantics, accessibility attributes, focus order, keyboard behavior, and supported responsive ranges. Do not hide content, hardcode fixture text into production, rasterize live UI into an image, disable a state, or remove an element to make one screenshot match. If parity requires any of these, finish every other layer and report the conflict as the first line.
 
 ## Stop signals
 
@@ -56,7 +56,7 @@ Keep semantics, accessibility attributes, focus order, keyboard behavior, and su
 - The two images being compared have different dimensions or scale: renormalize.
 - You are tuning a value by repeated guessing: measure it from the reference instead.
 - A fix on a later layer is needed while an earlier layer still differs: go back to the earlier layer.
-- A change would remove an accessible name, focus target, or responsive behavior: stop and report.
+- A change would remove an accessible name, focus target, or responsive behavior: leave that difference open and report it.
 
 ## Shortcuts that fail
 

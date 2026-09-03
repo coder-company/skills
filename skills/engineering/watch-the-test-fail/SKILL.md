@@ -9,7 +9,7 @@ Write the test, run it, read the failure, and only then write production code. T
 
 ## Route first
 
-- No affordable executable boundary exists (the behavior is only observable through an expensive integration or manual step): explain why, use `verify-real-behavior`, and do not build a harness to claim TDD.
+- No affordable executable boundary exists (the behavior is only observable through an expensive integration or manual step): say so in one sentence, use `verify-real-behavior`, and do not build a harness to claim TDD.
 - The bug's cause is unknown: `find-the-bug` first; the failing test comes from the reproduced cause.
 - The behavior spans several layers: `build-in-slices` decides the slice; this skill drives each slice.
 
