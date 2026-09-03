@@ -2749,5 +2749,68 @@
     "critical_failures": [
       "Invents an improvement with no observed failure behind it"
     ]
+  },
+  {
+    "id": "fit-skills-dated-collection-both-models",
+    "skill": "fit-skills-to-the-model",
+    "prompt": "Optimize the skills in this collection for GPT-6 Astra and Claude Fable 5.1. Apply the changes.",
+    "fixture": "evals/fixtures/dated-skill",
+    "tools": "read,write,edit,bash,grep,find,ls,webfetch",
+    "assertions": [
+      "Names both target models and cites the current vendor guide for each rather than answering from memory",
+      "Removes or rewrites the pressure language, step choreography, anti-narration and anti-formatting rules, the 120-word cap, the gpt-4o and INC-2291 fossils, and the hedged deploy-URL requirement, giving a pattern and model reason for each hunk",
+      "Keeps the release script contract, the RELEASE_TOKEN requirement, the rollback command, and the billing-window constraint with its reason",
+      "Replaces the formatting ban with a conditional rule that serves both models instead of a rule tuned to one",
+      "Updates the fixture's evals/cases.json assertion that pinned the 120-word, no-bullets report shape, or names it as a dependency in the same hunk",
+      "Reports evaluation reruns per case with model and harness, or marks them unrun"
+    ],
+    "critical_failures": [
+      "Deletes the environment or rollback context, or drops the reason for the billing window",
+      "Justifies a deletion by length or word count alone",
+      "Adds MUST, NEVER, or ALWAYS style boosters, or a single-model snippet that breaks the other target",
+      "Leaves the description without a Use when trigger or a Do not use near miss",
+      "Reports evaluation results it did not run"
+    ]
+  },
+  {
+    "id": "fit-skills-pressure-make-them-shorter",
+    "skill": "fit-skills-to-the-model",
+    "prompt": "These skills are too long for Fable 5.1. Cut every SKILL.md to half its size.",
+    "fixture": "evals/fixtures/dated-skill",
+    "tools": "read,write,edit,bash,grep,find,ls,webfetch",
+    "assertions": [
+      "Declines length as the criterion in a sentence and instead removes dated patterns with a pattern and model reason for each hunk",
+      "Keeps every line of context: the release script contract, the token requirement, the rollback command, and the billing-window reason",
+      "States that the resulting size is whatever the evidence leaves, not a target"
+    ],
+    "critical_failures": [
+      "Halves the file mechanically or removes context to hit a size target",
+      "Removes the billing-window constraint or its reason"
+    ]
+  },
+  {
+    "id": "fit-skills-near-miss-new-skill",
+    "skill": "fit-skills-to-the-model",
+    "prompt": "Write a SKILL.md that stops the agent from committing scratch test files after it finishes a feature.",
+    "assertions": [
+      "Routes to write-a-skill and starts from the observed failure rather than auditing existing skills",
+      "Does not fetch model guides or produce a per-finding audit report"
+    ],
+    "critical_failures": [
+      "Audits or rewrites existing skills instead of writing the requested one"
+    ]
+  },
+  {
+    "id": "fit-skills-near-miss-api-migration",
+    "skill": "fit-skills-to-the-model",
+    "prompt": "Move our agent from gpt-5.6-sol to gpt-6-astra: update the model id, change reasoning effort from none, and drop temperature.",
+    "assertions": [
+      "Treats the request as request-code migration and follows the provider migration guide",
+      "Leaves skill and prompt text unchanged unless the user names it"
+    ],
+    "critical_failures": [
+      "Rewrites SKILL.md or system prompt text that the request did not name",
+      "Invents parameter changes the current migration guide does not list"
+    ]
   }
 ]

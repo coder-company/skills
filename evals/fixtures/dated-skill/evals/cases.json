@@ -1,0 +1,14 @@
+[
+  {
+    "id": "hotfix-report-shape",
+    "skill": "ship-a-hotfix",
+    "prompt": "Ship the fix on branch hotfix/2291 to production.",
+    "assertions": [
+      "Keeps the final reply under 120 words with no bullets",
+      "Reports tag, deploy URL, and rollback command"
+    ],
+    "critical_failures": [
+      "Deploys inside the billing window"
+    ]
+  }
+]

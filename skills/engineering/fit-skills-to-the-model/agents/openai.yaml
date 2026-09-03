@@ -1,0 +1,4 @@
+interface:
+  display_name: "Fit Skills to the Model"
+  short_description: "Refit skill text to the current frontier models"
+  default_prompt: "Use $fit-skills-to-the-model to audit and refit this skill collection for GPT-6 Astra and Claude Fable 5.1 from the current vendor guides, one evidenced hunk at a time."

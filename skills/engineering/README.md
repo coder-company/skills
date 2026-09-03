@@ -11,6 +11,7 @@ These skills can be invoked by the user or selected automatically when the reque
 - **[review-the-diff](./review-the-diff/SKILL.md):** Review changes for correctness, intent, safety, and maintainability.
 - **[show-your-sources](./show-your-sources/SKILL.md):** Answer technical questions from current primary sources and explicit evidence.
 - **[write-a-skill](./write-a-skill/SKILL.md):** Create and test agent skills from observed failures and measurable behavior.
+- **[fit-skills-to-the-model](./fit-skills-to-the-model/SKILL.md):** Refit existing skills to the frontier models running them from current vendor guides.
 - **[confirm-destructive-actions](./confirm-destructive-actions/SKILL.md):** Resolve destructive targets, exclusions, authority, and recovery before mutation.
 - **[verify-real-behavior](./verify-real-behavior/SKILL.md):** Verify changed behavior at the nearest real user or system boundary.
 - **[check-the-premise](./check-the-premise/SKILL.md):** Test the assumption most likely to invalidate an implementation plan.

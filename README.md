@@ -98,6 +98,7 @@ Use the one that matches the failure. There is no setup mode, router, or prescri
 - **[`write-a-personal-essay`](./skills/productivity/write-a-personal-essay/SKILL.md):** Assemble narrated fragments into a personal essay without erasing the author's voice or lived details.
 - **[`generate-chaitanya-essay-images`](./skills/productivity/generate-chaitanya-essay-images/SKILL.md):** Generate and verify the hand-drawn ink image system used on [chaitanya.gg](https://chaitanya.gg).
 - **[`write-a-skill`](./skills/engineering/write-a-skill/SKILL.md):** Build skills from observed failures, explicit trigger boundaries, and behavioral evidence.
+- **[`fit-skills-to-the-model`](./skills/engineering/fit-skills-to-the-model/SKILL.md):** Refit existing skills to the frontier models running them, one evidenced hunk at a time.
 
 ## Design rules
 
